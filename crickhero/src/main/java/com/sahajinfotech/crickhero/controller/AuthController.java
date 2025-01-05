@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * UserController - Handles user-related operations
+ * AuthController - Handles user-related operations
  * 
  * This controller manages:
  * - User registration (signup)
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("crickhero")
-public class UserController {
+public class AuthController {
     
     @Autowired
     private UserService userService;
@@ -45,4 +45,6 @@ public class UserController {
     public ResponseEntity<?> signinUser(@RequestBody AuthRequest authRequest) {
         return userService.signinUser(authRequest);
     }
+
+
 }

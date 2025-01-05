@@ -1,5 +1,8 @@
 package com.sahajinfotech.crickhero.controller;
 
+import com.sahajinfotech.crickhero.config.jwt.JwtService;
+import com.sahajinfotech.crickhero.dto.BookingRequestDto;
+import com.sahajinfotech.crickhero.model.TimeSlot;
 import com.sahajinfotech.crickhero.model.Venue;
 import com.sahajinfotech.crickhero.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -16,10 +21,13 @@ import java.util.List;
 public class VenueController {
     @Autowired
     VenueService venueService;
+    @Autowired
+    JwtService jwtService;
+
+
     @GetMapping("/venuelist")
     @ResponseStatus(HttpStatus.OK)
-    public List<Venue> getAllVenue(){
-        System.out.println("venuelist called");
+    public List<Venue> getAllVenue() {
         return venueService.getAllVenue();
     }
 
@@ -38,9 +46,35 @@ public class VenueController {
             venue.setState(state);
             venue.setCity(city);
             venue.setAddress(address);
-            return venueService.addVenue(image,venue);
+            return venueService.addVenue(image, venue);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error processing request", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("auth/bookings")
+    public ResponseEntity<?> booking(@RequestHeader("Authorization") String header, @RequestBody BookingRequestDto bookingRequestDto) {
+        String email = "";
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            email = jwtService.extractUsername(token);
+            if(bookingRequestDto.getBookingDate().isAfter(LocalDate.now().minusDays(1))) {
+                if (bookingRequestDto.getBookingDate().isEqual(LocalDate.now()) && !bookingRequestDto.getStartTime().isAfter(LocalTime.now()))
+                    return new ResponseEntity<>("Not valid date and time",HttpStatus.NOT_ACCEPTABLE);
+                else
+                    return venueService.booking(email, bookingRequestDto);
+            }
+            else
+                return new ResponseEntity<>("Not valid date and time",HttpStatus.NOT_ACCEPTABLE);
+
+        }
+        return new ResponseEntity<>(email+" not found",HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("auth/bookings")
+    public ResponseEntity<List<TimeSlot>> getSlots(
+            @RequestParam Long venueId,
+            @RequestParam String date) {
+        return venueService.getSlots(venueId,date);
     }
 }

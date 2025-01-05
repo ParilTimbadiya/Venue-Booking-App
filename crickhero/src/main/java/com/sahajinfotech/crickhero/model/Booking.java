@@ -5,10 +5,9 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 
 @Entity
-public class Bookings {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long bookingId;
@@ -36,11 +35,29 @@ public class Bookings {
     @JoinColumn(name = "fkUserId")
     private User user;
 
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public Booking setVenue(Venue venue) {
+        this.venue = venue;
+        return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Booking setUser(User user) {
+        this.user = user;
+        return this;
+    }
+
     public Long getBookingId() {
         return bookingId;
     }
 
-    public Bookings setBookingId(Long bookingId) {
+    public Booking setBookingId(Long bookingId) {
         this.bookingId = bookingId;
         return this;
     }
@@ -49,7 +66,7 @@ public class Bookings {
         return bookingDate;
     }
 
-    public Bookings setBookingDate(LocalDate bookingDate) {
+    public Booking setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
         return this;
     }
@@ -58,7 +75,7 @@ public class Bookings {
         return start_time;
     }
 
-    public Bookings setStart_time(LocalTime start_time) {
+    public Booking setStart_time(LocalTime start_time) {
         this.start_time = start_time;
         return this;
     }
@@ -67,7 +84,7 @@ public class Bookings {
         return end_time;
     }
 
-    public Bookings setEnd_time(LocalTime end_time) {
+    public Booking setEnd_time(LocalTime end_time) {
         this.end_time = end_time;
         return this;
     }
@@ -76,7 +93,7 @@ public class Bookings {
         return total_hours;
     }
 
-    public Bookings setTotal_hours(double total_hours) {
+    public Booking setTotal_hours(double total_hours) {
         this.total_hours = total_hours;
         return this;
     }
@@ -85,7 +102,7 @@ public class Bookings {
         return total_cost;
     }
 
-    public Bookings setTotal_cost(double total_cost) {
+    public Booking setTotal_cost(double total_cost) {
         this.total_cost = total_cost;
         return this;
     }
@@ -94,6 +111,6 @@ public class Bookings {
         return created_at;
     }
 
-    public Bookings() {
+    public Booking() {
     }
 }

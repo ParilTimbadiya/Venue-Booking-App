@@ -32,15 +32,26 @@ public class Venue {
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy = "venue",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Bookings> bookingsList;
+    private List<Booking> bookingList;
 
+    @OneToMany(mappedBy = "venue",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<TimeSlot> timeSlots;
 
-    public List<Bookings> getBookingsList() {
-        return bookingsList;
+    public List<Booking> getBookingList() {
+        return bookingList;
     }
 
-    public Venue setBookingsList(List<Bookings> bookingsList) {
-        this.bookingsList = bookingsList;
+    public Venue setBookingList(List<Booking> bookingList) {
+        this.bookingList = bookingList;
+        return this;
+    }
+
+    public List<TimeSlot> getTimeSlots() {
+        return timeSlots;
+    }
+
+    public Venue setTimeSlots(List<TimeSlot> timeSlots) {
+        this.timeSlots = timeSlots;
         return this;
     }
 

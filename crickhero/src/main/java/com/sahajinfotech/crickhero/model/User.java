@@ -36,14 +36,14 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Bookings> bookingsList;
+    private List<Booking> bookingList;
 
-    public List<Bookings> getBookingsList() {
-        return bookingsList;
+    public List<Booking> getBookingsList() {
+        return bookingList;
     }
 
-    public User setBookingsList(List<Bookings> bookingsList) {
-        this.bookingsList = bookingsList;
+    public User setBookingsList(List<Booking> bookingList) {
+        this.bookingList = bookingList;
         return this;
     }
 
@@ -138,4 +138,5 @@ public class User {
 
     public User() {
     }
+
 }

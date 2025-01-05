@@ -19,20 +19,17 @@ const BookVenue = () => {
         }
       } catch (error) {
         console.error("Error fetching venues:", error);
+        setVenues([]);
       } finally {
         setLoading(false); // Stop loading
       }
-    };
-
-    console.log("fetch value useEffect called");
+    };   
     getVenues();
   }, []);
-
+  
   if (loading) {
     return <div>Loading...</div>; // Replace with your Loader component if available
   }
-
-  console.log("Venues data:", venues);
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Book Venue</h1>
