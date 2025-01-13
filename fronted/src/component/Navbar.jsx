@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto flex justify-between">
-        <Link to="/" className="text-white text-lg font-bold">Noob's Cricboard</Link>
+        <Link to="/" className="text-white text-lg font-bold">Cricboard</Link>
         <div>
           <Link to="/details" className="text-white mx-2 hover:text-blue-400 transition-colors duration-200">Details</Link>
           <Link to="/venue" className="text-white mx-2 hover:text-blue-400 transition-colors duration-200">Venue</Link>

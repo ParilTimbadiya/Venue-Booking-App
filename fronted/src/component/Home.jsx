@@ -13,7 +13,7 @@ const Home = () => {
           alt="Home Icon"
         />
         <p className="h1 mt-0">
-          Welcome to <span className="text-success">Noob's Cricboard</span>
+          Welcome to <span className="text-success">Cricboard</span>
         </p>
         <p className="text-secondary h4">Manage cricket matches on your touch</p>
 

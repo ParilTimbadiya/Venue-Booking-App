@@ -32,17 +32,23 @@ const BookVenueForm = ({ venueId, onBack }) => {
           startTime: formatTimeForBackend(selectedSlot),
           endTime: calculateEndTime(selectedSlot, duration),
         };
-
+        console.log("Booking data:",bookingData);
         const response = await privateApi.post("/bookings", bookingData);
         console.log("Booking Response:", response); // Log the booking response
         if (response.status === 200) {
+          alert("Booking confirmation sent to your email");
           navigate("/");
-        }else if (response.status === 208) {
+        } else if (response.status === 208) {
           alert(response.data); // Show alert if slots are already booked
         }
       } catch (error) {
-        if (error.response && error.response.status === 406) {
+        if (error.response && error.response.status === 401) {
+          alert("Please login to your account");
+        } else if (error.response && error.response.status === 406) {
           alert("Not valid date and time");
+        }
+        else if (error.response && error.response.status === 403) {
+          alert("Booking faild");
         } else {
           console.error("Booking failed:", error);
         }
@@ -52,11 +58,17 @@ const BookVenueForm = ({ venueId, onBack }) => {
 
   useEffect(() => {
     const fetchBookedSlots = async () => {
-      const response = await privateApi.get(
-        `/bookings?venueId=${venueId}&date=${formik.values.booking_date}`
-      );
-      // console.log("fetchBookedSlots");
-      // console.log(response.data);
+      let response;
+      try {
+        response = await privateApi.get(
+          `/bookings?venueId=${venueId}&date=${formik.values.booking_date}`
+        );
+        console.log(response);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          alert("Please login to your account");
+        }
+      }
 
       const formattedBookedSlots = response.data.map((booking) => {
         const startTimeParts = booking.slotTime.split(":");
@@ -68,7 +80,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
       });
       console.log(formattedBookedSlots);
 
-      setBookedSlots(formattedBookedSlots);
+      setBookedSlots(formattedBookedSlots.concat("12 am"));
     };
 
     if (formik.values.booking_date) {
@@ -95,7 +107,11 @@ const BookVenueForm = ({ venueId, onBack }) => {
   const calculateEndTime = (startTime, duration) => {
     const startHour = parseInt(startTime.split(" ")[0]);
     const isPM = startTime.includes("pm");
-    const totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
+    let totalHours
+    if(startHour==12&&isPM)
+      totalHours=12
+    else
+      totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
     const endHour = (totalHours + duration) % 24; // Calculate end hour
     return `${String(endHour).padStart(2, "0")}:00`; // Return in 24-hour format
   };
@@ -110,19 +126,26 @@ const BookVenueForm = ({ venueId, onBack }) => {
     formik.setFieldValue("start_time", slot);
     const startHour = parseInt(slot.split(" ")[0]);
     const isPM = slot.includes("pm");
-    const totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
-
-    if (totalHours >= 22) {
-      // 10 pm or later
+    let totalHours
+    if(startHour==12&&isPM)
+      totalHours=12;
+    else
+      totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
+    // console.log("totalhour for set end time", totalHours);
+    
+    if(slot === "12 pm"){
+      setMaxDuration(5);
+    }
+    else if (totalHours >= 23) {
       setMaxDuration(1);
-    } else if (totalHours >= 21) {
-      // 9 pm
+    } else if (totalHours >= 22) {
       setMaxDuration(2);
-    } else if (totalHours >= 20) {
-      // 8 pm
+    } else if (totalHours >= 21) {
       setMaxDuration(3);
-    } else if (totalHours === 12) {
-      // 12 pm
+    } else if (totalHours >= 20) {
+      setMaxDuration(4);
+    } 
+    else if (totalHours === 12) {
       setMaxDuration(5); // Allow maximum duration of 5 hours
     } else {
       setMaxDuration(5); // Default max duration for earlier slots
@@ -210,7 +233,6 @@ const BookVenueForm = ({ venueId, onBack }) => {
           )}
         </div>
 
-        
         <button
           type="submit"
           className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
