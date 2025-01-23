@@ -15,6 +15,7 @@ import com.sahajinfotech.crickhero.repository.UserRepo;
 import com.sahajinfotech.crickhero.repository.VenueRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class VenueService {
     EmailService emailService;
     @Autowired
     BookingRepo bookingRepo;
+    @Value('{}')
 
     public ResponseEntity<List<TimeSlot>> getSlots(Long venueId, String date) {
         LocalDate bookingDate = LocalDate.parse(date);
@@ -172,13 +174,38 @@ public class VenueService {
                 venue.getName() + "\n" +
                 "+91 97148 92058\n" +
                 "sahaj1032@gmail.com";
-
+        String adminEmailBody = "Dear Admin,\n\n" +
+                "A new booking has been successfully made on the CrickHero platform. Below are the details of the booking:\n\n" +
+                "Booking Details:\n" +
+                "- Booking ID: " + bookingId + "\n" +
+                "- Venue Name: " + venue.getName() + "\n" +
+                "- Booking Date: " + savedBooking.getBookingDate() + "\n" +
+                "- Start Time: " + savedBooking.getStart_time() + "\n" +
+                "- End Time: " + savedBooking.getEnd_time() + "\n" +
+                "- Total Duration: " + savedBooking.getTotal_hours() + " hours\n" +
+                "- Total Cost: ₹" + savedBooking.getTotal_cost() + "\n\n" +
+                "User Details:\n" +
+                "- User Name: " + user.getUserName() + "\n" +
+                "- User Email: " + user.getEmail() + "\n\n" +
+                "Important Information:\n" +
+                "- Please ensure that the venue is prepared for the scheduled booking time.\n" +
+                "- If there are any issues or conflicts, contact the user at the provided email.\n\n" +
+                "Thank you for overseeing the seamless management of the venue bookings.\n\n" +
+                "Best regards,\n" +
+                "CrickHero Team";
         EmailDetailsDto emailDetailsDto = EmailDetailsDto.builder()
                 .subject("Cricket Venue Booking Confirmation")
                 .recipient(user.getEmail())
                 .msgBody(emailBody)
                 .build();
         emailService.sendSimpleMail(emailDetailsDto);
+        EmailDetailsDto adminEmailDetails = EmailDetailsDto.builder()
+                .subject("New Cricket Venue Booking Notification")
+                .recipient() // Replace with the admin's email address
+                .msgBody(adminEmailBody)
+                .build();
+
+        emailService.sendSimpleMail(adminEmailDetails);
 
         return new ResponseEntity<>("Booking done successfully with Booking ID: " + bookingId, HttpStatus.OK);
     }

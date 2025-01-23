@@ -14,7 +14,6 @@ public class SlotScheduler {
     @Autowired
     TimeSlotRepo timeSlotRepo;
 
-
     @Scheduled(cron = "0 0 0 * * *")
     private void deleteSlotOfOldDate(){
         try {
