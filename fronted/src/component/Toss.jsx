@@ -52,6 +52,8 @@
 // export default Toss;
 
 import React, { useState } from 'react';
+import Head from "../assets/images/head.png";
+import Tail from "../assets/images/tail.png";
 
 const Toss = () => {
   const [teamA, setTeamA] = useState('Team A');
@@ -76,12 +78,12 @@ const Toss = () => {
     : null;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <h2 className="text-3xl font-bold text-blue-600 mb-6">Cricket Match Toss</h2>
+    <div className="flex  flex-col items-center justify-center min-h-screen bg-gray-900  p-6">
+      <h2 className="text-3xl font-bold text-teal-400 mb-6">Cricket Match Toss</h2>
 
       <div className="flex flex-col md:flex-row gap-6 mb-4">
         <div className="flex flex-col">
-          <label className="font-medium mb-2">Team A Name:</label>
+          <label className="font-medium mb-2 text-gray-400">Team A Name:</label>
           <input 
             type="text" 
             value={teamA} 
@@ -91,7 +93,7 @@ const Toss = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="font-medium mb-2">Team B Name:</label>
+          <label className="font-medium mb-2 text-gray-400">Team B Name:</label>
           <input 
             type="text" 
             value={teamB} 
@@ -102,7 +104,7 @@ const Toss = () => {
       </div>
 
       <div className="flex items-center mb-6">
-        <label className="font-medium mr-2">{teamA} chooses:</label>
+        <label className="font-medium mr-2 text-gray-400">{teamA} chooses:</label>
         <select 
           value={teamAChoice} 
           onChange={(e) => setTeamAChoice(e.target.value)} 
@@ -127,18 +129,19 @@ const Toss = () => {
         {result && (
           <img 
             src={result === 'heads' 
-              ? 'https://upload.wikimedia.org/wikipedia/commons/1/1f/Indian_1_rupee_coin_reverse.jpg' 
-              : 'https://upload.wikimedia.org/wikipedia/commons/2/24/Indian_1_rupee_coin_obverse.jpg'} 
+              ? {Head}
+              : {Tail}}
             alt={result} 
             className="w-full h-full rounded-full shadow-lg"
           />
         )}
+        {/* <img className='h-20 w-20' src={Head}></img> */}
       </div>
 
       {result && (
         <div className="mt-6 text-center">
-          <h3 className="text-2xl font-bold text-gray-800">Result: {result.toUpperCase()}</h3>
-          <h2 className="text-xl font-semibold text-green-600 mt-2">{winner} wins the toss!</h2>
+          <h3 className="text-2xl font-bold text-gray-400">Result: {result.toUpperCase()}</h3>
+          <h2 className="text-xl font-semibold text-blue-500 mt-2">{winner} wins the toss!</h2>
         </div>
       )}
     </div>

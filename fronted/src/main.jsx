@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
+import InternationalLiveMatch from "./component/InternationalLiveMatch.jsx";
 import LocalLiveScore from "./component/LocalLiveScore.jsx";
 import Details from "./component/Details";
 import Openers from "./component/Openers";
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/international",
+        element: <InternationalLiveMatch />,
+      },
       {
         path: "/locallivescore",
         element: <LocalLiveScore />,
