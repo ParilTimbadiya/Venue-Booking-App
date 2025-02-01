@@ -17,6 +17,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between">
         <Link to="/" className="text-white text-lg font-bold">Cricboard</Link>
         <div>
+        <Link to="/livescore" className="text-white mx-2 hover:text-blue-400 transition-colors duration-200">Live Score</Link>
           <Link to="/details" className="text-white mx-2 hover:text-blue-400 transition-colors duration-200">Details</Link>
           <Link to="/venue" className="text-white mx-2 hover:text-blue-400 transition-colors duration-200">Venue</Link>
           {isAdmin && (

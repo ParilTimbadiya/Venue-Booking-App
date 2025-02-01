@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
+import LiveScore from "./component/LiveScore";
 import Details from "./component/Details";
 import Openers from "./component/Openers";
 import Contact from "./component/Contact";
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
+      {
+        path: "/livescore",
+        element: <LiveScore />,
+      },
       {
         path: "/details",
         element: <Details />,
