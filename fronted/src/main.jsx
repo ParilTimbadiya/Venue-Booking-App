@@ -4,11 +4,11 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import LiveScore from "./component/LiveScore";
+import LocalLiveScore from "./component/LocalLiveScore.jsx";
 import Details from "./component/Details";
 import Openers from "./component/Openers";
 import Contact from "./component/Contact";
-import Toss from "./component/Toss";
+import Toss from "./component/Toss.jsx";
 import BookVenue from "./Venue/BookVenue";
 import Play from "./component/Play";
 import Signin from "./component/Signin.jsx";
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/livescore",
-        element: <LiveScore />,
+        path: "/locallivescore",
+        element: <LocalLiveScore />,
       },
       {
         path: "/details",

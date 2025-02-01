@@ -3,7 +3,7 @@ import React from "react";
 // import { Button } from "./components/ui/button";
 
 
-const LiveScore = () => {
+const LocalLiveScore = () => {
   const matchData = {
     team1: {
       name: "India",
@@ -80,4 +80,4 @@ const LiveScore = () => {
   );
 };
 
-export default LiveScore;
+export default LocalLiveScore;

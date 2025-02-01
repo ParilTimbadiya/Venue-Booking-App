@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './component/Navbar';
 import Home from './component/Home';
-import LiveScore from './component/LiveScore';
+import LocalLiveScore from './component/LocalLiveScore';
 import Details from './component/Details';
 import Openers from './component/Openers';
 import Contact from './component/Contact';
