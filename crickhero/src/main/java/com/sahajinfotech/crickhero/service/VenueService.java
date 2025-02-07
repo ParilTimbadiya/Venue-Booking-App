@@ -47,7 +47,8 @@ public class VenueService {
     EmailService emailService;
     @Autowired
     BookingRepo bookingRepo;
-    @Value('{}')
+    @Value("${spring.admin.username}")
+    private String adminMail;
 
     public ResponseEntity<List<TimeSlot>> getSlots(Long venueId, String date) {
         LocalDate bookingDate = LocalDate.parse(date);
@@ -201,7 +202,7 @@ public class VenueService {
         emailService.sendSimpleMail(emailDetailsDto);
         EmailDetailsDto adminEmailDetails = EmailDetailsDto.builder()
                 .subject("New Cricket Venue Booking Notification")
-                .recipient() // Replace with the admin's email address
+                .recipient(adminMail) // Replace with the admin's email address
                 .msgBody(adminEmailBody)
                 .build();
 
