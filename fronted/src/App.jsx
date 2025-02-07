@@ -2,6 +2,8 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Navbar from './component/Navbar';
 import Home from './component/Home';
+import InternationalLiveMatch from './component/InternationalLiveMatch';
+import LocalLiveScore from './component/LocalLiveScore';
 import Details from './component/Details';
 import Openers from './component/Openers';
 import Contact from './component/Contact';
@@ -18,7 +20,7 @@ const App = () => {
   return (
     <>
       <Navbar />
-      <Outlet></Outlet>
+        <Outlet />
       <Footer />
     </>
   );
