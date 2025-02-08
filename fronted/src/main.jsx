@@ -17,6 +17,7 @@ import Signup from "./component/Signup.jsx";
 import Home from "./component/Home.jsx";
 import AddVenue from "./Venue/AddVenue.jsx";
 import ErrorBoundary from "./component/ErrorBoundary.jsx";
+import RemoveVenue from "./Venue/RemoveVenue.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "/venue", // Add the new route
         element: <BookVenue />,
+      },
+      {
+        path: "/remove-venue",
+        element: <RemoveVenue />,
       },
       {
         path: "/signin", // Add the new route

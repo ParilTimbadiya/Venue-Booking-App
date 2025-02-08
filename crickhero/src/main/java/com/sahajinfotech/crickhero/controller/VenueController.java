@@ -52,6 +52,16 @@ public class VenueController {
         }
     }
 
+    @DeleteMapping("auth/delete/{venueId}")
+    public ResponseEntity<Void> deleteVenue(@PathVariable int venueId) {
+        System.out.println(venueId);
+        boolean isRemoved = venueService.removeVenue(venueId);
+        if (!isRemoved) {
+            return ResponseEntity.notFound().build(); // Return 404 if venue not found
+        }
+        return ResponseEntity.noContent().build(); // Return 204 No Content on successful deletion
+    }
+
     @PostMapping("auth/bookings")
     public ResponseEntity<?> booking(@RequestHeader("Authorization") String header, @RequestBody BookingRequestDto bookingRequestDto) {
         String email = "";

@@ -17,14 +17,14 @@ const Home = () => {
         </p>
         <p className="text-secondary h4">Manage cricket matches on your touch</p>
 
-        <Link to="/details">
+        {/* <Link to="/details">
           <button
             id="home-nm"
             className="mt-3 mx-1 btn btn-lg btn-primary rounded-pill"
           >
             New match
           </button>
-        </Link>
+        </Link> */}
         <button
           id="home-rm"
           className="d-none mt-3 mx-1 btn btn-lg btn-success rounded-pill"

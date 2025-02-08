@@ -47,14 +47,9 @@ public class VenueService {
     EmailService emailService;
     @Autowired
     BookingRepo bookingRepo;
-<<<<<<< HEAD
     @Value("${spring.admin.username}")
     private String adminMail;
 
-=======
-//    @Value(value = '${spring.admin.username}')
-//    String admin;
->>>>>>> 7a54aeb071d142fc5f20d9446c50563aa549f0b4
     public ResponseEntity<List<TimeSlot>> getSlots(Long venueId, String date) {
         LocalDate bookingDate = LocalDate.parse(date);
         List<TimeSlot> slots = timeSlotRepo.findByVenueIdAndBookingDate(venueId, bookingDate);
@@ -207,11 +202,8 @@ public class VenueService {
         emailService.sendSimpleMail(emailDetailsDto);
         EmailDetailsDto adminEmailDetails = EmailDetailsDto.builder()
                 .subject("New Cricket Venue Booking Notification")
-<<<<<<< HEAD
                 .recipient(adminMail) // Replace with the admin's email address
-=======
                 .recipient("sahaj1032@gmail.com") // Replace with the admin's email address
->>>>>>> 7a54aeb071d142fc5f20d9446c50563aa549f0b4
                 .msgBody(adminEmailBody)
                 .build();
 
@@ -220,7 +212,13 @@ public class VenueService {
         return new ResponseEntity<>("Booking done successfully with Booking ID: " + bookingId, HttpStatus.OK);
     }
 
-
-
-
+    @Transactional
+    public boolean removeVenue(int venueId) {
+        try{
+            venueRepo.deleteById(venueId);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 }
