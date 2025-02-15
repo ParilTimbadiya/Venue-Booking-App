@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { privateApi } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import Loadder from "../lodder/Loadder";
+
 
 const BookVenueForm = ({ venueId, onBack }) => {
   const navigate = useNavigate();
@@ -10,6 +12,8 @@ const BookVenueForm = ({ venueId, onBack }) => {
   const [selectedSlot, setSelectedSlot] = useState("");
   const [duration, setDuration] = useState(1); // Default duration of 1 hour
   const [maxDuration, setMaxDuration] = useState(5); // Default max duration
+  const [loading, setLoading] = useState(false);
+
 
   const validationSchema = yup.object({
     booking_date: yup.date().required("Booking date is required"),
@@ -23,7 +27,9 @@ const BookVenueForm = ({ venueId, onBack }) => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
+
         const bookingData = {
           venueId: venueId,
           bookingDate: new Date(values.booking_date)
@@ -42,6 +48,8 @@ const BookVenueForm = ({ venueId, onBack }) => {
           alert(response.data); // Show alert if slots are already booked
         }
       } catch (error) {
+        setLoading(false);
+
         if (error.response && error.response.status === 401) {
           alert("Please login to your account");
         } else if (error.response && error.response.status === 406) {
@@ -233,12 +241,19 @@ const BookVenueForm = ({ venueId, onBack }) => {
           )}
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-        >
-          Book Now
-        </button>
+        {loading ? (
+          <div className="flex justify-center">
+            <Loadder />
+          </div>
+        ) : (
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          >
+            Book Now
+          </button>
+        )}
+
       </form>
     </div>
   );

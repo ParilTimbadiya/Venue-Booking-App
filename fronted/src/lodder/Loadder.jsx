@@ -1,12 +1,11 @@
-import * as React from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import React from "react";
 
 function Loadder() {
   return (
-    <Box sx={{ display: "flex" }}>
-      <CircularProgress />
-    </Box>
+    <div className="flex justify-center items-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+    </div>
   );
 }
+
 export default Loadder;
