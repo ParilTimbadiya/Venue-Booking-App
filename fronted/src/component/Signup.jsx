@@ -16,7 +16,7 @@ function Signup() {
   const [states, setStates] = useState([]);
   const [errorMessage, setErrorMessage] = useState(""); // State for error messages
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     setStates(statecity.state_arr);
     console.log("fetch state and city");
@@ -315,3 +315,5 @@ function Signup() {
   );
 }
 export default Signup;
+
+

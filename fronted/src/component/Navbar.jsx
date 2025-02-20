@@ -80,8 +80,8 @@ const Navbar = () => {
             <Link to="/" className="hover:underline text-white">
               Schedule
             </Link>
-            <Link to="/" className="hover:underline text-white">
-              Archives
+            <Link to="/toss" className="hover:underline text-white">
+              Toss
             </Link>
 
             {/* News with Dropdown */}
@@ -184,17 +184,17 @@ const Navbar = () => {
             {/* <Link to="" className="hover:underline text-white">
               Series
             </Link> */}
-            <Link to="" className="hover:underline text-white">
+            <Link to="/" className="hover:underline text-white">
               Teams
             </Link>
-            <Link to="" className="hover:underline text-white">
+            <Link to="/" className="hover:underline text-white">
               Videos
             </Link>
-            <Link to="" className="hover:underline text-white">
-              Rankings
+            <Link to="/locallivescore" className="hover:underline text-white">
+              Local Match
             </Link>
-            <Link to="" className="hover:underline text-white">
-              More
+            <Link to="/venue" className="hover:underline text-white">
+              Add Venue
             </Link>
           </div>
 
