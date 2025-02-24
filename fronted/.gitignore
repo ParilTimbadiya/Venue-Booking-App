@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Application properties
+crickhero/src/main/resources/application.properties
