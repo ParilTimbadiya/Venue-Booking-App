@@ -49,6 +49,8 @@
 // export default Navbar;
 
 import React from "react";
+import logo from "../assets/images/logo.png"; // Importing the logo
+
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import menu from "../assets/images/Hamburger_menu.png";
@@ -73,7 +75,12 @@ const Navbar = () => {
     <>
       <nav className="fixed top-0 w-full bg-gray-900 text-white p-3 shadow-md z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center">
+            <img src={logo} alt="Cricboard Logo" className="h-8" />{" "}
+            {/* Logo added */}
+          </div>
           <div className="text-xl font-bold">Cricboard</div>
+
           <div className="flex space-x-6 text-sm relative">
             <Link to="/international" className="hover:underline text-white">
               Live Scores
@@ -192,26 +199,26 @@ const Navbar = () => {
               Videos
             </Link>
             <Link to="/locallivescore" className="hover:underline text-white">
-              Local Match
+              Start Tournament
             </Link>
             <Link to="/venue" className="hover:underline text-white">
-              Book Venue
+              Sport Venue
             </Link>
             {isAdmin && (
               <Link
-              to="/add-venue"
-              className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
+                to="/add-venue"
+                className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
               >
-              Add Venue
-            </Link>
-          )}
-          {isAdmin && (
-            <Link
-            to="/remove-venue"
-            className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
-            >
-              Delete Venue
-            </Link>
+                Add Venue
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
+                to="/remove-venue"
+                className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
+              >
+                Delete Venue
+              </Link>
             )}
           </div>
 
@@ -219,26 +226,41 @@ const Navbar = () => {
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
-                className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
+                className="flex items-center rounded-full shadow-lg px-4 py-2 bg-gray-800"
+              >
                 Log Out
               </button>
             ) : (
-              <div className="flex gap-4">
+              <div className="flex items-center rounded-full shadow-lg px-4 py-2 bg-gray-800">
                 <Link
                   to="/signin"
-                  className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  className="text-white hover:text-blue-400 transition-colors duration-200"
                 >
                   Log In
                 </Link>
+                <span className="mx-2">|</span>
                 <Link
                   to="/signup"
-                  className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  className="text-white hover:text-blue-400 transition-colors duration-200"
                 >
                   Sign Up
                 </Link>
-
               </div>
+              // <div className="flex gap-4">
+              //   <Link
+              //     to="/signin"
+              //     className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              //   >
+              //     Log In
+              //   </Link>
+              //   <Link
+              //     to="/signup"
+              //     className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+              //   >
+              //     Sign Up
+              //   </Link>
+
+              // </div>
             )}
           </div>
         </div>
@@ -317,19 +339,12 @@ const Navbar = () => {
 
           ) : (
             <div className="flex gap-4">
-              <Link
-                to="/signin"
-                variant="outline"
-                className="bg-blue-900 border-white text-white px-4 py-[10px] rounded-full font-bold"
-              >
-                Login
-              </Link>
-              <Link
-                to="/signup"
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
-              >
-                Sign Up
-              </Link>
+                <div className="flex items-center rounded-lg shadow-lg p-2 bg-gray-800">
+                  <Link to="/signin" className="text-white hover:text-blue-400 transition-colors duration-200">Log In</Link>
+                  <span className="mx-2">|</span>
+                  <Link to="/signup" className="text-white hover:text-blue-400 transition-colors duration-200">Sign Up</Link>
+                </div>
+
             </div>
           )}
         </div> */}
