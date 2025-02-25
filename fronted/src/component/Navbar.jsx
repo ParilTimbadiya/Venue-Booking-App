@@ -195,32 +195,49 @@ const Navbar = () => {
               Local Match
             </Link>
             <Link to="/venue" className="hover:underline text-white">
+              Book Venue
+            </Link>
+            {isAdmin && (
+              <Link
+              to="/add-venue"
+              className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
+              >
               Add Venue
             </Link>
+          )}
+          {isAdmin && (
+            <Link
+            to="/remove-venue"
+            className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
+            >
+              Delete Venue
+            </Link>
+            )}
           </div>
 
           <div className="flex space-x-4">
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
-              >
+                className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
                 Log Out
               </button>
             ) : (
               <div className="flex gap-4">
                 <Link
                   to="/signin"
-                  className="bg-blue-900 border-white text-white px-4 py-[10px] rounded-full font-bold"
+                  className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                 >
-                  Login
+                  Log In
                 </Link>
                 <Link
                   to="/signup"
-                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
+                  className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                 >
                   Sign Up
                 </Link>
+
               </div>
             )}
           </div>
@@ -291,12 +308,13 @@ const Navbar = () => {
 
       {/* <div className="flex space-x-4">
           {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
-            >
-              Log Out
-            </button>
+                <button
+                  onClick={handleLogout}
+                  className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                >
+                  Log Out
+                </button>
+
           ) : (
             <div className="flex gap-4">
               <Link

@@ -15,7 +15,7 @@
     "crickshero": "file:",
     "express": "^4.21.2",
     "formik": "^2.4.6",
-    "framer-motion": "^12.4.3",
+    "framer-motion": "^12.4.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",

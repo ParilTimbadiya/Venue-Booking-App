@@ -9,6 +9,23 @@ body {
 	font-family: ubuntu;
 }
 
+.btn-login {
+  @apply bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105;
+}
+
+.btn-signup {
+  @apply bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105;
+}
+
+.btn-logout {
+  @apply bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 hover:scale-105;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .btn-purple {
 	color: #fff;
 	background-color: purple;
