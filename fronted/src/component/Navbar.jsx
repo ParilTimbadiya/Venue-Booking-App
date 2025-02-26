@@ -75,11 +75,13 @@ const Navbar = () => {
     <>
       <nav className="fixed top-0 w-full bg-gray-900 text-white p-3 shadow-md z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center">
+          <Link to="/" className="hover:no-underline text-white">
+          <div className="flex items-center shadow-white">
             <img src={logo} alt="Cricboard Logo" className="h-8" />{" "}
             {/* Logo added */}
+          <div className="text-2xl ml-1 font-semibold text-start">Cricboard</div>
           </div>
-          <div className="text-xl font-bold">Cricboard</div>
+          </Link>
 
           <div className="flex space-x-6 text-sm relative">
             <Link to="/international" className="hover:underline text-white">

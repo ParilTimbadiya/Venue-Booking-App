@@ -67,7 +67,7 @@ const AddVenue = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-10 rounded-lg shadow-md">
       <h2 className="text-lg font-bold mb-4">Add New Venue</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-4">
@@ -88,7 +88,7 @@ const AddVenue = () => {
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
-            Image Upload
+            Image
           </label>
           <input
             type="file"
@@ -105,7 +105,7 @@ const AddVenue = () => {
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
-            Price Per Hour
+            Price (Per Hour In Rupees)
           </label>
           <input
             type="number"
@@ -169,7 +169,7 @@ const AddVenue = () => {
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
-            Address
+            Full Address
           </label>
           <input
             type="text"

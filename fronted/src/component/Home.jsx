@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div className="flex flex-col items-center justify-center h-screen white">
         <img
           src="src/assets/images/home-img.jpg"
           className="img-fluid"
@@ -15,16 +15,8 @@ const Home = () => {
         <p className="h1 mt-0">
           Welcome to <span className="text-success">Cricboard</span>
         </p>
-        <p className="text-secondary h4">Manage cricket matches on your touch</p>
+        <p className="text-secondary h4">Manage cricket matches at your fingertips</p>
 
-        {/* <Link to="/details">
-          <button
-            id="home-nm"
-            className="mt-3 mx-1 btn btn-lg btn-primary rounded-pill"
-          >
-            New match
-          </button>
-        </Link> */}
         <button
           id="home-rm"
           className="d-none mt-3 mx-1 btn btn-lg btn-success rounded-pill"
@@ -32,10 +24,10 @@ const Home = () => {
           Running Match
         </button>
         <Link to="/venue">
-        <button className="mt-3 mx-1 btn btn-lg btn-warning rounded-pill">
-          Book Venue
-        </button>
-          </Link>
+          <button className="mt-3 mx-1 btn btn-lg bg-gray-900 text-white rounded-pill shadow-lg hover:bg-blue-600 transition duration-300">
+            Book Venue
+          </button>
+        </Link>
       </div>
     </>
   );

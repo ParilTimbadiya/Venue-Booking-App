@@ -5,7 +5,6 @@ import { privateApi } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import Loadder from "../lodder/Loadder";
 
-
 const BookVenueForm = ({ venueId, onBack }) => {
   const navigate = useNavigate();
   const [bookedSlots, setBookedSlots] = useState([]);
@@ -13,7 +12,6 @@ const BookVenueForm = ({ venueId, onBack }) => {
   const [duration, setDuration] = useState(1); // Default duration of 1 hour
   const [maxDuration, setMaxDuration] = useState(5); // Default max duration
   const [loading, setLoading] = useState(false);
-
 
   const validationSchema = yup.object({
     booking_date: yup.date().required("Booking date is required"),
@@ -29,7 +27,6 @@ const BookVenueForm = ({ venueId, onBack }) => {
     onSubmit: async (values) => {
       setLoading(true);
       try {
-
         const bookingData = {
           venueId: venueId,
           bookingDate: new Date(values.booking_date)
@@ -38,7 +35,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
           startTime: formatTimeForBackend(selectedSlot),
           endTime: calculateEndTime(selectedSlot, duration),
         };
-        console.log("Booking data:",bookingData);
+        console.log("Booking data:", bookingData);
         const response = await privateApi.post("/bookings", bookingData);
         console.log("Booking Response:", response); // Log the booking response
         if (response.status === 200) {
@@ -54,8 +51,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
           alert("Please login to your account");
         } else if (error.response && error.response.status === 406) {
           alert("Not valid date and time");
-        }
-        else if (error.response && error.response.status === 403) {
+        } else if (error.response && error.response.status === 403) {
           alert("Booking faild");
         } else {
           console.error("Booking failed:", error);
@@ -115,11 +111,9 @@ const BookVenueForm = ({ venueId, onBack }) => {
   const calculateEndTime = (startTime, duration) => {
     const startHour = parseInt(startTime.split(" ")[0]);
     const isPM = startTime.includes("pm");
-    let totalHours
-    if(startHour==12&&isPM)
-      totalHours=12
-    else
-      totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
+    let totalHours;
+    if (startHour == 12 && isPM) totalHours = 12;
+    else totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
     const endHour = (totalHours + duration) % 24; // Calculate end hour
     return `${String(endHour).padStart(2, "0")}:00`; // Return in 24-hour format
   };
@@ -134,17 +128,14 @@ const BookVenueForm = ({ venueId, onBack }) => {
     formik.setFieldValue("start_time", slot);
     const startHour = parseInt(slot.split(" ")[0]);
     const isPM = slot.includes("pm");
-    let totalHours
-    if(startHour==12&&isPM)
-      totalHours=12;
-    else
-      totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
+    let totalHours;
+    if (startHour == 12 && isPM) totalHours = 12;
+    else totalHours = isPM ? startHour + 12 : startHour; // Convert to 24-hour format
     // console.log("totalhour for set end time", totalHours);
-    
-    if(slot === "12 pm"){
+
+    if (slot === "12 pm") {
       setMaxDuration(5);
-    }
-    else if (totalHours >= 23) {
+    } else if (totalHours >= 23) {
       setMaxDuration(1);
     } else if (totalHours >= 22) {
       setMaxDuration(2);
@@ -152,15 +143,14 @@ const BookVenueForm = ({ venueId, onBack }) => {
       setMaxDuration(3);
     } else if (totalHours >= 20) {
       setMaxDuration(4);
-    } 
-    else if (totalHours === 12) {
+    } else if (totalHours === 12) {
       setMaxDuration(5); // Allow maximum duration of 5 hours
     } else {
       setMaxDuration(5); // Default max duration for earlier slots
     }
   };
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-10 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Book Venue</h2>
         <button
@@ -248,12 +238,12 @@ const BookVenueForm = ({ venueId, onBack }) => {
         ) : (
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            className="bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 w-full"
           >
             Book Now
           </button>
-        )}
 
+        )}
       </form>
     </div>
   );
