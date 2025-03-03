@@ -248,21 +248,6 @@ const Navbar = () => {
                   Sign Up
                 </Link>
               </div>
-              // <div className="flex gap-4">
-              //   <Link
-              //     to="/signin"
-              //     className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-              //   >
-              //     Log In
-              //   </Link>
-              //   <Link
-              //     to="/signup"
-              //     className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-              //   >
-              //     Sign Up
-              //   </Link>
-
-              // </div>
             )}
           </div>
         </div>
