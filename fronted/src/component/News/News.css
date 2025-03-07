@@ -1,0 +1,120 @@
+/* Main Container */
+.news-dashboard {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #111827, #000000);
+    padding: 2rem;
+    color: #e2e8f0;
+    margin-top: 80px;
+  }
+  
+  .news-dashboard h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2dd4bf;
+    margin-bottom: 2rem;
+  }
+  
+  /* News Grid */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  
+  /* News Card */
+  .news-card {
+    background: #1f2937;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* News Content */
+  .news-content {
+    padding: 1.5rem;
+  }
+  
+  .news-content h3 {
+    font-size: 1.25rem;
+    color: #e2e8f0;
+    margin-bottom: 0.75rem;
+  }
+  
+  .news-content p {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 1rem;
+  }
+  
+  /* News Meta */
+  .news-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #9ca3af;
+  }
+  
+  /* Loading and Error States */
+  .loading,
+  .error {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.125rem;
+  }
+  
+  .loading {
+    color: #9ca3af;
+  }
+  
+  .error {
+    color: #fc8181;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .news-dashboard {
+      padding: 1rem;
+    }
+  
+    .news-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  
+    .news-dashboard h1 {
+      font-size: 2rem;
+    }
+  
+    .news-content h3 {
+      font-size: 1.1rem;
+    }
+  
+    .news-content p {
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .news-dashboard h1 {
+      font-size: 1.8rem;
+    }
+  
+    .news-content h3 {
+      font-size: 1rem;
+    }
+  
+    .news-content p {
+      font-size: 0.8rem;
+    }
+  }

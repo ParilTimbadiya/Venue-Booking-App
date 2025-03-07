@@ -4,6 +4,8 @@ import { privateApi } from "../utils/api";
 import statecity from "../data/statecity";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddVenue = () => {
   const [imageFile, setImageFile] = useState(null);
@@ -17,11 +19,14 @@ const AddVenue = () => {
 
   const validationSchema = yup.object({
     name: yup.string().required("Venue name is required"),
-    price: yup.number().required("Price is required").positive("Price must be positive"),
+    price: yup
+      .number()
+      .required("Price is required")
+      .positive("Price must be positive"),
     state: yup.string().required("State is required"),
     city: yup.string().required("City is required"),
     address: yup.string().required("Address is required"),
-    image: yup.mixed().required("Image is required")
+    image: yup.mixed().required("Image is required"),
   });
 
   const formik = useFormik({
@@ -31,10 +36,10 @@ const AddVenue = () => {
       state: "",
       city: "",
       address: "",
-      image: null
+      image: null,
     },
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("image", imageFile);
@@ -44,17 +49,34 @@ const AddVenue = () => {
       formData.append("address", values.address);
 
       try {
-        const data = await privateApi.post("/addvenues", formData, {
+        const { data } = await privateApi.post("/addvenues", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log(data);
-        navigate("/venue");
+
+        // Show success toast
+        toast.success("Venue added successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
+        resetForm(); // Reset form fields
+        setImageFile(null); // Reset image field
+        setCities([]); // Clear cities dropdown
+
+        // Navigate to Venue list after 3 seconds
+        setTimeout(() => navigate("/venue"), 3000);
       } catch (error) {
         console.error("Error adding venue:", error);
+
+        // Show error toast
+        toast.error("Failed to add venue. Please try again!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
-    }
+    },
   });
 
   const handleStateChange = (event) => {
@@ -67,29 +89,36 @@ const AddVenue = () => {
   };
 
   return (
-    <div className="bg-white p-10 rounded-lg shadow-md">
-      <h2 className="text-lg font-bold mb-4">Add New Venue</h2>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Venue Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
-          {formik.touched.name && formik.errors.name && (
-            <div className="text-red-500 text-sm">{formik.errors.name}</div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Image
-          </label>
+    <div className="relative w-screen h-full flex items-center bg-gradient-to-b from-gray-700 to-gray-950 justify-center overflow-hidden">
+        
+    <div className="z-10 max-w-5xl mx-auto p-8 bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-920 to-gray-950 rounded-xl shadow-lg mt-32 mb-10 w-100">
+      
+      <ToastContainer /> {/* Toast container for notifications */}
+      <h2 className="text-2xl font-semibold text-center text-white mb-6">Add New Venue</h2>
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
+        {[ 
+          { label: "Venue Name", name: "name", type: "text" },
+          { label: "Price Per Hour", name: "price", type: "number" },
+          { label: "Address", name: "address", type: "text" },
+        ].map(({ label, name, type }) => (
+          <div key={name}>
+            <label className="block text-slate-300 font-medium">{label}</label>
+            <input
+              type={type}
+              name={name}
+              value={formik.values[name]}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
+            />
+            {formik.touched[name] && formik.errors[name] && (
+              <div className="text-red-500 text-sm mt-1">{formik.errors[name]}</div>
+            )}
+          </div>
+        ))}
+
+        <div>
+          <label className="block text-slate-300 font-medium">Image Upload</label>
           <input
             type="file"
             accept="image/*"
@@ -97,32 +126,16 @@ const AddVenue = () => {
               setImageFile(e.target.files[0]);
               formik.setFieldValue("image", e.target.files[0]);
             }}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
           />
           {formik.touched.image && formik.errors.image && (
-            <div className="text-red-500 text-sm">{formik.errors.image}</div>
+            <div className="text-red-500 text-sm mt-1">{formik.errors.image}</div>
           )}
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Price (Per Hour In Rupees)
-          </label>
-          <input
-            type="number"
-            name="price"
-            value={formik.values.price}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
-          {formik.touched.price && formik.errors.price && (
-            <div className="text-red-500 text-sm">{formik.errors.price}</div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            State
-          </label>
+
+        <div className="grid grid-cols-2 gap-4">  
+        <div>
+          <label className="block text-slate-300 font-medium">State</label>
           <select
             name="state"
             value={formik.values.state}
@@ -131,65 +144,47 @@ const AddVenue = () => {
               formik.handleChange(e);
             }}
             onBlur={formik.handleBlur}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white text-gray-700"
+            className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
           >
             <option value="">Select State</option>
             {states.map((st, index) => (
-              <option key={index} value={st}>
-                {st}
-              </option>
+              <option key={index} value={st}>{st}</option>
             ))}
           </select>
           {formik.touched.state && formik.errors.state && (
-            <div className="text-red-500 text-sm">{formik.errors.state}</div>
+            <div className="text-red-500 text-sm mt-1">{formik.errors.state}</div>
           )}
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            City
-          </label>
+
+        <div>
+          <label className="block text-slate-300 font-medium">City</label>
           <select
             name="city"
             value={formik.values.city}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white text-gray-700"
+            className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
             disabled={!formik.values.state}
           >
             <option value="">Select City</option>
             {cities.map((city, index) => (
-              <option key={index} value={city}>
-                {city}
-              </option>
+              <option key={index} value={city}>{city}</option>
             ))}
           </select>
           {formik.touched.city && formik.errors.city && (
-            <div className="text-red-500 text-sm">{formik.errors.city}</div>
+            <div className="text-red-500 text-sm mt-1">{formik.errors.city}</div>
           )}
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Full Address
-          </label>
-          <input
-            type="text"
-            name="address"
-            value={formik.values.address}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
-          {formik.touched.address && formik.errors.address && (
-            <div className="text-red-500 text-sm">{formik.errors.address}</div>
-          )}
         </div>
+<br />
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          className="h-18 w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-md transition-all duration-300"
         >
           Add Venue
         </button>
       </form>
+    </div>
     </div>
   );
 };

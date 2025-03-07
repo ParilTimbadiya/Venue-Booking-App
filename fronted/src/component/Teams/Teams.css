@@ -1,0 +1,187 @@
+/* Teams.css */
+#root {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #111827, #000000);
+  color: #e2e8f0;
+}
+
+/* General Styles */
+.teams-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.teams-header {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2dd4bf;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding-top: 90px;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+  gap: 20px;
+}
+
+.team-card {
+  background: linear-gradient(145deg, #1f2937, #111827);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #374151;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, #2dd4be62, #000000);
+}
+
+.team-image img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #2dd4bf;
+  margin-left: 90px;
+  margin-top: 20px;
+}
+
+.team-card h2 {
+  font-size: 1.5rem;
+  color: #e2e8f0;
+  margin: 10px 0;
+}
+
+.team-card p {
+  font-size: 1rem;
+  color: #9ca3af;
+}
+
+.players-container {
+  margin-top: 20px;
+}
+
+.back-button {
+  background: #2dd4bf;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  margin-top: 70px;
+}
+
+.back-button:hover {
+  background: #22c3ae;
+  transform: scale(1.05);
+}
+
+.players-header {
+  text-align: center;
+  font-size: 2rem;
+  color: #2dd4bf;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+  gap: 20px;
+}
+
+.player-card {
+  background: linear-gradient(145deg, #1f2937, #111827);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #374151;
+}
+
+.player-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, #2dd4be62, #000000);
+}
+
+.player-image img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #2dd4bf;
+  margin-left: 50px;
+}
+
+.player-card h2 {
+  font-size: 1.5rem;
+  color: #e2e8f0;
+  margin: 10px 0;
+}
+
+.player-card p {
+  font-size: 1rem;
+  color: #9ca3af;
+  margin: 5px 0;
+}
+
+.player-category {
+  font-size: 1.8rem;
+  color: #2dd4bf;
+  text-align: center;
+  margin: 20px 0;
+  grid-column: 1 / -1;
+  border-bottom: 2px solid #4a5568;
+  padding-bottom: 10px;
+}
+
+.loading,
+.error,
+.no-data {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #9ca3af;
+  margin-top: 50px;
+}
+
+.error {
+  color: #fc8181;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .teams-grid,
+  .players-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 cards per row on smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .teams-grid,
+  .players-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .teams-grid,
+  .players-grid {
+    grid-template-columns: 1fr; /* 1 card per row on very small screens */
+  }
+}

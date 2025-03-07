@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
-import InternationalLiveMatch from "./component/InternationalLiveMatch.jsx";
+import InternationalLiveMatch from "./component/InternationalLiveMatch";
 import LocalLiveScore from "./component/LocalLiveScore.jsx";
 import MainContainer from "./component/MainContainer.jsx";
 import Details from "./component/Details.jsx";
@@ -19,6 +19,21 @@ import Home from "./component/Home.jsx";
 import AddVenue from "./Venue/AddVenue.jsx";
 import ErrorBoundary from "./component/ErrorBoundary.jsx";
 import RemoveVenue from "./Venue/RemoveVenue.jsx";
+import UserInput from "./component/UserInput.jsx";
+import CalculateScore from "./component/calculateScore.jsx";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+// import store from "./app/store";
+import Matches from "./component/Matches/Matches";
+import MatchDetails from "./component/matchDetails/MatchDetails";
+import Schedule from './component/Schedule/Schedule'
+import NewsDetail from "./component/NewsDetail/NewsDetail.jsx";
+import News from "./component/News/News";
+import Teams from "./component/Teams/Teams";
+import Series from "./component/Series/Series";
+import BatsmenRankings from "./component/BatsmenRanking/BatsmenRanking.jsx";
+import PhotoGallery from "./component/Photos/PhotoGallery.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -62,6 +77,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/venue", // Add the new route
+        element: <AddVenue />,
+      },
+      {
+        path: "/venueshow", // Add the new route
         element: <BookVenue />,
       },
       {
@@ -84,12 +103,51 @@ const router = createBrowserRouter([
         path: "*", 
         element: <ErrorBoundary /> 
       },
+      { 
+        path: "/matches", 
+        element: <Matches /> 
+      },
+      {
+        path: "/match/:matchId",
+        element: <MatchDetails />,
+      },
+      {
+        path: "/schedule",
+        element: <Schedule />,
+      },
+      {
+        path: "/news/:id",
+        element: <NewsDetail />,
+      },
+      {
+        path: "/news",
+        element: <News/>,
+      },
+      {
+        path: "/teams",
+        element: <Teams />,
+      },
+      {
+        path: "/series",
+        element: <Series />,
+      },
+      {
+        path: "/ranking",
+        element: <BatsmenRankings />,
+      },
+      {
+        path: "/photo",
+        element: <PhotoGallery />,
+      },
+      
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
+  <Provider store={store}>
     <RouterProvider router={router} />
+  </Provider>
   // </StrictMode>
-);
+)
