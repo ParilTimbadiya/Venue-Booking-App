@@ -52,6 +52,109 @@
 // export default Toss;
 
 
+// import React, { useState } from 'react';
+// import HeadImage from '../assets/images/head.png';
+// import TailImage from '../assets/images/tail.png';
+
+// const Toss = () => {
+//   const [teamA, setTeamA] = useState('Team A');
+//   const [teamB, setTeamB] = useState('Team B');
+//   const [teamAChoice, setTeamAChoice] = useState('heads');
+//   const [result, setResult] = useState(null);
+//   const [isFlipping, setIsFlipping] = useState(false);
+
+//   const handleToss = () => {
+//     setIsFlipping(true);
+//     setResult(null);
+
+//     setTimeout(() => {
+//       const tossResult = Math.random() < 0.5 ? 'heads' : 'tails';
+//       setResult(tossResult);
+//       setIsFlipping(false);
+//     }, 2000);
+//   };
+
+//   const winner = result ? (result === teamAChoice ? teamA : teamB) : null;
+
+//   return (
+//     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 p-6">
+//       <h2 className="text-3xl font-bold text-teal-400 mb-6">Cricket Match Toss</h2>
+
+//       <div className="flex flex-col md:flex-row gap-6 mb-4">
+//         <div className="flex flex-col">
+//           <label className="font-medium mb-2 text-gray-400">Team A Name:</label>
+//           <input
+//             type="text"
+//             value={teamA}
+//             onChange={(e) => setTeamA(e.target.value)}
+//             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+//           />
+//         </div>
+
+//         <div className="flex flex-col">
+//           <label className="font-medium mb-2 text-gray-400">Team B Name:</label>
+//           <input
+//             type="text"
+//             value={teamB}
+//             onChange={(e) => setTeamB(e.target.value)}
+//             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+//           />
+//         </div>
+//       </div>
+
+//       <div className="flex items-center mb-6">
+//         <label className="font-medium mr-2 text-gray-400">{teamA} chooses:</label>
+//         <select
+//           value={teamAChoice}
+//           onChange={(e) => setTeamAChoice(e.target.value)}
+//           className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+//         >
+//           <option value="heads">Heads</option>
+//           <option value="tails">Tails</option>
+//         </select>
+//       </div>
+
+//       <button
+//         className={`px-6 py-3 text-lg font-semibold rounded-md shadow-md transition duration-300 ${
+//           isFlipping ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'
+//         }`}
+//         onClick={handleToss}
+//         disabled={isFlipping}
+//       >
+//         {isFlipping ? 'Flipping...' : 'Toss the Coin'}
+//       </button>
+
+//       <div className="mt-10 w-40 h-40 relative">
+//         <div
+//           className={`w-full h-full rounded-full shadow-lg transform ${
+//             isFlipping ? 'animate-flip' : ''
+//           }`}
+//           style={{
+//             backgroundImage: `url(${result === 'heads' ? HeadImage : TailImage})`,
+//             backgroundSize: 'cover',
+//             backfaceVisibility: 'hidden',
+//           }}
+//         >
+//           {!isFlipping && result && (
+//             <div className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-white">
+//               {result.toUpperCase()}
+//             </div>
+//           )}
+//         </div>
+//       </div>
+
+//       {result && (
+//         <div className="mt-6 text-center">
+//           <h3 className="text-2xl font-bold text-gray-400">Result: {result.toUpperCase()}</h3>
+//           <h2 className="text-xl font-semibold text-blue-500 mt-2">{winner} wins the toss!</h2>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Toss;
+
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Head from "../assets/images/head.png";
@@ -81,7 +184,7 @@ const Toss = () => {
   const winner = result ? (result === teamAChoice ? teamA : teamB) : null;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-900 to-black p-6 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-800 to-gray-950 p-6 text-white">
       <h2 className="text-4xl font-extrabold text-teal-400 mb-6 drop-shadow-lg">
         Cricket Match Toss
       </h2>

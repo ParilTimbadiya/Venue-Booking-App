@@ -1,0 +1,256 @@
+/* Main Container */
+.scheduleContainer {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #111827e1, #000000ef);
+    margin-top: 3px;
+    display: flex;
+    margin-top: 80px;
+    flex-direction: column;
+  }
+  
+  /* Schedule Header */
+  .scheduleHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    height: 160px;
+    background: linear-gradient(to top, #111827e1, #000000ef);
+    
+  }
+  
+  .scheduleHeader > div > h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2dd4bf;
+    margin: 0.5rem 0 1.5rem 0;
+    text-align: center;
+    letter-spacing: 0.5px;
+    
+  }
+  
+  /* Schedule Options Navigation */
+  .scheduleOptions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0.5rem auto 2rem;
+    border-radius: 0.5rem;
+    flex-wrap: wrap;
+    width: 95%;
+  }
+  
+  .scheduleOptions > span {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #a0aec0;
+    font-weight: 600;
+    background: #2d3748;
+  }
+  
+  .scheduleOptions > span:hover {
+    background: #4a5568;
+    color: #e2e8f0;
+    transform: scale(1.05);
+  }
+  
+  .scheduleOptions > span.active {
+    background: #2dd4bf;
+    color: black;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(45, 212, 191, 0.3);
+  }
+  
+  /* Scheduled Matches Container */
+  .scheduledMatches {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 2rem;
+    width: 95%;
+    max-width: 1200px;
+    animation: fadeIn 0.3s ease-out;
+    background: linear-gradient(to top, #0000003b, #111827d1);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+  
+  /* Date Header */
+  .scheduledMatchDate {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #4a5568;
+    background: linear-gradient(to bottom, #000000, #111827d5);
+  }
+  
+  .scheduledMatchDate > p {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    color: #2dd4bf;
+    text-align: center;
+  }
+  
+  /* Match Info Cards */
+  .scheduledMatchInfo {
+    display: flex;
+    padding: 1.2rem;
+    margin: 0.8rem;background: linear-gradient(to top, #1f2937, #0f172a);
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-left: 4px solid #2dd4bf;
+  }
+  
+  .scheduledMatchInfo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background-color: linear-gradient(to right, #000000, #0a1122);;
+  }
+  
+  .scheduledMatchInfo > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+  
+  .scheduledMatchInfo > div > p {
+    margin: 0.3rem 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #e2e8f0;
+  }
+  
+  /* Series Name */
+  .seriesName > p {
+    font-weight: 700;
+    color: #2dd4bf !important;
+    border-bottom: 1px solid #4a5568;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Teams Info */
+  .teamsInfo > p:first-child {
+    font-weight: 600;
+    color: #e2e8f0;
+  }
+  
+  .teamsInfo > p:last-child {
+    color: #a0aec0;
+    font-size: 0.9rem;
+  }
+  
+  /* Match Time */
+  .scheduledMatchTime > p {
+    color: #2dd4bf !important;
+    font-weight: 600;
+    background: rgba(45, 212, 191, 0.1);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  /* Error Styling */
+  .errorContainer {
+    text-align: center;
+    padding: 2rem;
+    color: #fc8181;
+    background: #2d3748;
+    border-radius: 0.5rem;
+    margin: 2rem auto;
+    max-width: 600px;
+  }
+  
+  /* Empty State */
+  .noMatchesContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    color: #a0aec0;
+    font-size: 1.125rem;
+    text-align: center;
+    min-height: 200px;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Custom Scrollbar */
+  .scheduleContainer::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scheduleContainer::-webkit-scrollbar-track {
+    background: #2d3748;
+  }
+  
+  .scheduleContainer::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 4px;
+  }
+  
+  .scheduleContainer::-webkit-scrollbar-thumb:hover {
+    background: #2dd4bf;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 900px) {
+    .scheduleContainer {
+      padding: 0.75rem;
+    }
+    
+    .scheduleHeader > div > h1 {
+      font-size: 1.5rem;
+    }
+    
+    .scheduleOptions {
+      gap: 0.5rem;
+      padding: 0.75rem;
+      margin-bottom: 1.5rem;
+      width: 95%;
+    }
+    
+    .scheduleOptions > span {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+    
+    .scheduledMatchInfo {
+      flex-direction: column;
+      padding: 1rem;
+    }
+    
+    .scheduledMatchInfo > div {
+      padding: 0.5rem 0;
+    }
+    
+    .seriesName {
+      margin-bottom: 0.5rem;
+    }
+    
+    .scheduledMatchDate > p {
+      font-size: 1.2rem;
+    }
+  }
+  
+  /* Large Screens */
+  @media (min-width: 1024px) {
+    .scheduledMatches {
+      width: 90%;
+    }
+  }

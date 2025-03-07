@@ -1,0 +1,365 @@
+import React, { useState, useEffect } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import options from '../../apiOptions';
+import './Rank.css';
+
+const Rank = () => {
+  // Added state for view toggle
+  const [activeView, setActiveView] = useState('team'); // 'team' or 'player'
+  
+  const [rankings, setRankings] = useState([]);
+  const [topStats, setTopStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedSeason, setSelectedSeason] = useState('All');
+  const [selectedStat, setSelectedStat] = useState('mostRuns');
+  const [sortConfig, setSortConfig] = useState({ key: 'rank', direction: 'asc' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState(null);
+
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const fetchRankings = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://cricbuzz-cricket.p.rapidapi.com/stats/v1/iccstanding/team/matchtype/1', {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': options.headers['X-RapidAPI-Key'],
+            'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setRankings(data.values || []);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching rankings:', err);
+        setError(`Failed to load rankings: ${err.message}`);
+        setLoading(false);
+      }
+    };
+
+    fetchRankings();
+  }, []);
+
+  useEffect(() => {
+    const fetchTopStats = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://cricbuzz-cricket.p.rapidapi.com/stats/v1/topstats/0?statsType=${selectedStat}`, {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-key': options.headers['X-RapidAPI-Key'],
+            'x-rapidapi-host': 'cricbuzz-cricket.p.rapidapi.com',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTopStats(data.values || []);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching top stats:', err);
+        setError(`Failed to load top stats: ${err.message}`);
+        setLoading(false);
+      }
+    };
+
+    if (activeView === 'player') {
+      fetchTopStats();
+    }
+  }, [selectedStat, activeView]);
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedAndFilteredRankings = React.useMemo(() => {
+    let sortableItems = [...rankings];
+    if (selectedSeason !== 'All') {
+      sortableItems = sortableItems.filter((team) => team.season === selectedSeason);
+    }
+
+    if (sortConfig.key) {
+      sortableItems.sort((a, b) => {
+        const aValue = a.value[sortConfig.key === 'rank' ? 0 : sortConfig.key === 'team' ? 2 : 3];
+        const bValue = b.value[sortConfig.key === 'rank' ? 0 : sortConfig.key === 'team' ? 2 : 3];
+
+        if (!isNaN(aValue)) {
+          return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
+        }
+        return sortConfig.direction === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
+      });
+    }
+    return sortableItems;
+  }, [rankings, selectedSeason, sortConfig]);
+
+  const paginatedRankings = sortedAndFilteredRankings.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const filteredRankings = paginatedRankings.filter(team =>
+    team.value[2].toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const seasons = ['All', 'World Test Championship (2021-2023)', 'World Test Championship (2019-2021)'];
+  const statsTypes = [
+    { value: 'mostRuns', header: 'Most Runs' },
+    { value: 'highestScore', header: 'Highest Scores' },
+    { value: 'mostWickets', header: 'Most Wickets' },
+    { value: 'bestBowlingInnings', header: 'Best Bowling' },
+  ];
+
+  const openModal = (team) => {
+    setSelectedTeam(team);
+  };
+
+  const closeModal = () => {
+    setSelectedTeam(null);
+  };
+
+  // Handle tab switching
+  const handleViewChange = (view) => {
+    setActiveView(view);
+    // Reset loading state if switching to player view and we need to fetch data
+    if (view === 'player' && topStats.length === 0) {
+      setLoading(true);
+    }
+  };
+
+  // if (loading) return (
+  //   <div className="flex justify-center items-center min-h-64 p-6 ">
+  //     <div className="text-center">
+  //       <div className="relative w-16 h-16">
+  //         <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-200 rounded-full"></div>
+  //         <div className="absolute top-0 left-0 w-16 h-16 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+  //       </div>
+  //       <p className="mt-4 text-gray-700 font-medium">Loading {activeView === 'team' ? 'team rankings' : 'player stats'} data...</p>
+  //     </div>
+  //   </div>
+  // );
+
+  if (error) return (
+    <div className="text-center p-6 ">
+      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md">
+        <div className="flex items-center">
+          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <p className="font-bold">Error Loading Data</p>
+        </div>
+        <p className="mt-2">{error}</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="matchesContainer w-1000 ">
+      <div className="max-w-6xl mx-auto p-4 font-sans ">
+        {/* Updated Header */}
+        <div className="matchType">
+          <h1 className="text-3xl font-bold text-center text-teal-400 mb-2">ICC Cricket Statistics</h1>
+          <p className="text-center text-gray-400">Team Rankings and Player Statistics for Test Cricket</p>
+        </div>
+
+        {/* Updated View Toggle */}
+        <div className="matchOptions">
+          <span
+            className={`${activeView === 'team' ? 'active' : ''}`}
+            onClick={() => handleViewChange('team')}
+          >
+            Team Rankings
+          </span>
+          <span
+            className={`${activeView === 'player' ? 'active' : ''}`}
+            onClick={() => handleViewChange('player')}
+          >
+            Player Stats
+          </span>
+        </div>
+
+        {/* Team Rankings View */}
+        {activeView === 'team' && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              {/* Stats Cards */}
+              {[
+                { value: rankings.length, label: 'Total Teams' },
+                { value: rankings[0]?.value[3], label: 'Top Team PCT' },
+                { value: seasons.length - 1, label: 'Seasons' }
+              ].map((stat, index) => (
+                <div key={index} className="bg-gray-800 rounded-lg shadow-xl p-4 text-center">
+                  <div className="text-4xl font-bold text-teal-400">{stat.value}</div>
+                  <div className="text-gray-400 mt-2">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Rankings Table Section */}
+            <div className="liveMatches mt-6">
+              <div className="matchType">
+                <h2>Team Rankings</h2>
+              </div>
+              
+              {/* Filters */}
+              {/* <div className="p-4 flex flex-wrap gap-4 bg-gray-800"> */}
+                {/* <div className="relative flex-1">
+                  <select
+                    className="w-full bg-gray-700 border border-gray-600 text-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-400"
+                    value={selectedSeason}
+                    onChange={(e) => setSelectedSeason(e.target.value)}
+                  >
+                    {seasons.map((season) => (
+                      <option key={season} value={season} className="bg-gray-800">
+                        {season}
+                      </option>
+                    ))}
+                  </select>
+                </div> */}
+                {/* <input
+                  type="text"
+                  placeholder="Search teams..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="flex-1 bg-gray-700 border border-gray-600 text-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-400"
+                /> */}
+              {/* </div> */}
+
+              {/* Table */}
+              <div className="container bg-gradient-to-t from-gray-800 to-gray-900">
+                <table className="w-full bg-gradient-to-b from-gray-850 to-gray-950 border-3 border-gray-800">
+                  <thead className="bg-gray-750 w-full">
+                    <tr>
+                      {['Rank', 'Team', 'PCT'].map((header) => (
+                        <th
+                          key={header}
+                          className="px-6 py-3 text-left text-sm font-semibold bg-gray-700 cursor-pointer"
+                          onClick={() => requestSort(header.toLowerCase())}
+                        >
+                          {header}
+                          {sortConfig.key === header.toLowerCase() && (
+                            <span className="ml-1">
+                              {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                            </span>
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredRankings.map((team, index) => (
+                      <tr
+                        key={index}
+                        className="hover:bg-gray-750 transition-colors border-t border-gray-700"
+                        onClick={() => openModal(team)}
+                      >
+                        <td className="px-6 py-4 text-teal-400 font-medium">
+                          {team.value[0]}
+                        </td>
+                        <td className="px-6 py-4 text-gray-300">{team.value[2]}</td>
+                        <td className="px-6 py-4 text-gray-300">{team.value[3]}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Player Stats View */}
+        {activeView === 'player' && (
+          <div className="recentMatches mt-6">
+            <div className="matchType">
+              <h2>Player Statistics</h2>
+            </div>
+
+            {/* Stats Selector */}
+            <div className="p-4 bg-gray-800">
+              <select
+                className="w-full bg-gray-700 border border-gray-600 text-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-teal-400"
+                value={selectedStat}
+                onChange={(e) => setSelectedStat(e.target.value)}
+              >
+                {statsTypes.map((stat) => (
+                  <option key={stat.value} value={stat.value} className="bg-gray-800">
+                    {stat.header}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Player Stats Table */}
+            <div className="container bg-gradient-to-t from-gray-800 to-gray-900">
+              <table className="w-full bg-gradient-to-b from-gray-850 to-gray-950 border-3 border-gray-800">
+                <thead className="bg-gray-750">
+                  <tr>
+                    {['Player', 'Matches', selectedStat.includes('Wicket') ? 'Wickets' : 'Runs', 'Average'].map((header) => (
+                      <th
+                        key={header}
+                        className="px-6 py-3 text-left text-sm font-semibold bg-gray-700"
+                      >
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {topStats.map((stat, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-750 transition-colors border-t border-gray-700"
+                    >
+                      <td className="px-6 py-4 text-teal-400 font-medium">{stat.values[1]}</td>
+                      <td className="px-6 py-4 text-gray-300">{stat.values[2]}</td>
+                      <td className="px-6 py-4 text-gray-300">{stat.values[3]}</td>
+                      <td className="px-6 py-4 text-gray-300">{stat.values[4]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        
+      </div>
+
+      {/* Modal */}
+      {selectedTeam && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg max-w-md w-full">
+            <h2 className="text-2xl font-bold text-teal-400 mb-4">{selectedTeam.value[2]}</h2>
+            <div className="space-y-2 text-gray-300">
+              <p>Rank: <span className="text-teal-400">{selectedTeam.value[0]}</span></p>
+              <p>PCT: <span className="text-teal-400">{selectedTeam.value[3]}</span></p>
+            </div>
+            <button
+              onClick={closeModal}
+              className="mt-4 w-full py-2 bg-teal-400 text-gray-900 rounded-lg hover:bg-teal-500 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Rank;

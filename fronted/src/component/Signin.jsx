@@ -4,6 +4,8 @@ import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import {publicApi} from "../utils/api";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import backgroundVideo from "../assets/cricket-stadium.mov";
 
 function Signin() {
   const navigate = useNavigate();
@@ -28,9 +30,15 @@ function Signin() {
         const data = await publicApi.post("/signin", loginData);
         console.log(data);
         if (data.status == 200) {
+        function setCookie(name, value) {
+          document.cookie = name + " " + value;
+        }
           console.log(data.data.message);
           localStorage.setItem("auth", data.data.message);
           localStorage.setItem("role",data.data.role);
+          setCookie("auth", data.data.message);
+          setCookie("role",data.data.role);
+
           navigate("/");
           window.location.reload();
         }
@@ -49,30 +57,22 @@ function Signin() {
   });
   return (
     <>
-      <div className=" w-screen h-screen bg-[#152331]">
-        <div className="w-[500px] h-[600px] bg-[#152331] absolute mt-16 ml-[550px] rounded-xl">
-          <div>
-            <section className="rounded-md ">
-              <div className="flex items-center justify-center ">
-                <div className=" ">
-                  <div className=" w-full items-center  mt-5 mb-3">
-                    <h2 className="text-xl font-bold leading-tight text-gray-300 text-center ">
-                      Sign in to your account
-                    </h2>
-                    <div className="flex text-center mt-2">
-                      <h6 className="text-[#53abf3]  ml-[50px] mr-1">
-                        Don&#x27;t have an account?
-                      </h6>
-                      <Link
-                        to="/signup"
-                        title=""
-                        className="font-semibold text-[#00bcd4] transition-all duration-200 hover:underline text-center"
-                      >
-                        Create a free account
-                      </Link>
-                    </div>
-                  </div>
-
+      <div className="relative w-screen h-screen flex items-center justify-center overflow-hidden">
+            <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover">
+              <source src={backgroundVideo} type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative z-10 w-[720px] bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-850 to-gray-950 shadow-lg shadow-blue-500/50 rounded-xl p-8 mt-20"
+            >
+                  <h2 className="text-3xl font-bold text-center text-white">Sign In 🏏</h2>
+                          <p className="text-center text-gray-400 text-sm mt-1">
+                          Don't have an account? <Link to="/signup" className="text-yellow-400 hover:underline">Create a new account</Link>
+                          </p>
                   <form onSubmit={handleSubmit}>
                     <div className="space-y-5 b">
                       <div>
@@ -84,7 +84,7 @@ function Signin() {
                         </label>
                         <div className="mt-2">
                           <input
-                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 text-gray-400"
+                            className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
                             type="email"
                             name="email"
                             placeholder="Email"
@@ -96,7 +96,8 @@ function Signin() {
                           {errors.email && touched.email && errors.email}
                         </p>
                       </div>
-                      <div>
+                      
+                      <div  >
                         <div className="flex items-center justify-between">
                           <label
                             htmlFor=""
@@ -114,7 +115,7 @@ function Signin() {
                         </div>
                         <div className="mt-2">
                           <input
-                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 text-gray-400"
+                            className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
                             type="password"
                             placeholder="Password"
                             value={values.password}
@@ -128,29 +129,14 @@ function Signin() {
                             errors.password}
                         </p>
                       </div>
-
+                            
                       <div>
                         <button
                           type="submit"
-                          className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
+                          className="h-18 w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-md transition-all duration-300"
                         >
-                          Get started
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            // class="ml-2"
-                            className="mt-1 ml-1"
-                          >
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                          </svg>
+                          Get started ↣
+                          
                         </button>
                       </div>
                     </div>
@@ -189,12 +175,8 @@ function Signin() {
                       Sign in with Facebook
                     </button>
                   </div> */}
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+        </div>  
     </>
   );
 }
