@@ -39,10 +39,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/crickhero': {
-        target: 'http://localhost:8076', // Backend URL
+        target: 'http://localhost:8023', // Backend URL
         changeOrigin: true,
       },
     },
+    port:55000,
   },
 });
 

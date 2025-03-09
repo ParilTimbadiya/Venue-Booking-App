@@ -87,4 +87,11 @@ public class VenueController {
             @RequestParam String date) {
         return venueService.getSlots(venueId,date);
     }
+
+    @PostMapping("auth/matchdata")
+    public ResponseEntity<?> getMatchData(@RequestBody Object object){
+        System.out.println(object.toString());
+        System.out.println();
+        return new ResponseEntity<>(object,HttpStatus.OK);
+    }
 }

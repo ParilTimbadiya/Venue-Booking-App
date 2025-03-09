@@ -56,7 +56,7 @@ import Sidebar from "./Sidebar";
 import menu from "../assets/images/Hamburger_menu.png";
 import { Link, useNavigate } from "react-router-dom";
 import logo2 from "../assets/images/logo.png";
-
+import Cookies from "js-cookie";
 const Navbar = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -68,6 +68,8 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("role");
+    Cookies.remove("auth"); // Remove the auth cookie on logout
+
     navigate("/signin");
   };
 
