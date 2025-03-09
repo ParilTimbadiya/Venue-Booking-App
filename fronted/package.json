@@ -10,24 +10,42 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
+    "chart.js": "^4.4.8",
     "cors": "^2.8.5",
+    "cricketlive": "^1.0.0",
     "crickshero": "file:",
     "express": "^4.21.2",
     "formik": "^2.4.6",
+<<<<<<< HEAD
     "framer-motion": "^12.4.7",
     "js-cookie": "^3.0.5",
+=======
+    "html-react-parser": "^5.2.2",
+    "lodash": "^4.17.21",
+    "lodash.debounce": "^4.0.8",
+    "lucide-react": "^0.475.0",
+    "motion": "^12.4.4",
+>>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.0.2",
+    "react-toastify": "^11.0.3",
+    "react-tsparticles": "^2.12.2",
+    "recharts": "^2.15.1",
+    "tsparticles": "^3.8.1",
+    "tsparticles-engine": "^2.12.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^1.3.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-plugin-react": "^7.37.2",
@@ -36,6 +54,6 @@
     "globals": "^15.12.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
-    "vite": "^6.0.11"
+    "vite": "^6.2.1"
   }
 }

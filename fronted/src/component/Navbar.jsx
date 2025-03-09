@@ -48,9 +48,11 @@
 
 // export default Navbar;
 
-import React from "react";
-import logo from "../assets/images/logo.png"; // Importing the logo
+// import React from "react";
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
 
+<<<<<<< HEAD
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import menu from "../assets/images/Hamburger_menu.png";
@@ -72,40 +74,234 @@ const Navbar = () => {
 
     navigate("/signin");
   };
+=======
+// const Navbar = () => {
+//   const navigate = useNavigate();
+//   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+//   const isAuthenticated = !!localStorage.getItem("auth");
+//   const isAdmin = localStorage.getItem("role") === "admin";
+//   const [isNewsOpen, setIsNewsOpen] = useState(false);
+//   const [seriesOpen, setSeriesOpen] = useState(false);
 
-  return (
-    <>
-      <nav className="fixed top-0 w-full bg-gray-900 text-white p-3 shadow-md z-50">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="hover:no-underline text-white">
-          <div className="flex items-center shadow-white">
-            <img src={logo} alt="Cricboard Logo" className="h-8" />{" "}
-            {/* Logo added */}
-          <div className="text-2xl ml-1 font-semibold text-start">Cricboard</div>
-          </div>
-          </Link>
+//   const handleLogout = () => {
+//     localStorage.removeItem("auth");
+//     localStorage.removeItem("role");
+//     navigate("/signin");
+//   };
 
-          <div className="flex space-x-6 text-sm relative">
-            <Link to="/international" className="hover:underline text-white">
-              Live Scores
-            </Link>
-            <Link to="/" className="hover:underline text-white">
-              Schedule
-            </Link>
-            <Link to="/toss" className="hover:underline text-white">
-              Toss
-            </Link>
+//   return (
+//     <>
+//       <nav className="fixed top-0 w-full bg-gray-900 text-white p-3 shadow-md z-50">
+//         <div className="max-w-7xl mx-auto flex justify-between items-center">
+//           <div className="text-xl font-bold">Cricboard</div>
+//           <div className="flex space-x-6 text-sm relative">
+//             <Link to="/international" className="hover:underline text-white">
+//               Live Scores
+//             </Link>
+//             <Link to="/" className="hover:underline text-white">
+//               Schedule
+//             </Link>
+//             <Link to="/" className="hover:underline text-white">
+//               Archives
+//             </Link>
+>>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
+
+//             {/* News with Dropdown */}
+//             <div
+//               className="relative"
+//               onMouseEnter={() => setIsNewsOpen(true)}
+//               onMouseLeave={() => setIsNewsOpen(false)}
+//             >
+//               <Link to="/" className="hover:underline text-white">
+//                 News ▼
+//               </Link>
+//               {isNewsOpen && (
+//                 <div className="absolute left-0  w-48 bg-white text-gray-900 shadow-lg rounded-md">
+//                   <ul className="py-2">
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       All Stories
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Premium Editorials
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Latest News
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Topics
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Spotlight
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Opinions
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Specials
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Stats & Analysis
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Interviews
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Live Blogs
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Harsha Bhogle
+//                     </li>
+//                   </ul>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Series with Dropdown */}
+//             <div
+//               className="relative"
+//               onMouseEnter={() => setSeriesOpen(true)}
+//               onMouseLeave={() => setSeriesOpen(false)}
+//             >
+//               <Link to="" className="hover:underline text-white">
+//                 Series ▼
+//               </Link>
+//               {seriesOpen && (
+//                 <div className="absolute left-0  w-72 bg-white text-gray-900 shadow-lg rounded-md">
+//                   <ul className="py-2">
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       ICC Champions Trophy, 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Womens Premier League 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Indian Premier League 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Pakistan ODI Tri-Series, 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Ireland tour of Zimbabwe, 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Australia tour of Sri Lanka, 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Ranji Trophy Elite 2024-25
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       England tour of India, 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       Pakistan tour of New Zealand, 2025
+//                     </li>
+//                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
+//                       All Series
+//                     </li>
+//                   </ul>
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* <Link to="" className="hover:underline text-white">
+//               Series
+//             </Link> */}
+//             <Link to="" className="hover:underline text-white">
+//               Teams
+//             </Link>
+//             <Link to="" className="hover:underline text-white">
+//               Videos
+//             </Link>
+//             <Link to="" className="hover:underline text-white">
+//               Rankings
+//             </Link>
+//             <Link to="" className="hover:underline text-white">
+//               More
+//             </Link>
+//           </div>
+
+//           <div className="flex space-x-4">
+//             {isAuthenticated ? (
+//               <button
+//                 onClick={handleLogout}
+//                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
+//               >
+//                 Log Out
+//               </button>
+//             ) : (
+//               <div className="flex gap-4">
+//                 <Link
+//                   to="/signin"
+//                   className="bg-blue-900 border-white text-white px-4 py-[10px] rounded-full font-bold"
+//                 >
+//                   Login
+//                 </Link>
+//                 <Link
+//                   to="/signup"
+//                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
+//                 >
+//                   Sign Up
+//                 </Link>
+//               </div>
+//             )}
+//           </div>
+//         </div>
+//       </nav>
+
+//           </>
+//   );
+// };
+
+// export default Navbar;
+//
+// import React from "react";
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+//
+// const Navbar = () => {
+//   const navigate = useNavigate();
+//   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+//   const isAuthenticated = !!localStorage.getItem("auth");
+//   const isAdmin = localStorage.getItem("role") === "admin";
+//   const [isNewsOpen, setIsNewsOpen] = useState(false);
+//   const [seriesOpen, setSeriesOpen] = useState(false);
+//
+//   const handleLogout = () => {
+//     localStorage.removeItem("auth");
+//     localStorage.removeItem("role");
+//     navigate("/signin");
+//   };
+//
+//   return (
+//     <>
+//       <nav className="fixed top-0 w-full bg-gray-900 text-white p-3 shadow-md z-50 ">
+//         <div className="max-w-7xl mx-auto flex justify-between items-center">
+//           <a href="/"><img className="ml--20 w-15 h-12 pt-1 pd-1   justify-between items-left" src="../../public/cricboard-logo-crop.png" alt="Logo" /></a>
+//
+//           <div className="flex space-x-6 text-sm relative">
+//           <Link to="/" className="hover:underline text-white">
+//               Home
+//             </Link>
+//             <Link to="/matches" className="hover:underline text-white">
+//               Matches
+//             </Link>
+//             <Link to="/schedule" className="hover:underline text-white">
+//               Schedule
+//             </Link>
+//             <Link to="/toss" className="hover:underline text-white">
+//               Toss
+//             </Link>
 
             {/* News with Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setIsNewsOpen(true)}
-              onMouseLeave={() => setIsNewsOpen(false)}
-            >
-              <Link to="/" className="hover:underline text-white">
-                News ▼
-              </Link>
-              {isNewsOpen && (
+{/*             <div */}
+{/*               className="relative" */}
+{/*               onMouseEnter={() => setIsNewsOpen(true)} */}
+{/*               onMouseLeave={() => setIsNewsOpen(false)} */}
+{/*             > */}
+{/*               <Link to="/news" className="hover:underline text-white"> */}
+{/*                 News  */}
+{/*               </Link> */}
+              {/* {isNewsOpen && (
                 <div className="absolute left-0  w-48 bg-white text-gray-900 shadow-lg rounded-md">
                   <ul className="py-2">
                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
@@ -143,19 +339,19 @@ const Navbar = () => {
                     </li>
                   </ul>
                 </div>
-              )}
-            </div>
+              )} */}
+{/*             </div> */}
 
             {/* Series with Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setSeriesOpen(true)}
-              onMouseLeave={() => setSeriesOpen(false)}
-            >
-              <Link to="" className="hover:underline text-white">
-                Series ▼
-              </Link>
-              {seriesOpen && (
+{/*             <div */}
+{/*               className="relative" */}
+{/*               onMouseEnter={() => setSeriesOpen(true)} */}
+{/*               onMouseLeave={() => setSeriesOpen(false)} */}
+{/*             > */}
+{/*               <Link to="/series" className=" hover:underline text-white"> */}
+{/*                 Series  */}
+{/*               </Link> */}
+              {/* {seriesOpen && (
                 <div className="absolute left-0  w-72 bg-white text-gray-900 shadow-lg rounded-md">
                   <ul className="py-2">
                     <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer">
@@ -190,70 +386,64 @@ const Navbar = () => {
                     </li>
                   </ul>
                 </div>
-              )}
-            </div>
+              )} */}
+{/*             </div> */}
 
             {/* <Link to="" className="hover:underline text-white">
               Series
             </Link> */}
-            <Link to="/" className="hover:underline text-white">
-              Teams
-            </Link>
-            <Link to="/" className="hover:underline text-white">
-              Videos
-            </Link>
-            <Link to="/locallivescore" className="hover:underline text-white">
-              Start Tournament
-            </Link>
-            <Link to="/venue" className="hover:underline text-white">
-              Sport Venue
-            </Link>
-            {isAdmin && (
-              <Link
-                to="/add-venue"
-                className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
-              >
-                Add Venue
-              </Link>
-            )}
-            {isAdmin && (
-              <Link
-                to="/remove-venue"
-                className="text-white text-sm hover:text-blue-400 transition-colors duration-200"
-              >
-                Delete Venue
-              </Link>
-            )}
-          </div>
+{/*             <Link to="/teams" className="hover:underline text-white"> */}
+{/*               Teams */}
+{/*             </Link> */}
+{/*              */}
+{/*             <Link to="/ranking" className="hover:underline text-white"> */}
+{/*               Rank */}
+{/*             </Link><Link to="/photo" className="hover:underline text-white"> */}
+{/*               Photo */}
+{/*             </Link> */}
+{/*               <Link to="http://localhost:5500/Cricboard/"  className="hover:underline text-white"> */}
+{/*               Done</Link> */}
+{/*             <Link to="/locallivescore" className="hover:underline text-white"> */}
+{/*               Local Match */}
+{/*             </Link> */}
+{/*             <Link to="/venue" className="hover:underline text-white"> */}
+{/*               Add Venue */}
+{/*             </Link> */}
+{/*             <Link to="/venueshow" className="hover:underline text-white"> */}
+{/*               Book Venue */}
+{/*             </Link> */}
+{/*             <Link to="/contact" className="hover:underline text-white"> */}
+{/*               Contact US */}
+{/*             </Link> */}
+{/*           </div> */}
 
-          <div className="flex space-x-4">
-            {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="flex items-center rounded-full shadow-lg px-4 py-2 bg-gray-800"
-              >
-                Log Out
-              </button>
-            ) : (
-              <div className="flex items-center rounded-full shadow-lg px-4 py-2 bg-gray-800">
-                <Link
-                  to="/signin"
-                  className="text-white hover:text-blue-400 transition-colors duration-200"
-                >
-                  Log In
-                </Link>
-                <span className="mx-2">|</span>
-                <Link
-                  to="/signup"
-                  className="text-white hover:text-blue-400 transition-colors duration-200"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+{/*           <div className="flex space-x-4"> */}
+{/*             {isAuthenticated ? ( */}
+{/*               <button */}
+{/*                 onClick={handleLogout} */}
+{/*                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold" */}
+{/*               > */}
+{/*                 Log Out */}
+{/*               </button> */}
+{/*             ) : ( */}
+{/*               <div className="flex gap-4"> */}
+{/*                 <Link */}
+{/*                   to="/signin" */}
+{/*                   className="bg-blue-800 hover:bg-blue-900 border-white text-white px-4 py-[10px] rounded-full font-bold" */}
+{/*                 > */}
+{/*                   Login */}
+{/*                 </Link> */}
+{/*                 <Link */}
+{/*                   to="/signup" */}
+{/*                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold" */}
+{/*                 > */}
+{/*                   Sign Up */}
+{/*                 </Link> */}
+{/*               </div> */}
+{/*             )} */}
+{/*           </div> */}
+{/*         </div> */}
+{/*       </nav> */}
 
       {/* <nav className="bg-gray-900 text-white px-4 py-3 border-b-[1px] border-gray-300 flex items-center justify-between fixed top-0 w-full shadow-md z-10">
         <div className="flex items-center gap-4">
@@ -275,6 +465,8 @@ const Navbar = () => {
           </Link>
         </div> */}
 
+      {/* <div className="container mx-auto flex items-center justify-between"> */}
+      {/* <div className="flex space-x-6">
       {/* <div className="container mx-auto flex items-center justify-between"> */}
       {/* <div className="flex space-x-6">
           <Link
@@ -315,25 +507,33 @@ const Navbar = () => {
           >
             Details
           </Link>
+        </div> 
         </div> */}
 
       {/* <div className="flex space-x-4">
+      {/* <div className="flex space-x-4">
           {isAuthenticated ? (
-                <button
-                  onClick={handleLogout}
-                  className="bg-gradient-to-r from-red-500 to-red-700 text-white px-5 py-2 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  Log Out
-                </button>
-
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
+            >
+              Log Out
+            </button>
           ) : (
             <div className="flex gap-4">
-                <div className="flex items-center rounded-lg shadow-lg p-2 bg-gray-800">
-                  <Link to="/signin" className="text-white hover:text-blue-400 transition-colors duration-200">Log In</Link>
-                  <span className="mx-2">|</span>
-                  <Link to="/signup" className="text-white hover:text-blue-400 transition-colors duration-200">Sign Up</Link>
-                </div>
-
+              <Link
+                to="/signin"
+                variant="outline"
+                className="bg-blue-900 border-white text-white px-4 py-[10px] rounded-full font-bold"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-[10px] rounded-full font-bold"
+              >
+                Sign Up
+              </Link>
             </div>
           )}
         </div> */}
@@ -354,8 +554,98 @@ const Navbar = () => {
       >
         <Sidebar />
       </div> */}
-    </>
+{/*     </> */}
+{/*   ); */}
+{/* }; */}
+
+{/* export default Navbar; */}
+
+import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const Navbar = () => {
+  const navigate = useNavigate();
+  const [isNewsOpen, setIsNewsOpen] = useState(false);
+  const [seriesOpen, setSeriesOpen] = useState(false);
+  const isAuthenticated = !!localStorage.getItem("auth");
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth");
+    localStorage.removeItem("role");
+    navigate("/signin");
+  };
+
+  return (
+    <nav className="fixed top-0 w-full bg-gray-900 text-white py-3 shadow-md z-50">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+
+        {/* Logo on the Left */}
+        <Link to="/" className="flex-shrink-0">
+          <img className="w-15 h-12" src="/cricboard-logo-crop.png" alt="Logo" />
+        </Link>
+
+        {/* Navigation Links on the Right */}
+        <div className="flex items-center space-x-6 text-sm ">
+          <Link to="/matches" className="hover:text-yellow-400 transition">Matches</Link>
+          <Link to="/schedule" className="hover:text-yellow-400 transition">Schedule</Link>
+          <Link to="/toss" className="hover:text-yellow-400 transition">Toss</Link>
+
+          {/* News Dropdown */}
+          <div
+            className="relative group"
+            onMouseEnter={() => setIsNewsOpen(true)}
+            onMouseLeave={() => setIsNewsOpen(false)}
+          >
+            <Link to="/news" className="hover:text-yellow-400 transition">News</Link>
+          </div>
+
+          {/* Series Dropdown */}
+          <div
+            className="relative group"
+            onMouseEnter={() => setSeriesOpen(true)}
+            onMouseLeave={() => setSeriesOpen(false)}
+          >
+            <Link to="/series" className="hover:text-yellow-400 transition">Series</Link>
+          </div>
+
+          <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
+          <Link to="/ranking" className="hover:text-yellow-400 transition">Rank</Link>
+          <Link to="/photo" className="hover:text-yellow-400 transition">Photo</Link>
+          <Link to="http://localhost:5500/Cricboard" className="hover:text-yellow-400 transition">Local Match</Link>
+          
+          <Link to="/venue" className="hover:text-yellow-400 transition">Add Venue</Link>
+          <Link to="/venueshow" className="hover:text-yellow-400 transition">Book Venue</Link>
+          <Link to="/contact" className="hover:text-yellow-400 transition">Contact Us</Link>
+
+          {/* Authentication Buttons */}
+          {isAuthenticated ? (
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition"
+            >
+              Log Out
+            </button>
+          ) : (
+            <div className="flex space-x-4">
+              <Link
+                to="/signin"
+                className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-full font-bold transition"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 };
 
-export default Navbar;
+export default Navbar;

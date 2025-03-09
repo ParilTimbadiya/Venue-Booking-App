@@ -1,0 +1,146 @@
+.squad-container {
+    margin: 1.5vmax 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.playing11 {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    margin: 0 auto;
+    border-bottom: 2px solid #e0e0e0;
+    padding: 10px 0;
+}
+
+.playing11>p {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.team-name-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: linear-gradient(180deg, #091e2d 0%, #2c4d69 100%);
+    border-radius: 8px;
+    margin: auto;
+    width: 90%;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-name-header>span {
+    margin: 10px 20px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.squads {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    margin: auto;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.squads>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+}
+
+.squads>div:first-child {
+    border-right: 1px solid #e0e0e0;
+}
+
+.teamPlayerName {
+    font-size: 1.2rem !important;
+    font-weight: 600;
+    color: #333;
+}
+
+.teamPlayerRole {
+    font-size: 13px;
+    color: #777;
+}
+
+.squads>div>span {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+    padding: 10px 0;
+}
+
+.squads>div>span>a {
+    width: 100%;
+    text-decoration: none;
+    color: black;
+    transition: 0.2s;
+}
+
+.squads>div>span>a:hover {
+    color: #4b6cb7;
+}
+
+.squads>div:last-child>span>a {
+    align-items: flex-end;
+}
+
+.squads>div:last-child>span>a>p {
+    margin: 4px 13px 0px 1px;
+}
+
+.squads>div:first-child>span>a>p {
+    margin: 4px 0px 0px 15px;
+}
+
+/* Highlight for IN/OUT players */
+.squads>div>span[style*="background-color: #daf1ebb0"] {
+    background-color: #daf1ebb0 !important;
+}
+
+.squads>div>span[style*="background-color: #fff4f4"] {
+    background-color: #fff4f4 !important;
+}
+
+@media screen and (max-width: 900px) {
+    .playing11 {
+        width: 100%;
+    }
+
+    .team-name-header {
+        width: 95%;
+    }
+
+    .squads {
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .squads>div:first-child {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .teamPlayerName {
+        font-size: 14px !important;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .teamPlayerName {
+        font-size: 14px !important;
+    }
+}

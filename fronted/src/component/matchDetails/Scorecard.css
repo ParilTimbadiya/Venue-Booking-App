@@ -1,0 +1,365 @@
+/* Scorecard Styles */
+.scorecard-container {
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding-bottom: 20px;
+  }
+  
+  /* Match status */
+  .match-status {
+    background: linear-gradient(180deg, #091e2d 0%, #2c4d69 100%);
+    color: #2dd4bf;
+    padding: 15px 20px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .match-status p {
+    margin: 0;
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  /* Team selector */
+  .team-selector {
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    background-color: #f1f2f6;
+    border-bottom: 1px solid #dfe4ea;
+  }
+  
+  .team-btn {
+    padding: 10px 25px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 30px;
+    background-color: #f1f2f6;
+    color: #2f3542;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    outline: none;
+  }
+  
+  .team-btn:hover {
+    background-color: #dfe4ea;
+  }
+  
+  .team-btn.active {
+    background: linear-gradient(135deg, #0a3d62 0%, #3c6382 100%);
+    color: white;
+    border-color: #0a3d62;
+    box-shadow: 0 4px 8px rgba(10, 61, 98, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  /* Scorecard content */
+  .scorecard-content {
+    padding: 20px;
+  }
+  
+  .team-scorecard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .second-innings {
+    margin-top: 30px;
+    border-top: 2px dashed #dfe4ea;
+    padding-top: 20px;
+  }
+  
+  .team-name {
+    display: flex;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #091e2df2 10%, #2c4d69 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .team-name p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  /* Table styles */
+  .batters, .bowlers {
+    display: flex;
+    padding: 6px 15px;
+    border-bottom: 2px solid white;
+  }
+  
+  .batters > div:first-child, 
+  .bowlers > div:first-child {
+    flex: 2;
+    text-align: left;
+  }
+  
+  .batters > div:last-child, 
+  .bowlers > div:last-child {
+    flex: 3;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .batters.fall-header > div:first-child,
+  .bowlers.header {
+    font-weight: 600;
+    background-color: #f1f2f6;
+    border-bottom: 3px solid white;
+  }
+  
+  .batters p, .bowlers p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+  }
+  
+  .bowlers.header {
+    background-color: #f1f2f6;
+  }
+  
+  /* Player row styles */
+  .players {
+    display: flex;
+    padding: 5px;
+    border-bottom: 2px solid white;
+    background-color: rgba(255, 255, 255, 0.499)
+  }
+/*   
+  .players:hover {
+    background-color: #f8f9fa;
+  } */
+  
+  .players > div:first-child {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .players > div:last-child {
+    flex: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .batter-name p {
+    color: #1e3799;
+    font-weight: 500;
+    margin: 5px 0;
+  }
+  
+  .player-status p {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+  .back{
+    background-color: rgba(128, 128, 128, 0.453);
+  }
+  /* Fall of wickets */
+  .fow-container {
+    padding: 15px 20px;
+    background-color: white;
+    border-bottom: 1px solid #f1f2f6;
+  }
+  
+  .fall-of-wickets {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .wicket-fall {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .wicket-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 6px 12px;
+    transition: transform 0.2s;
+  }
+  
+  .wicket-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .color{
+    color:rgba(0, 0, 0, 0.862);
+  }
+  
+  .wicket-score {
+    font-weight: 600;
+    color: #e84118;
+    margin: 0;
+  }
+  
+  .wicket-player {
+    font-size: 0.85rem;
+    color: #2f3542;
+    margin: 3px 0 0 0;
+  }
+  
+  /* Extras and Total */
+  .extras {
+    background-color: #f8f9fa;
+  }
+  
+  .total {
+    background-color: #f1f2f6;
+    font-weight: 600;
+  }
+  
+  /* Yet to bat */
+  .yet-to-bat {
+    display: flex;
+    padding: 10px 20px;
+  }
+  
+  .did-not-bat {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .yet-to-bat-names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .yet-to-bat-names p {
+    margin: 3px 0;
+    padding: 2px 8px;
+    background-color: #f1f2f6;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #1e3799;
+  }
+  
+  /* No data states */
+  .no-data, .no-scorecard {
+    padding: 30px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+  }
+  
+  .no-scorecard p {
+    font-size: 1.2rem;
+    color: #2f3542;
+    animation: pulse 2s infinite;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Responsive styles */
+  @media screen and (max-width: 900px) {
+    .scorecard-container {
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+    
+    .team-selector {
+      flex-direction: row;
+      padding: 10px;
+    }
+    
+    .team-btn {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+    
+    .team-name {
+      padding: 10px 15px;
+    }
+    
+    .batters, .bowlers, .players {
+      padding: 8px 10px;
+    }
+    
+    .players > div:first-child {
+      flex: 1;
+    }
+    
+    .players > div:last-child {
+      flex: 1.5;
+    }
+    
+    .batters p, .bowlers p, .batter-name p, .player-status p {
+      font-size: 0.85rem;
+    }
+    
+    .wicket-item {
+      padding: 4px 8px;
+    }
+    
+    .wicket-score, .wicket-player {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .team-name p {
+      font-size: 0.95rem;
+    }
+    
+    .batters > div:last-child, 
+    .bowlers > div:last-child,
+    .players > div:last-child {
+      justify-content: space-around;
+    }
+    
+    .players > div p {
+      min-width: auto;
+      font-size: 0.8rem;
+    }
+    
+    .player-status p {
+      font-size: 0.7rem;
+    }
+    
+    .wicket-fall {
+      gap: 8px;
+    }
+    
+    .extras > div:last-child p {
+      font-size: 0.75rem;
+    }
+  }
