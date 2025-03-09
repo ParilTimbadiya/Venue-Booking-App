@@ -54,7 +54,7 @@ const Signup = () => {
         <source src={backgroundVideo} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-black bg-opacity-60"></div>
-      
+
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ const Signup = () => {
         <p className="text-center text-gray-400 text-sm mt-1">
           Already have an account? <Link to="/signin" className="text-yellow-400 hover:underline">Sign in</Link>
         </p>
-        
+
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">
           <div className="grid grid-cols-2 gap-4">
             {['fullName', 'userName'].map((field, idx) => (
