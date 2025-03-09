@@ -5,10 +5,7 @@ import com.sahajinfotech.crickhero.config.email.EmailDetailsDto;
 import com.sahajinfotech.crickhero.config.email.EmailService;
 import com.sahajinfotech.crickhero.dto.BookingRequestDto;
 import com.sahajinfotech.crickhero.exception.CustomException;
-import com.sahajinfotech.crickhero.model.Booking;
-import com.sahajinfotech.crickhero.model.TimeSlot;
-import com.sahajinfotech.crickhero.model.User;
-import com.sahajinfotech.crickhero.model.Venue;
+import com.sahajinfotech.crickhero.model.*;
 import com.sahajinfotech.crickhero.repository.BookingRepo;
 import com.sahajinfotech.crickhero.repository.TimeSlotRepo;
 import com.sahajinfotech.crickhero.repository.UserRepo;
@@ -59,7 +56,6 @@ public class VenueService {
         }
         return new ResponseEntity<>(slots, HttpStatus.OK);
     }
-
     public List<Venue> getAllVenue() {
         List<Venue> venues = venueRepo.findAll();
         for (Venue venue : venues) {
@@ -68,6 +64,7 @@ public class VenueService {
         }
         return venues;
     }
+
 
     @Transactional
     public ResponseEntity<?> addVenue(MultipartFile multipartFile, Venue venue) {

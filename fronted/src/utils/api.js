@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 export const publicApi = axios.create({
-  baseURL: 'http://localhost:8023/crickhero'
+  baseURL: 'http://localhost:8090/crickhero/'
 });
 
 export const privateApi = axios.create({
-  baseURL: "http://localhost:8023/crickhero/auth/"
+  baseURL: "http://localhost:8090/crickhero/auth/"
 });
 
 privateApi.interceptors.request.use(

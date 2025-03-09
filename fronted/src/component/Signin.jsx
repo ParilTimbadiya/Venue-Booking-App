@@ -37,7 +37,11 @@ function Signin() {
         }
           console.log(data.data.message);
           localStorage.setItem("auth", data.data.message);
-          localStorage.setItem("role",data.data.role);
+          localStorage.setItem("role", data.data.role);
+          // Set cookies for auth and role
+          Cookies.set("auth", data.data.message, { path: '/' });
+          Cookies.set("role", data.data.role, { path: '/' });
+
           setCookie("auth", data.data.message);
           setCookie("role",data.data.role);
 

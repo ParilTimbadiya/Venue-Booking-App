@@ -30,6 +30,7 @@ public class UserService {
 
     @Autowired
     JwtService jwtService;
+
     @Autowired
     PasswordEncoder passwordEncoder;
 

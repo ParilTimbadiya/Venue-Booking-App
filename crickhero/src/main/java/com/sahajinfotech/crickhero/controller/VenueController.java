@@ -2,8 +2,10 @@ package com.sahajinfotech.crickhero.controller;
 
 import com.sahajinfotech.crickhero.config.jwt.JwtService;
 import com.sahajinfotech.crickhero.dto.BookingRequestDto;
+import com.sahajinfotech.crickhero.model.Product;
 import com.sahajinfotech.crickhero.model.TimeSlot;
 import com.sahajinfotech.crickhero.model.Venue;
+import com.sahajinfotech.crickhero.service.ProductService;
 import com.sahajinfotech.crickhero.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,21 +19,19 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("crickhero")
+@RequestMapping("crickhero/auth/")
 public class VenueController {
+    @Autowired
+    JwtService jwtService;
     @Autowired
     VenueService venueService;
     @Autowired
-    JwtService jwtService;
+    ProductService productService;
 
 
-    @GetMapping("/venuelist")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Venue> getAllVenue() {
-        return venueService.getAllVenue();
-    }
 
-    @PostMapping(value = "auth/addvenues", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
+    @PostMapping(value = "addvenues", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addVenue(
             @RequestParam("name") String name,
             @RequestParam("image") MultipartFile image,
@@ -52,7 +52,27 @@ public class VenueController {
         }
     }
 
-    @DeleteMapping("auth/delete/{venueId}")
+
+
+    @PostMapping(value = "/addproduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addProduct(
+            @RequestParam("title") String title,
+            @RequestParam("imgSrc") MultipartFile image,
+            @RequestParam("description") String description,
+            @RequestParam("price") int price
+    ) {
+        try {
+            Product product = new Product();
+            product.setTitle(title);
+            product.setDescription(description);
+            product.setPrice(price);
+            return productService.addProduct(image, product);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("delete/{venueId}")
     public ResponseEntity<Void> deleteVenue(@PathVariable int venueId) {
         System.out.println(venueId);
         boolean isRemoved = venueService.removeVenue(venueId);
@@ -62,7 +82,7 @@ public class VenueController {
         return ResponseEntity.noContent().build(); // Return 204 No Content on successful deletion
     }
 
-    @PostMapping("auth/bookings")
+    @PostMapping("bookings")
     public ResponseEntity<?> booking(@RequestHeader("Authorization") String header, @RequestBody BookingRequestDto bookingRequestDto) {
         String email = "";
         if (header != null && header.startsWith("Bearer ")) {
@@ -81,14 +101,14 @@ public class VenueController {
         return new ResponseEntity<>(email+" not found",HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("auth/bookings")
+    @GetMapping("bookings")
     public ResponseEntity<List<TimeSlot>> getSlots(
             @RequestParam Long venueId,
             @RequestParam String date) {
         return venueService.getSlots(venueId,date);
     }
 
-    @PostMapping("auth/matchdata")
+    @PostMapping("matchdata")
     public ResponseEntity<?> getMatchData(@RequestBody Object object){
         System.out.println(object.toString());
         System.out.println();

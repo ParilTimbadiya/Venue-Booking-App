@@ -39,7 +39,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/crickhero': {
-        target: 'http://localhost:8023', // Backend URL
+        target: 'http://localhost:8090', // Backend URL
         changeOrigin: true,
       },
     },

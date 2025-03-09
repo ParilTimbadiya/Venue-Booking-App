@@ -33,6 +33,9 @@ import Teams from "./component/Teams/Teams";
 import Series from "./component/Series/Series";
 import BatsmenRankings from "./component/BatsmenRanking/BatsmenRanking.jsx";
 import PhotoGallery from "./component/Photos/PhotoGallery.jsx";
+import Product from "./Products/Product.jsx";
+import Logout from "./component/Logout.jsx";
+import AddProduct from "./component/AddProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -141,7 +144,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/products",
-        element: <Home/>
+        element: <Product/>
+      },
+      {
+        path: "/logout",
+        element: <Logout/>
+      },
+      {
+        path: "/addProduct",
+        element: <AddProduct/>
       }
     ],
   },
