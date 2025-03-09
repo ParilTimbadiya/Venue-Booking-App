@@ -52,29 +52,6 @@
 // import { useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
 
-<<<<<<< HEAD
-import { useState } from "react";
-import Sidebar from "./Sidebar";
-import menu from "../assets/images/Hamburger_menu.png";
-import { Link, useNavigate } from "react-router-dom";
-import logo2 from "../assets/images/logo.png";
-import Cookies from "js-cookie";
-const Navbar = () => {
-  const navigate = useNavigate();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const isAuthenticated = !!localStorage.getItem("auth");
-  const isAdmin = localStorage.getItem("role") === "admin";
-  const [isNewsOpen, setIsNewsOpen] = useState(false);
-  const [seriesOpen, setSeriesOpen] = useState(false);
-
-  const handleLogout = () => {
-    localStorage.removeItem("auth");
-    localStorage.removeItem("role");
-    Cookies.remove("auth"); // Remove the auth cookie on logout
-
-    navigate("/signin");
-  };
-=======
 // const Navbar = () => {
 //   const navigate = useNavigate();
 //   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -104,7 +81,6 @@ const Navbar = () => {
 //             <Link to="/" className="hover:underline text-white">
 //               Archives
 //             </Link>
->>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
 
 //             {/* News with Dropdown */}
 //             <div
@@ -569,6 +545,7 @@ const Navbar = () => {
   const [isNewsOpen, setIsNewsOpen] = useState(false);
   const [seriesOpen, setSeriesOpen] = useState(false);
   const isAuthenticated = !!localStorage.getItem("auth");
+  const isAdmin = localStorage.getItem("role")=="admin";
 
   const handleLogout = () => {
     localStorage.removeItem("auth");
@@ -613,10 +590,17 @@ const Navbar = () => {
           <Link to="/ranking" className="hover:text-yellow-400 transition">Rank</Link>
           <Link to="/photo" className="hover:text-yellow-400 transition">Photo</Link>
           <Link to="http://localhost:5500/Cricboard" className="hover:text-yellow-400 transition">Local Match</Link>
-          
-          <Link to="/venue" className="hover:text-yellow-400 transition">Add Venue</Link>
+          {
+          isAdmin ?
+          (<Link to="/venue" className="hover:text-yellow-400 transition text-green-400">Add Venue</Link>):(<></>)
+          } 
+          {
+          isAdmin ?
+          (<Link to="/remove-venue" className="hover:text-yellow-400 transition text-green-400">Remove Venue</Link>):(<></>)
+          } 
           <Link to="/venueshow" className="hover:text-yellow-400 transition">Book Venue</Link>
           <Link to="/contact" className="hover:text-yellow-400 transition">Contact Us</Link>
+          <Link to="/products" className="hover:text-yellow-400 transition">Sport Equipment</Link>
 
           {/* Authentication Buttons */}
           {isAuthenticated ? (

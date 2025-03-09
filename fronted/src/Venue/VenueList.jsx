@@ -23,7 +23,6 @@ function VenueList({ venue }) {
             className="w-full h-center object-cover rounded-md"
           />
           <h2 className="text-lg font-semibold mt-2">{venue.name}</h2>
-          <p className="text-black">{venue.address}</p>
           <div className="flex justify-between items-center mt-2">
             <p className="text-gray-600">Rs.{venue.price} per hour</p>
             <button

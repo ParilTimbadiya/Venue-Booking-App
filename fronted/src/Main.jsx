@@ -139,7 +139,10 @@ const router = createBrowserRouter([
         path: "/photo",
         element: <PhotoGallery />,
       },
-      
+      {
+        path: "/products",
+        element: <Home/>
+      }
     ],
   },
 ]);

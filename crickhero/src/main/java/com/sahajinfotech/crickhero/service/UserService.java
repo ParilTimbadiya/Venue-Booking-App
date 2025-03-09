@@ -1,5 +1,7 @@
 package com.sahajinfotech.crickhero.service;
 
+import com.sahajinfotech.crickhero.config.email.EmailDetailsDto;
+import com.sahajinfotech.crickhero.config.email.EmailService;
 import com.sahajinfotech.crickhero.config.jwt.JwtService;
 import com.sahajinfotech.crickhero.dto.AuthResponse;
 import com.sahajinfotech.crickhero.dto.AuthRequest;
@@ -34,14 +36,55 @@ public class UserService {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Autowired
+    EmailService emailService;
+
     public ResponseEntity<?> signupUser(User user) {
         try {
             if (userRepo.findByEmail(user.getEmail()) != null)
                 return new ResponseEntity<>("Already exist!", HttpStatus.OK);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole("ROLE_USER");
-            if (userRepo.save(user) != null)
+            if (userRepo.save(user) != null) {
+                String emailBody = "Dear " + user.getUserName() + ",\n\n" +
+                        "Welcome to CrickHero! We are thrilled to have you on board.\n\n" +
+                        "Your registration has been successfully completed. Here are your account details:\n\n" +
+                        "User Details:\n" +
+                        "- Username: " + user.getUserName() + "\n" +
+                        "- Email: " + user.getEmail() + "\n" +
+                        "- City: " + user.getCity() + "\n\n" +
+                        "You can now explore and book cricket venues, join exciting matches, and connect with other cricket enthusiasts.\n\n" +
+                        "If you have any questions or need assistance, feel free to contact us.\n\n" +
+                        "Thank you for choosing CrickHero!\n\n" +
+                        "Best regards,\n" +
+                        "CrickHero Team\n" +
+                        "+91 97148 92058\n" +
+                        "sahaj1032@gmail.com";
+
+                String adminEmailBody = "Dear Admin,\n\n" +
+                        "A new user has successfully registered on the CrickHero platform. Below are the details of the user:\n\n" +
+                        "User Details:\n" +
+                        "- Username: " + user.getUserName() + "\n" +
+                        "- Email: " + user.getEmail() + "\n" +
+                        "- City: " + user.getCity() + "\n\n" +
+                        "Please ensure that the user receives a warm welcome and has a seamless experience on our platform.\n\n" +
+                        "Best regards,\n" +
+                        "CrickHero Team";
+                EmailDetailsDto emailDetailsDto = EmailDetailsDto.builder()
+                        .subject("Registration successfully done")
+                        .recipient(user.getEmail())
+                        .msgBody(emailBody)
+                        .build();
+                emailService.sendSimpleMail(emailDetailsDto);
+                EmailDetailsDto adminEmailDetails = EmailDetailsDto.builder()
+                        .subject("New user added!!")
+                        .recipient("sahaj1032@gmail.com") // Replace with the admin's email address
+                        .msgBody(adminEmailBody)
+                        .build();
+
+                emailService.sendSimpleMail(adminEmailDetails);
                 return new ResponseEntity<>("Sign up successfully", HttpStatus.OK);
+            }
             else
                 return new ResponseEntity<>("Sign up not done!", HttpStatus.OK);
         } catch (Exception e) {

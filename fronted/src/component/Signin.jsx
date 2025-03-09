@@ -31,13 +31,6 @@ function Signin() {
       try {
         const data = await publicApi.post("/signin", loginData);
         console.log(data);
-<<<<<<< HEAD
-        if (data.status === 200) {
-          console.log(data.data.message);
-          localStorage.setItem("auth", data.data.message);
-          localStorage.setItem("role", data.data.role);
-          Cookies.set("auth", data.data.message, { expires: 7 }); // Set cookie for auth token accessible across all ports
-=======
         if (data.status == 200) {
         function setCookie(name, value) {
           document.cookie = name + " " + value;
@@ -47,7 +40,6 @@ function Signin() {
           localStorage.setItem("role",data.data.role);
           setCookie("auth", data.data.message);
           setCookie("role",data.data.role);
->>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
 
           navigate("/");
           window.location.reload();
@@ -66,32 +58,6 @@ function Signin() {
 
   return (
     <>
-<<<<<<< HEAD
-      <div className="w-screen h-screen bg-[#152331]">
-        <div className="w-[500px] h-[600px] bg-[#152331] absolute mt-16 ml-[550px] rounded-xl">
-          <div>
-            <section className="rounded-md">
-              <div className="flex items-center justify-center">
-                <div>
-                  <div className="w-full items-center mt-5 mb-3">
-                    <h2 className="text-xl font-bold leading-tight text-gray-300 text-center">
-                      Sign in to your account
-                    </h2>
-                    <div className="flex text-center mt-2">
-                      <h6 className="text-[#53abf3] ml-[50px] mr-1">
-                        Don&#x27;t have an account?
-                      </h6>
-                      <Link
-                        to="/signup"
-                        title=""
-                        className="font-semibold text-[#00bcd4] transition-all duration-200 hover:underline text-center"
-                      >
-                        Create a free account
-                      </Link>
-                    </div>
-                  </div>
-
-=======
       <div className="relative w-screen h-screen flex items-center justify-center overflow-hidden">
             <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover">
               <source src={backgroundVideo} type="video/mp4" />
@@ -108,7 +74,6 @@ function Signin() {
                           <p className="text-center text-gray-400 text-sm mt-1">
                           Don't have an account? <Link to="/signup" className="text-yellow-400 hover:underline">Create a new account</Link>
                           </p>
->>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
                   <form onSubmit={handleSubmit}>
                     <div className="space-y-5 b">
                       <div>
@@ -169,39 +134,12 @@ function Signin() {
                           type="submit"
                           className="h-18 w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-md transition-all duration-300"
                         >
-<<<<<<< HEAD
-                          Get started
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="mt-1 ml-1"
-                          >
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                          </svg>
-=======
                           Get started ↣
                           
->>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
                         </button>
                       </div>
                     </div>
                   </form>
-<<<<<<< HEAD
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </div>
-=======
                   {/* <div className="mt-4 space-y-4 ">
                     <button
                       type="button"
@@ -238,7 +176,6 @@ function Signin() {
                   </div> */}
         </motion.div>
         </div>  
->>>>>>> 33a9983859143327aa6e26f363067fce515d5e94
     </>
   );
 }

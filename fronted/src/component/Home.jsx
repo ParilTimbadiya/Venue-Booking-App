@@ -46,17 +46,16 @@ function Home() {
             <h1>Welcome to Cricket Tournaments</h1>
             <h1>WickPlay.com</h1>
             <p>Join and compete in the most exciting cricket tournaments!</p>
-            {
-              Array.isArray(profileData) && profileData.length > 0 ? (
-                <h2 className='namehead'>Welcome @{profileData[0]?.name}</h2>
-              ) : (
-
-                <div className="btns">
-                  <Link to='/signin' className='signupbtn'>Login</Link>
-                  <Link to='/signup' className='signupbtn'>Sign Up</Link>
-                </div>
-              )
-            }
+{/*             {*/}
+{/*               Array.isArray(profileData) && profileData.length > 0 ? (*/}
+{/*              <h2 className='namehead'>Welcome @{profileData[0]?.name}</h2>*/}
+{/*               ) : (*/}
+{/*                 <div className="btns">*/}
+{/*                   <Link to='/signin' className='signupbtn'>Login</Link>*/}
+{/*                   <Link to='/signup' className='signupbtn'>Sign Up</Link>*/}
+{/*                 </div>*/}
+{/*               )*/}
+{/*             } */}
 
           </header>
         </div>
