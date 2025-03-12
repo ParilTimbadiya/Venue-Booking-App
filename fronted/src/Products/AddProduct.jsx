@@ -17,7 +17,7 @@ const AddProduct = () => {
       .number()
       .required("Price is required")
       .positive("Price must be positive"),
-    imgSrc: yup.mixed().required("Image is required"),
+    image: yup.mixed().required("Image is required"),
   });
 
   const formik = useFormik({
@@ -25,7 +25,7 @@ const AddProduct = () => {
       title: "",
       description: "",
       price: "",
-      imgSrc: null,
+      image: null,
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -33,10 +33,10 @@ const AddProduct = () => {
       formData.append("title", values.title);
       formData.append("description", values.description);
       formData.append("price", values.price);
-      formData.append("imgSrc", imageFile);
+      formData.append("image", imageFile);
 
       try {
-        const { data } = await privateApi.post("/addproduct", formData, {
+        const { data } = await privateApi.post("/addvenues", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -102,13 +102,13 @@ const AddProduct = () => {
               accept="image/*"
               onChange={(e) => {
                 setImageFile(e.target.files[0]);
-                formik.setFieldValue("imgSrc", e.target.files[0]);
+                formik.setFieldValue("image", e.target.files[0]);
               }}
               className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
             />
-            {formik.touched.imgSrc && formik.errors.imgSrc && (
+            {formik.touched.image && formik.errors.image && (
               <div className="text-red-500 text-sm mt-1">
-                {formik.errors.imgSrc}
+                {formik.errors.image}
               </div>
             )}
           </div>

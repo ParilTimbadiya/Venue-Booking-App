@@ -66,7 +66,7 @@ const AddVenue = () => {
         setCities([]); // Clear cities dropdown
 
         // Navigate to Venue list after 3 seconds
-        setTimeout(() => navigate("/venue"), 3000);
+        setTimeout(() => navigate("/venueshow"), 3000);
       } catch (error) {
         console.error("Error adding venue:", error);
 

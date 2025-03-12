@@ -42,10 +42,15 @@ public class UserService {
 
     public ResponseEntity<?> signupUser(User user) {
         try {
-            if (userRepo.findByEmail(user.getEmail()) != null)
+            User temp = userRepo.findByEmail(user.getEmail());
+            if (temp != null)
                 return new ResponseEntity<>("Already exist!", HttpStatus.OK);
+            if (temp!=null && temp.getUserName().equals(user.getUserName()))
+                return new ResponseEntity<>("Username already exist!", HttpStatus.OK);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole("ROLE_USER");
+            if (user.getEmail().equals("official.cricboard@gmail.com"))
+                user.setRole("ROLE_ADMIN");
             if (userRepo.save(user) != null) {
                 String emailBody = String.format("""
                     Dear %s,
