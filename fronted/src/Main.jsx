@@ -35,7 +35,7 @@ import BatsmenRankings from "./component/BatsmenRanking/BatsmenRanking.jsx";
 import PhotoGallery from "./component/Photos/PhotoGallery.jsx";
 import Product from "./Products/Product.jsx";
 import Logout from "./component/Logout.jsx";
-import AddProduct from "./component/AddProduct.jsx";
+import AddProduct from "./Products/AddProduct.jsx";
 
 const router = createBrowserRouter([
   {
