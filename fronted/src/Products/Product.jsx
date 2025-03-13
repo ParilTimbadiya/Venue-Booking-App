@@ -8,6 +8,7 @@ import React from "react";
 const Product = () => {
   const [items, setItems] = useState([]); // State to hold fetched items
   const [cart, setCart] = useState([]); // State to hold cart items
+  const [quantities, setQuantities] = useState({}); // State to hold quantities for each product
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -30,13 +31,29 @@ const Product = () => {
   }, []); // Empty dependency array to run once on mount
 
   const handleAddToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
-    toast.success(`${product.title} added to cart!`);
+    const quantity = quantities[product.id] || 0; // Get current quantity or default to 0
+    if (quantity > 0) {
+      const existingProduct = cart.find(item => item.id === product.id);
+      if (existingProduct) {
+        existingProduct.quantity += quantity; // Update quantity if already in cart
+        setCart([...cart]);
+      } else {
+        setCart([...cart, { ...product, quantity }]); // Add new product with quantity
+      }
+      toast.success(`${product.title} added to cart!`);
+    }
   };
 
   const handleRemoveFromCart = (product) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== product.id));
+    setCart(cart.filter(item => item.id !== product.id));
     toast.error(`${product.title} removed from cart!`);
+  };
+
+  const handleQuantityChange = (productId, change) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [productId]: Math.max(0, (prevQuantities[productId] || 0) + change) // Prevent negative quantities
+    }));
   };
 
   return (
@@ -61,11 +78,11 @@ const Product = () => {
                 <p className="product-description">{product.description}</p>
                 <div className="product-price-container">
                   <span className="product-price">${product.price}</span>
-                  {cart.some((cartItem) => cartItem.id === product.id) ? (
-                    <button onClick={() => handleRemoveFromCart(product)} className="product-cart-btn">Remove from Cart</button>
-                  ) : (
-                    <button onClick={() => handleAddToCart(product)} className="product-cart-btn">Add to Cart</button>
-                  )}
+                  <div className="text-3xl p-">
+                    <button className="text-blue-700 p-3 border-1 rounded-xl" onClick={() => handleQuantityChange(product.id, 1)}>+</button>
+                    <span className="p-3 text-black">{quantities[product.id] || 0}</span> {/* Display current quantity */}
+                    <button className="text-blue-700 p-3 border-1 rounded-xl" onClick={() => handleQuantityChange(product.id, -1)}>-</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -75,5 +92,8 @@ const Product = () => {
     </div>
   );
 };
+
+
+
 
 export default Product;
