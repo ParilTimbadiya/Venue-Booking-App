@@ -61,8 +61,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/crickhero/auth/bookvenue").hasAuthority("ROLE_USER")
-                        .requestMatchers("/crickhero/auth/addvenue","crickhero/auth/addequipment").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/crickhero/signup","/crickhero/signin","/crickhero/venuelist","/crickhero/productlist","/crickhero/contact").permitAll()
+                        .requestMatchers("/crickhero/auth/addvenue","/crickhero/auth/addequipment").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/crickhero/signup","/crickhero/signin","/crickhero/venuelist","/crickhero/productlist","/crickhero/contact","/crickhero/addequipment").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

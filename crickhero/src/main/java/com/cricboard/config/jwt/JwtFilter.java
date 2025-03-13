@@ -4,6 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,14 +59,17 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String username = null;
 
-        // Extract token from Authorization header
+        Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+        logger.info("Extracting token from Authorization header");
+
         String header = request.getHeader("Authorization");
         if(header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
             username = jwtService.extractUsername(token);
         }
 
-        // Validate token and set up authentication if valid
+        logger.info("Validating token for user: {}", username);
+
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = context.getBean(UserDetailServiceImplementation.class)
                                           .loadUserByUsername(username);
@@ -75,7 +81,8 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // Continue filter chain processing
+        logger.info("Continuing filter chain processing");
+
         filterChain.doFilter(request, response);
     }
 }

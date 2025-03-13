@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -58,7 +59,25 @@ public class AuthController {
         return userService.signinUser(authRequest);
     }
 
-
+    @PostMapping("/addequipment")
+    public ResponseEntity<?> addEquipment(@RequestHeader("Authorization") String header,
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("price") int price,
+            @RequestPart("image") MultipartFile image)
+    {
+        try {
+            System.out.println(header);
+            Product product = new Product();
+            product.setTitle(title);
+            product.setDescription(description);
+            product.setPrice(price);
+            return productService.addProduct(image, product);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    
 
     @GetMapping("/productlist")
     public ResponseEntity<List<Product>> getAllProduct() {

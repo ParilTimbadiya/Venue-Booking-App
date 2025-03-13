@@ -29,7 +29,23 @@ public class VenueController {
     ProductService productService;
 
 
-
+    @PostMapping("addequipment")
+    public ResponseEntity<?> addEquipment(
+            @RequestParam("title") String title,
+            @RequestParam("description") String description,
+            @RequestParam("price") int price,
+            @RequestPart("image") MultipartFile image)
+    {
+        try {
+            Product product = new Product();
+            product.setTitle(title);
+            product.setDescription(description);
+            product.setPrice(price);
+            return productService.addProduct(image, product);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping(value = "addvenues", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addVenue(
@@ -54,23 +70,7 @@ public class VenueController {
 
 
 
-    @PostMapping(value = "/addproduct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addProduct(
-            @RequestParam("title") String title,
-            @RequestParam("imgSrc") MultipartFile image,
-            @RequestParam("description") String description,
-            @RequestParam("price") int price
-    ) {
-        try {
-            Product product = new Product();
-            product.setTitle(title);
-            product.setDescription(description);
-            product.setPrice(price);
-            return productService.addProduct(image, product);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @DeleteMapping("delete/{venueId}")
     public ResponseEntity<Void> deleteVenue(@PathVariable int venueId) {
@@ -108,10 +108,10 @@ public class VenueController {
         return venueService.getSlots(venueId,date);
     }
 
-    @PostMapping("matchdata")
-    public ResponseEntity<?> getMatchData(@RequestBody Object object){
-        System.out.println(object.toString());
-        System.out.println();
-        return new ResponseEntity<>(object,HttpStatus.OK);
-    }
+//    @PostMapping("matchdata")
+//    public ResponseEntity<?> getMatchData(@RequestBody Object object){
+//        System.out.println(object.toString());
+//        System.out.println();
+//        return new ResponseEntity<>(object,HttpStatus.OK);
+//    }
 }

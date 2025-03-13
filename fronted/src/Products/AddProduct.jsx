@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { privateApi } from "../utils/api";
+import { publicApi } from "../utils/api";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,7 +16,8 @@ const AddProduct = () => {
     price: yup
       .number()
       .required("Price is required")
-      .positive("Price must be positive"),
+      .positive("Price must be positive")
+      .integer("Price must be an integer"),
     image: yup.mixed().required("Image is required"),
   });
 
@@ -35,10 +36,15 @@ const AddProduct = () => {
       formData.append("price", values.price);
       formData.append("image", imageFile);
 
+      const token = localStorage.getItem("auth");
+      const role = localStorage.getItem("role");
+
       try {
-        const { data } = await privateApi.post("/addvenues", formData, {
+        const { data } = await publicApi.post("/addequipment", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+            Role: role,
           },
         });
 
@@ -47,8 +53,8 @@ const AddProduct = () => {
           autoClose: 3000,
         });
 
-        resetForm(); 
-        setImageFile(null); 
+        resetForm();
+        setImageFile(null);
 
         setTimeout(() => navigate("/products"), 3000);
       } catch (error) {
@@ -65,7 +71,7 @@ const AddProduct = () => {
   return (
     <div className="relative w-screen h-full flex items-center bg-gradient-to-b from-gray-700 to-gray-950 justify-center overflow-hidden">
       <div className="z-10 max-w-5xl mx-auto p-8 bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-920 to-gray-950 rounded-xl shadow-lg mt-32 mb-10 w-100">
-        <ToastContainer /> 
+        <ToastContainer />
         <h2 className="text-2xl font-semibold text-center text-white mb-6">
           Add New Product
         </h2>
@@ -84,6 +90,11 @@ const AddProduct = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className="mt-1 p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400 w-full"
+                onKeyPress={(e) => {
+                  if (name === "price" && !/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
               />
               {formik.touched[name] && formik.errors[name] && (
                 <div className="text-red-500 text-sm mt-1">
