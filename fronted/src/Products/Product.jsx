@@ -9,6 +9,7 @@ const Product = () => {
   const [items, setItems] = useState([]); // State to hold fetched items
   const [cart, setCart] = useState([]); // State to hold cart items
   const [quantities, setQuantities] = useState({}); // State to hold quantities for each product
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,6 +33,10 @@ const Product = () => {
 
   const handleAddToCart = (product) => {
     const quantity = quantities[product.id] || 0; // Get current quantity or default to 0
+    if (!isLoggedIn) {
+      alert("Please log in to add items to your cart."); // Alert if not logged in
+      return;
+    }
     if (quantity > 0) {
       const existingProduct = cart.find(item => item.id === product.id);
       if (existingProduct) {
@@ -49,12 +54,17 @@ const Product = () => {
     toast.error(`${product.title} removed from cart!`);
   };
 
-  const handleQuantityChange = (productId, change) => {
-    setQuantities(prevQuantities => ({
-      ...prevQuantities,
-      [productId]: Math.max(0, (prevQuantities[productId] || 0) + change) // Prevent negative quantities
-    }));
-  };
+const handleQuantityChange = (productId, change) => {
+  if (change > 0 && !isLoggedIn) {
+    alert("Please log in to increase the quantity."); // Alert if not logged in
+    return;
+  }
+  setQuantities(prevQuantities => ({
+    ...prevQuantities,
+    [productId]: Math.max(0, (prevQuantities[productId] || 0) + change) // Prevent negative quantities
+  }));
+};
+
 
   return (
     <div className="container mt-5">
@@ -78,11 +88,12 @@ const Product = () => {
                 <p className="product-description">{product.description}</p>
                 <div className="product-price-container">
                   <span className="product-price">${product.price}</span>
-                  <div className="text-3xl p-">
-                    <button className="text-blue-700 p-3 border-1 rounded-xl" onClick={() => handleQuantityChange(product.id, 1)}>+</button>
-                    <span className="p-3 text-black">{quantities[product.id] || 0}</span> {/* Display current quantity */}
-                    <button className="text-blue-700 p-3 border-1 rounded-xl" onClick={() => handleQuantityChange(product.id, -1)}>-</button>
+                  <div>
+                    <button onClick={() => handleQuantityChange(product.id, 1)}>+</button>
+                    <span>{quantities[product.id] || 0}</span> {/* Display current quantity */}
+                    <button onClick={() => handleQuantityChange(product.id, -1)}>-</button>
                   </div>
+                  <button onClick={() => handleAddToCart(product)} className="product-cart-btn">Add to Cart</button>
                 </div>
               </div>
             </div>
@@ -92,6 +103,7 @@ const Product = () => {
     </div>
   );
 };
+
 
 
 
