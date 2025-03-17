@@ -33,7 +33,10 @@ const Footer = () => {
             </a>
             </div><br />
             <p className="text-sm">
-            © 2025 Cricboard, Times Internet Limited. All rights reserved | The Times of India | Navbharat Times  {new Date().getFullYear()} 
+            © 2025 Cricboard, All rights reserved | Cricboard | Cricket Sport {new Date().getFullYear()} 
+            </p>
+            <p className="text-sm">
+            Contact: official.cricboard@gmail.com
             </p>
           </div>
           

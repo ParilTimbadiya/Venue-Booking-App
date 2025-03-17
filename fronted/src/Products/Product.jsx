@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { publicApi } from "../utils/api"; // Importing the publicApi for fetching data
+import { privateApi, publicApi } from "../utils/api"; // Importing the publicApi for fetching data
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Product.css"; // Adding custom CSS
@@ -12,12 +12,26 @@ const Product = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await publicApi.get("/productlist");
+const fetchProductsAndCart = async () => {
+  try {
+    const response = await Promise.all([
+      publicApi.get("/productlist"),
+      publicApi.get("/cart/items")
+    ]);
+    const products = response[0].data;
+    const cartItems = response[1].data;
 
-        if (response && response.data) {
-          setItems(response.data);
+
+    if (products) {
+      setItems(products);
+      const newQuantities = {};
+      if (Array.isArray(cartItems)) {
+        cartItems.forEach(item => {
+          newQuantities[item.product.id] = item.qty; // Assuming the response has productId and quantity
+        });
+      }
+      setQuantities(newQuantities); // Set quantities based on fetched cart items
+
         } else {
           setItems([]);
           console.error("Invalid response format:", response);
@@ -28,42 +42,63 @@ const Product = () => {
       }
     };
 
-    fetchProducts(); // Call the fetch function
-  }, []); // Empty dependency array to run once on mount
+    // Check local storage for authentication
+    const auth = localStorage.getItem('auth');
+    const role = localStorage.getItem('role');
+    setIsLoggedIn(!!auth && !!role); // Set logged in status based on local storage
 
-  const handleAddToCart = (product) => {
-    const quantity = quantities[product.id] || 0; // Get current quantity or default to 0
-    if (!isLoggedIn) {
-      alert("Please log in to add items to your cart."); // Alert if not logged in
+    if (isLoggedIn) {
+      fetchCartItems(); // Fetch cart items if logged in
+    }
+
+    fetchProductsAndCart(); // Call the fetch function
+  }, [isLoggedIn]); // Run effect when isLoggedIn changes
+
+  const fetchCartItems = async () => {
+    try {
+      const response = await publicApi.get("/cart/items"); // Adjust the endpoint as necessary
+      const cartItems = response.data;
+      console.log(cartItems);
+      
+      const newQuantities = {};
+      if (Array.isArray(cartItems)) {
+        cartItems.forEach(item => {
+          newQuantities[item.product] = item.qty; // Assuming the response has productId and quantity
+        });
+      } else {
+        console.error("Cart items response is not an array. Cart items:", cartItems);
+      }
+      setQuantities(newQuantities); // Set quantities based on fetched cart items
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  const handleQuantityChange = async (productId, change) => {
+    if (change > 0 && !isLoggedIn) {
+      alert("Please log in to increase the quantity."); // Alert if not logged in
       return;
     }
-    if (quantity > 0) {
-      const existingProduct = cart.find(item => item.id === product.id);
-      if (existingProduct) {
-        existingProduct.quantity += quantity; // Update quantity if already in cart
-        setCart([...cart]);
-      } else {
-        setCart([...cart, { ...product, quantity }]); // Add new product with quantity
+    setQuantities(prevQuantities => {
+      const newQuantities = {
+        ...prevQuantities,
+        [productId]: Math.max(0, (prevQuantities[productId] || 0) + change) // Prevent negative quantities
+      };
+      
+      // Make API call to update the cart in the backend
+      if (isLoggedIn) {
+        publicApi.get(`/cart/update`, {
+          product: productId,
+          qty: newQuantities[productId],
+
+        }).catch(error => {
+          console.error("Error updating cart:", error);
+        });
       }
-      toast.success(`${product.title} added to cart!`);
-    }
+      
+      return newQuantities;
+    });
   };
-
-  const handleRemoveFromCart = (product) => {
-    setCart(cart.filter(item => item.id !== product.id));
-    toast.error(`${product.title} removed from cart!`);
-  };
-
-const handleQuantityChange = (productId, change) => {
-  if (change > 0 && !isLoggedIn) {
-    alert("Please log in to increase the quantity."); // Alert if not logged in
-    return;
-  }
-  setQuantities(prevQuantities => ({
-    ...prevQuantities,
-    [productId]: Math.max(0, (prevQuantities[productId] || 0) + change) // Prevent negative quantities
-  }));
-};
 
 
   return (
@@ -78,34 +113,45 @@ const handleQuantityChange = (productId, change) => {
             </p>
           </div>
         ) : (
-          items.map((product) => (
-            <div key={product.id} className="product-card">
-              <div className="product-image-container">
-                <img src={product.imgSrc} alt={product.title} className="product-image" />
-              </div>
-              <div className="product-info">
-                <h3 className="product-title">{product.title}</h3>
-                <p className="product-description">{product.description}</p>
-                <div className="product-price-container">
-                  <span className="product-price">${product.price}</span>
-                  <div>
-                    <button onClick={() => handleQuantityChange(product.id, 1)}>+</button>
-                    <span>{quantities[product.id] || 0}</span> {/* Display current quantity */}
-                    <button onClick={() => handleQuantityChange(product.id, -1)}>-</button>
-                  </div>
-                  <button onClick={() => handleAddToCart(product)} className="product-cart-btn">Add to Cart</button>
-                </div>
-              </div>
-            </div>
+          items.map((product) => (<></>
+            // <div key={product.id} className="product-card">
+            //   <div className="product-image-container">
+            //     <img
+            //       src={product.imgSrc}
+            //       alt={product.title}
+            //       className="product-image"
+            //     />
+            //   </div>
+            //   <div className="product-info">
+            //     <h3 className="product-title">{product.title}</h3>
+            //     <p className="product-description">{product.description}</p>
+            //     <div className="product-price-container">
+            //       <span className="product-price">${product.price}</span>
+            //       <div className="text-3xl p-">
+            //         <button
+            //           className="text-blue-700 p-3 border-1 rounded-xl"
+            //           onClick={() => handleQuantityChange(product.id, 1)}
+            //         >
+            //           +
+            //         </button>
+            //         <span className="p-3 text-black">
+            //           {quantities[product.id] || 0}
+            //         </span>{" "}
+            //         <button
+            //           className="text-blue-700 p-3 border-1 rounded-xl"
+            //           onClick={() => handleQuantityChange(product.id, -1)}
+            //         >
+            //           -
+            //         </button>
+            //       </div>
+            //     </div>
+            //   </div>
+            // </div>
           ))
         )}
       </div>
     </div>
   );
 };
-
-
-
-
 
 export default Product;

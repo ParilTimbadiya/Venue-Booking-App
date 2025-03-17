@@ -11,10 +11,21 @@ const AddVenue = () => {
   const [imageFile, setImageFile] = useState(null);
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     setStates(statecity.state_arr);
+     // Check if the user is an admin (this logic will depend on your authentication setup)
+     const checkAdminStatus = () => {
+      // Implement your logic to check if the user is an admin
+      // For example, you might check a user role from context or local storage
+      const userRole = localStorage.getItem('role'); // Example
+      
+      setIsAdmin(userRole === 'admin');
+    };
+    
+    checkAdminStatus();
   }, []);
 
   const validationSchema = yup.object({
@@ -87,6 +98,16 @@ const AddVenue = () => {
     const citiesArray = citiesString.split("|").map((city) => city.trim());
     setCities(citiesArray);
   };
+
+  if (!isAdmin) {
+    return (
+      <div className="p-12 mt-20">
+        <div>You do not have permission to view this page.</div>
+
+      </div>
+    ); // Message for non-admin users
+
+  }
 
   return (
     <div className="relative w-screen h-full flex items-center bg-gradient-to-b from-gray-700 to-gray-950 justify-center overflow-hidden">

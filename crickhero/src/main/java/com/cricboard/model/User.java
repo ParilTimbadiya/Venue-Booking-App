@@ -44,8 +44,12 @@ public class User {
 
     private String role;
 
+    private String otp;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Booking> bookingList;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<CartItem> cartItemList;
 
 }

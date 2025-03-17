@@ -60,9 +60,9 @@ public class SecurityConfig {
                 .csrf(customizer -> customizer.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/crickhero/auth/bookvenue").hasAuthority("ROLE_USER")
+                        .requestMatchers("/crickhero/auth/bookvenue","/crickhero/addequipment").hasAuthority("ROLE_USER")
                         .requestMatchers("/crickhero/auth/addvenue","/crickhero/auth/addequipment").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/crickhero/signup","/crickhero/signin","/crickhero/venuelist","/crickhero/productlist","/crickhero/contact","/crickhero/addequipment").permitAll()
+                        .requestMatchers("/crickhero/signup","/crickhero/signin","/crickhero/send-otp","/crickhero/reset-password","/crickhero/venuelist","/crickhero/productlist","/crickhero/contact","/crickhero/addequipment","/crickhero/cart/items","/crickhero/cart/update","/crickhero/booking-data","/crickhero/users").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

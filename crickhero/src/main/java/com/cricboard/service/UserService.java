@@ -1,5 +1,6 @@
 package com.cricboard.service;
 
+import com.cricboard.model.Booking;
 import com.cricboard.repository.UserRepo;
 import com.cricboard.config.email.EmailDetailsDto;
 import com.cricboard.config.email.EmailService;
@@ -20,6 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
     @Autowired
@@ -39,6 +45,12 @@ public class UserService {
 
     @Autowired
     EmailService emailService;
+
+    public static String generateOtp() {
+        Random random = new Random();
+        int otp = 100000 + random.nextInt(900000); // Generates a number between 100000 and 999999
+        return String.valueOf(otp);
+    }
 
     public ResponseEntity<?> signupUser(User user) {
         try {
@@ -142,5 +154,95 @@ public class UserService {
                 .anyMatch(role -> role.equals("ADMIN"));
         AuthResponse authResponse = new AuthResponse(token,HttpStatus.OK,isAdmin?"admin":"user");
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
+    }
+
+    public boolean sendOtpToEmail(String email) {
+        try{
+            User user = userRepo.findByEmail(email);
+
+            if(user!=null){
+                String otp = UserService.generateOtp();
+                user.setOtp(otp);
+                if(userRepo.save(user)!=null) {
+                    String emailBody = String.format("""
+                                    Dear %s,
+                                                    
+                                    Your OTP for password reset is: %s
+                                                    
+                                    Please use this OTP to reset your password. If you did not request this, please ignore this email.
+                                                    
+                                    Best regards,
+                                    Cricboard Team
+                                    official.cricboard@gmail.com
+                                    """,
+                            user.getUserName(), // Assuming you have the user's name
+                            otp); // The generated OTP
+
+                    EmailDetailsDto userEmail = EmailDetailsDto.builder()
+                            .subject("Cricboard - OTP for Password Reset")
+                            .recipient(user.getEmail())
+                            .msgBody(emailBody)
+                            .build();
+                    emailService.sendSimpleMail(userEmail);
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean resetPassword(String email, String otp, String newPassword) {
+        try{
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.getOtp().equals(otp)){
+                user.setPassword(passwordEncoder.encode(newPassword));
+                user.setOtp("");
+                if(userRepo.save(user)!=null){
+                    String emailBody = String.format("""
+                Dear %s,
+                
+                Your password has been reset successfully.
+                
+                You can now log in with your new password. If you did not request this change, please contact our support team immediately.
+                
+                Best regards,
+                Cricboard Team
+                official.cricboard@gmail.com
+                """,
+                            user.getUserName()); // Assuming you have the user's name
+
+                    EmailDetailsDto userEmail = EmailDetailsDto.builder()
+                            .subject("Cricboard - Password Reset Successful")
+                            .recipient(user.getEmail())
+                            .msgBody(emailBody)
+                            .build();
+                    emailService.sendSimpleMail(userEmail);
+                    return true;
+                }
+            }
+            return false;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public List<User> getAllUser() {
+        List<User> sortedList = userRepo.findAll().stream()
+                .sorted(Comparator.comparing(User::getEmail).reversed())
+                .collect(Collectors.toList());
+        for (User i : sortedList){
+            i.setOtp(null);
+            i.setPassword(null);
+            i.setBookingList(null);
+            i.setRole(null);
+            i.setCartItemList(null);
+        }
+        return sortedList;
     }
 }

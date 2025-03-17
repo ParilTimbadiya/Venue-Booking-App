@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicApi } from "../utils/api";
 import { useFormik } from "formik";
@@ -9,6 +9,19 @@ import "react-toastify/dist/ReactToastify.css";
 const AddProduct = () => {
   const [imageFile, setImageFile] = useState(null);
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+       const checkAdminStatus = () => {
+        // Implement your logic to check if the user is an admin
+        // For example, you might check a user role from context or local storage
+        const userRole = localStorage.getItem('role'); // Example
+        
+        setIsAdmin(userRole === 'admin');
+      };
+      
+      checkAdminStatus();
+    }, []);
 
   const validationSchema = yup.object({
     title: yup.string().required("Product title is required"),
@@ -68,6 +81,15 @@ const AddProduct = () => {
     },
   });
 
+  if (!isAdmin) {
+    return (
+      <div className="p-12 mt-20">
+        <div>You do not have permission to view this page.</div>
+
+      </div>
+    ); // Message for non-admin users
+
+  }
   return (
     <div className="relative w-screen h-full flex items-center bg-gradient-to-b from-gray-700 to-gray-950 justify-center overflow-hidden">
       <div className="z-10 max-w-5xl mx-auto p-8 bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-920 to-gray-950 rounded-xl shadow-lg mt-32 mb-10 w-100">

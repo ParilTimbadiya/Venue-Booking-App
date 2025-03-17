@@ -5,7 +5,8 @@ import { privateApi, publicApi } from "../utils/api"; // Correctly import the fe
 const RemoveVenue = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(false);
-
+    const [isAdmin, setIsAdmin] = useState(false);
+  
   useEffect(() => {
     const getVenues = async () => {
       setLoading(true); // Start loading
@@ -24,6 +25,16 @@ const RemoveVenue = () => {
         setLoading(false); // Stop loading
       }
     };   
+     // Check if the user is an admin (this logic will depend on your authentication setup)
+     const checkAdminStatus = () => {
+      // Implement your logic to check if the user is an admin
+      // For example, you might check a user role from context or local storage
+      const userRole = localStorage.getItem('role'); // Example
+      
+      setIsAdmin(userRole === 'admin');
+    };
+    
+    checkAdminStatus();
     getVenues();
   }, []);
   
@@ -39,9 +50,17 @@ const RemoveVenue = () => {
   if (loading) {
     return <div>Loading...</div>; // Replace with your Loader component if available
   }
-  
+  if (!isAdmin) {
+    return (
+      <div className="p-12 mt-20">
+        <div>You do not have permission to view this page.</div>
+
+      </div>
+    ); // Message for non-admin users
+
+  }
   return (
-    <div className="p-4">
+    <div className="p-5 mt-20">
       <h1 className="text-2xl font-bold mb-4">Remove Venue</h1>
       <div className="grid grid-cols-1 p-3 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {venues.map((venue) => (

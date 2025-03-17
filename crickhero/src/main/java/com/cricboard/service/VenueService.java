@@ -17,6 +17,7 @@ import com.cricboard.model.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VenueService {
@@ -293,5 +296,19 @@ public class VenueService {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public List<Booking> getAllBooking() {
+        List<Booking> sortedList = bookingRepo.findAll().stream()
+                .sorted(Comparator.comparing(Booking::getBookingDate).reversed())
+                .collect(Collectors.toList());
+        for (Booking i : sortedList){
+            i.getVenue().setBookingList(null);
+            i.getVenue().setTimeSlots(null);
+            User temp = new User();
+            temp.setEmail(i.getUser().getEmail());
+            i.setUser(temp);
+        }
+        return  sortedList;
     }
 }

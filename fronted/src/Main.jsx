@@ -36,6 +36,10 @@ import PhotoGallery from "./component/Photos/PhotoGallery.jsx";
 import Product from "./Products/Product.jsx";
 import Logout from "./component/Logout.jsx";
 import AddProduct from "./Products/AddProduct.jsx";
+import ForgotPassword from "./component/ForgotPassword.jsx";
+import ForgotPassword2 from "./component/ForgotPassword2.jsx";
+import Booking from "./Venue/Booking.jsx";
+import UserDetails from "./Venue/UserDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -153,6 +157,15 @@ const router = createBrowserRouter([
       {
         path: "/addProduct",
         element: <AddProduct/>
+      },{
+        path: "/forgotPassword",
+        element: <ForgotPassword2/>
+      },{
+        path: "/bookingData",
+        element: <Booking/>
+      },{
+        path: "/userDetails",
+        element: <UserDetails/>
       }
     ],
   },

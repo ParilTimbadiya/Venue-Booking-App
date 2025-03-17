@@ -4,6 +4,7 @@ import com.cricboard.config.email.EmailDetailsDto;
 import com.cricboard.config.email.EmailService;
 import com.cricboard.dto.AuthRequest;
 import com.cricboard.dto.Contactus;
+import com.cricboard.model.Booking;
 import com.cricboard.model.Product;
 import com.cricboard.model.User;
 import com.cricboard.model.Venue;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * AuthController - Handles user-related operations
@@ -77,12 +79,45 @@ public class AuthController {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    
 
+
+    @PostMapping("/send-otp")
+    public ResponseEntity<String> sendOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        // Logic to generate and send OTP
+        boolean isSent = userService.sendOtpToEmail(email);
+        if (isSent) {
+            return ResponseEntity.ok("OTP sent to your email!");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending OTP.");
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+        String newPassword = request.get("newPassword");
+        // Logic to validate OTP and reset password
+        boolean isReset = userService.resetPassword(email, otp, newPassword);
+        if (isReset) {
+            return ResponseEntity.ok("Password reset successfully!");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP or email.");
+        }
+    }
     @GetMapping("/productlist")
     public ResponseEntity<List<Product>> getAllProduct() {
-        System.out.println("getallproducts");
         return new ResponseEntity<>(productService.getAllProduct(),HttpStatus.OK);
+    }
+    @GetMapping("/booking-data")
+    public ResponseEntity<List<Booking>> getAllBooking() {
+        return new ResponseEntity<>(venueService.getAllBooking(),HttpStatus.OK);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUser(),HttpStatus.OK);
     }
 
     @GetMapping("/venuelist")

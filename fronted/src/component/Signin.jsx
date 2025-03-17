@@ -55,6 +55,13 @@ function Signin() {
           alert("Invalid credentials");
         }
       } catch (ex) {
+        if(ex.status === 400){
+          alert("Invalid credentials");
+        }else if (data.status === 500) {
+          alert("Internal server error");
+        } else {
+          alert("Invalid credentials");
+        }
         console.log(ex);
       }
     },
@@ -110,13 +117,12 @@ function Signin() {
                           >
                             Password
                           </label>
-                          <a
-                            href="#"
+                          <Link to="/forgotPassword"
                             title=""
                             className="text-sm font-semibold text-gray-400 hover:underline"
                           >
                             Forgot password?
-                          </a>
+                          </Link>
                         </div>
                         <div className="mt-2">
                           <input

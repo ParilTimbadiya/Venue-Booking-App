@@ -148,43 +148,42 @@ const BookVenueForm = ({ venueId, onBack }) => {
     }
   };
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-[#2d3748] p-6 text-[#a0aec0] rounded-lg shadow-lg w-[448px] max-w-lg mx-auto">
+      {/* Header with Back Button */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">Book Venue</h2>
+        <h2 className="text-xl font-bold">Book Venue</h2>
         <button
           onClick={onBack}
-          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+          className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
         >
           Back
         </button>
       </div>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Booking Date
-          </label>
+
+      {/* Booking Form */}
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
+        {/* Booking Date */}
+        <div>
+          <label className="block text-sm font-medium">Booking Date</label>
           <input
             type="date"
             name="booking_date"
             value={formik.values.booking_date}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1 w-full bg-[#CCD6F6] text-black border border-gray-300 rounded-md p-2"
           />
           {formik.touched.booking_date && formik.errors.booking_date && (
-            <div className="text-red-500 text-sm">
-              {formik.errors.booking_date}
-            </div>
+            <div className="text-red-500 text-sm">{formik.errors.booking_date}</div>
           )}
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Duration (hours)
-          </label>
+
+        {/* Duration Dropdown */}
+        <div>
+          <label className="block text-sm font-medium">Duration (hours)</label>
           <select
             value={duration}
-            onChange={handleDurationChange}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            onChange={(e) => setDuration(Number(e.target.value))}
+            className="w-full bg-[#CCD6F6] text-black border border-gray-300 rounded-md p-2"
           >
             {[1, 2, 3, 4, 5].slice(0, maxDuration).map((hour) => (
               <option key={hour} value={hour}>
@@ -193,51 +192,139 @@ const BookVenueForm = ({ venueId, onBack }) => {
             ))}
           </select>
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Select Time Slot
-          </label>
-          <div className="grid grid-cols-3 gap-2">
+
+        {/* Time Slots Selection */}
+        <div>
+          <label className="block text-sm font-medium">Select Time Slot</label>
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
             {timeSlots.map((slot, index) => {
               const isBooked = bookedSlots.includes(slot);
-              const isSelected = selectedSlot === slot;
-              const isDisabled = isBooked; // Disable if the slot is booked
               return (
-                <div
+                <button
                   key={index}
-                  className={`p-2 border rounded-md cursor-pointer 
-         ${
-           isBooked
-             ? "bg-red-500 text-white"
-             : isDisabled
-             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-             : isSelected
-             ? "bg-blue-500 text-white"
-             : "bg-gray-200"
-         }`}
+                  type="button"
+                  className={`p-2 border rounded-md transition ${
+                    isBooked
+                      ? "bg-red-500 text-white cursor-not-allowed"
+                      : selectedSlot === slot
+                      ? "bg-blue-500 text-white"
+                      : "bg-[#CCD6F6] text-black hover:bg-blue-300"
+                  }`}
+                  disabled={isBooked}
                   onClick={() => !isBooked && handleSlotSelect(slot)}
                 >
                   {slot}
-                </div>
+                </button>
               );
             })}
           </div>
           {formik.touched.start_time && formik.errors.start_time && (
-            <div className="text-red-500 text-sm">
-              {formik.errors.start_time}
-            </div>
+            <div className="text-red-500 text-sm">{formik.errors.start_time}</div>
           )}
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
         >
           Book Now
         </button>
       </form>
     </div>
   );
+
+  // return (
+  //   <div className="bg-white p-6 rounded-lg shadow-md">
+  //     <div className="flex justify-between items-center mb-4">
+  //       <h2 className="text-lg font-bold">Book Venue</h2>
+  //       <button
+  //         onClick={onBack}
+  //         className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+  //       >
+  //         Back
+  //       </button>
+  //     </div>
+  //     <form onSubmit={formik.handleSubmit}>
+  //       <div className="mb-4">
+  //         <label className="block text-sm font-medium text-gray-700">
+  //           Booking Date
+  //         </label>
+  //         <input
+  //           type="date"
+  //           name="booking_date"
+  //           value={formik.values.booking_date}
+  //           onChange={formik.handleChange}
+  //           onBlur={formik.handleBlur}
+  //           className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+  //         />
+  //         {formik.touched.booking_date && formik.errors.booking_date && (
+  //           <div className="text-red-500 text-sm">
+  //             {formik.errors.booking_date}
+  //           </div>
+  //         )}
+  //       </div>
+  //       <div className="mb-4">
+  //         <label className="block text-sm font-medium text-gray-700">
+  //           Duration (hours)
+  //         </label>
+  //         <select
+  //           value={duration}
+  //           onChange={handleDurationChange}
+  //           className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+  //         >
+  //           {[1, 2, 3, 4, 5].slice(0, maxDuration).map((hour) => (
+  //             <option key={hour} value={hour}>
+  //               {hour} hour{hour > 1 ? "s" : ""}
+  //             </option>
+  //           ))}
+  //         </select>
+  //       </div>
+  //       <div className="mb-4">
+  //         <label className="block text-sm font-medium text-gray-700">
+  //           Select Time Slot
+  //         </label>
+  //         <div className="grid grid-cols-3 gap-2">
+  //           {timeSlots.map((slot, index) => {
+  //             const isBooked = bookedSlots.includes(slot);
+  //             const isSelected = selectedSlot === slot;
+  //             const isDisabled = isBooked; // Disable if the slot is booked
+  //             return (
+  //               <div
+  //                 key={index}
+  //                 className={`p-2 border rounded-md cursor-pointer 
+  //        ${
+  //          isBooked
+  //            ? "bg-red-500 text-white"
+  //            : isDisabled
+  //            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+  //            : isSelected
+  //            ? "bg-blue-500 text-white"
+  //            : "bg-gray-200"
+  //        }`}
+  //                 onClick={() => !isBooked && handleSlotSelect(slot)}
+  //               >
+  //                 {slot}
+  //               </div>
+  //             );
+  //           })}
+  //         </div>
+  //         {formik.touched.start_time && formik.errors.start_time && (
+  //           <div className="text-red-500 text-sm">
+  //             {formik.errors.start_time}
+  //           </div>
+  //         )}
+  //       </div>
+
+  //       <button
+  //         type="submit"
+  //         className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+  //       >
+  //         Book Now
+  //       </button>
+  //     </form>
+  //   </div>
+  // );
 };
 
 export default BookVenueForm;
