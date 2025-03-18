@@ -11,7 +11,6 @@ const UserDetails = () => {
     const fetchUserDetails = async () => {
       try {
         const response = await publicApi.get('/users'); // Fetch user data
-        console.log(response);
         
         if (response && response.data) {
           setUserDetails(response.data);

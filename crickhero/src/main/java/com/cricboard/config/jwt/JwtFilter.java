@@ -60,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
 
         Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-        logger.info("Extracting token from Authorization header");
+//        logger.info("Extracting token from Authorization header");
 
         String header = request.getHeader("Authorization");
         if(header != null && header.startsWith("Bearer ")) {
@@ -68,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
             username = jwtService.extractUsername(token);
         }
 
-        logger.info("Validating token for user: {}", username);
+//        logger.info("Validating token for user: {}", username);
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = context.getBean(UserDetailServiceImplementation.class)
@@ -81,7 +81,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        logger.info("Continuing filter chain processing");
+//        logger.info("Continuing filter chain processing");
 
         filterChain.doFilter(request, response);
     }

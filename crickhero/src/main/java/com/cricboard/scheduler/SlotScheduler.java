@@ -14,13 +14,13 @@ public class SlotScheduler {
     @Autowired
     TimeSlotRepo timeSlotRepo;
 
-    @Scheduled(cron = "0 0 0 * * *")
-    private void deleteSlotOfOldDate(){
-        try {
-            LocalDate date = LocalDate.now().minusDays(1);
-            timeSlotRepo.deleteAllLessThanDate(date);
-        }catch (Exception e){
-            log.error(e.getMessage());
-        }
-    }
+//    @Scheduled(cron = "0 0 0 * * *")
+//    private void deleteSlotOfOldDate(){
+//        try {
+//            LocalDate date = LocalDate.now().minusDays(1);
+//            timeSlotRepo.deleteAllLessThanDate(date);
+//        }catch (Exception e){
+//            log.error(e.getMessage());
+//        }
+//    }
 }

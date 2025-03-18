@@ -535,17 +535,19 @@
 {/* }; */}
 
 {/* export default Navbar; */}
-
-import React from "react";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react"; // Icons for toggle menu
+import userImage from "../assets/images/account.png"; // User profile image
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [isNewsOpen, setIsNewsOpen] = useState(false);
-  const [seriesOpen, setSeriesOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
   const isAuthenticated = !!localStorage.getItem("auth");
-  const isAdmin = localStorage.getItem("role")=="admin";
+  const isAdmin = localStorage.getItem("role") === "admin";
 
   const handleLogout = () => {
     localStorage.removeItem("auth");
@@ -553,90 +555,151 @@ const Navbar = () => {
     navigate("/signin");
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <nav className="fixed top-0 w-full bg-gray-900 text-white py-3 shadow-md z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-
-        {/* Logo on the Left */}
-        <Link to="/" className="flex-shrink-0">
-          <img className="w-15 h-12" src="/cricboard-logo-crop.png" alt="Logo" />
-        </Link>
-
-        {/* Navigation Links on the Right */}
-        <div className="flex items-center space-x-6 text-sm ">
-          <Link to="/matches" className="hover:text-yellow-400 transition">Matches</Link>
-          <Link to="/schedule" className="hover:text-yellow-400 transition">Schedule</Link>
-          <Link to="/toss" className="hover:text-yellow-400 transition">Toss</Link>
-
-          {/* News Dropdown */}
-          <div
-            className="relative group"
-            onMouseEnter={() => setIsNewsOpen(true)}
-            onMouseLeave={() => setIsNewsOpen(false)}
+    <nav className="w-full bg-[#1a2938] text-white py-3 shadow-md">
+      <div className="mx-auto flex items-center justify-between px-10">
+        {/* Left Side: Toggle Button + Logo */}
+        <div className="flex items-center space-x-4">
+          <button
+            className="text-white focus:outline-none transition-transform duration-300 hover:scale-110"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <Link to="/news" className="hover:text-yellow-400 transition">News</Link>
-          </div>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
 
-          {/* Series Dropdown */}
-          <div
-            className="relative group"
-            onMouseEnter={() => setSeriesOpen(true)}
-            onMouseLeave={() => setSeriesOpen(false)}
-          >
-            <Link to="/series" className="hover:text-yellow-400 transition">Series</Link>
-          </div>
+          <Link to="/" className="flex-shrink-0 group">
+            <img
+              className="w-15 h-12 transition-transform duration-300 group-hover:scale-110"
+              src="/cricboard-logo-crop.png"
+              alt="Logo"
+            />
+          </Link>
+        </div>
 
-          <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
-          <Link to="/ranking" className="hover:text-yellow-400 transition">Rank</Link>
-          <Link to="/photo" className="hover:text-yellow-400 transition">Photo</Link>
-          <Link to="http://localhost:5500/Cricboard" className="hover:text-yellow-400 transition">Local Match</Link>
-          {
-          isAdmin ?
-          (<Link to="/venue" className="hover:text-yellow-400 transition text-green-400">Add Venue</Link>):(<></>)
-          } 
-          {
-          isAdmin ?
-          (<Link to="/addProduct" className="hover:text-yellow-400 transition text-green-400">Add Products</Link>):(<></>)
-          } 
-          {
-          isAdmin ?
-          (<Link to="/remove-venue" className="hover:text-yellow-400 transition text-green-400">Remove Venue</Link>):(<></>)
-          } 
-          {
-          isAdmin ?
-          (<Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400">Booked Venue</Link>):(<></>)
-          } 
-          {
-          isAdmin ?
-          (<Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400">User Details</Link>):(<></>)
-          } 
-          <Link to="/venueshow" className="hover:text-yellow-400 transition">Book Venue</Link>
-          <Link to="/contact" className="hover:text-yellow-400 transition">Contact Us</Link>
-          <Link to="/products" className="hover:text-yellow-400 transition">Sport Equipment</Link>
-
-          {/* Authentication Buttons */}
-          {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition"
+        {/* Center Navigation Links */}
+        <div className="flex items-center justify-center space-x-8 tracking-widest font-my3 text-xs">
+          {[
+            { to: "/matches", text: "Matches" },
+            { to: "http://localhost:5500/Cricboard", text: "Local Match" },
+            // { to: "/localmatch", text: "Local Match" },
+            { to: "/venueshow", text: "Book Venue" },
+            { to: "/products", text: "Sport Equipment" },
+            { to: "/contact", text: "Contact Us" },
+          ].map((link, index) => (
+            <Link
+              key={index}
+              to={link.to}
+              className="hover:no-underline text-white font-medium hover:text-yellow-400 transition duration-300 relative after:block after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
-              Log Out
-            </button>
+              {link.text}
+            </Link>
+          ))}
+        </div>
+
+        {/* Right Side: Profile/Login */}
+        <div className="flex space-x-4">
+          {isAuthenticated ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="w-10 h-10 rounded-full bg-gray-700 text-white flex items-center justify-center shadow-md hover:bg-gray-600 transition-all duration-300"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <img src={userImage} className="w-7 h-7 rounded-full" alt="User" />
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute z-50 border-[1px] font-my border-gray-700 hover:bg-gray-700 right-0 mt-2 w-36 bg-gray-800 rounded-md shadow-xl py-2">
+                  <button
+                    onClick={handleLogout}
+                    className="block px-4 py-2 text-sm text-gray-200  w-full text-left"
+                  >
+                    Log Out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
-            <div className="flex space-x-4">
+            <>
               <Link
                 to="/signin"
-                className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-full font-bold transition"
+                className="font-my hover:no-underline text-sm text-[#cfcfcfd0] hover:text-white py-2 font-extrabold tracking-wide transition duration-300 uppercase relative after:block after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
               >
-                Login
+                Log in
               </Link>
               <Link
                 to="/signup"
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition"
+                className="font-my hover:no-underline text-sm text-[#cfcfcfd0] hover:text-white py-2 font-extrabold tracking-wide transition duration-300 uppercase relative after:block after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
               >
                 Sign Up
               </Link>
-            </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Side Menu */}
+      <div
+        className={`fixed inset-y-0 left-0 w-64 bg-gray-800 shadow-lg z-50 p-4 space-y-3 overflow-y-auto h-screen transition-transform duration-500 ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex justify-between items-center p-2 border-b border-gray-700">
+          <Link to="/" className="flex-shrink-0 group">
+            <img className="w-15 h-12 transition-transform duration-300 group-hover:scale-110" src="/cricboard-logo-crop.png" alt="Logo" />
+          </Link>
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="text-white transition-transform duration-300 hover:rotate-90"
+          >
+            <X size={28} />
+          </button>
+        </div>
+
+        {/* Menu Links */}
+        <div className="flex flex-col space-y-3 mt-4 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
+          {[
+            { to: "/matches", text: "Matches" },
+            { to: "/schedule", text: "Schedule" },
+            { to: "/toss", text: "Toss" },
+            { to: "/news", text: "News" },
+            { to: "/series", text: "Series" },
+            { to: "/teams", text: "Teams" },
+            { to: "/ranking", text: "Rank" },
+            { to: "/photo", text: "Photo" },
+            { to: "http://localhost:5500/Crickboard/", text: "Local Match" },
+            { to: "/venueshow", text: "Book Venue" },
+            { to: "/contact", text: "Contact Us" },
+            { to: "/products", text: "Sport Equipment" },
+          ].map((link, index) => (
+            <Link
+              key={index}
+              to={link.to}
+              className="hover:text-yellow-400 transition-opacity duration-300 opacity-90 hover:opacity-100"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {link.text}
+            </Link>
+          ))}
+
+          {isAdmin && (
+            <>
+              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
+              <Link to="/addProduct" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Products</Link>
+              <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
+              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booked Venue</Link>
+              <Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>User Details</Link>
+            </>
           )}
         </div>
       </div>
@@ -644,4 +707,118 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar;
+
+
+// import React from "react";
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+
+// const Navbar = () => {
+//   const navigate = useNavigate();
+//   const [isNewsOpen, setIsNewsOpen] = useState(false);
+//   const [seriesOpen, setSeriesOpen] = useState(false);
+//   const isAuthenticated = !!localStorage.getItem("auth");
+//   const isAdmin = localStorage.getItem("role")=="admin";
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("auth");
+//     localStorage.removeItem("role");
+//     navigate("/signin");
+//   };
+
+//   return (
+//     <nav className="fixed top-0 w-full bg-gray-900 text-white py-3 shadow-md z-50">
+//       <div className="max-w-7xl mx-auto flex items-center justify-between">
+
+//         {/* Logo on the Left */}
+//         <Link to="/" className="flex-shrink-0">
+//           <img className="w-15 h-12" src="/cricboard-logo-crop.png" alt="Logo" />
+//         </Link>
+
+//         {/* Navigation Links on the Right */}
+//         <div className="flex items-center space-x-6 text-sm ">
+//           <Link to="/matches" className="hover:text-yellow-400 transition">Matches</Link>
+//           <Link to="/schedule" className="hover:text-yellow-400 transition">Schedule</Link>
+//           <Link to="/toss" className="hover:text-yellow-400 transition">Toss</Link>
+
+//           {/* News Dropdown */}
+//           <div
+//             className="relative group"
+//             onMouseEnter={() => setIsNewsOpen(true)}
+//             onMouseLeave={() => setIsNewsOpen(false)}
+//           >
+//             <Link to="/news" className="hover:text-yellow-400 transition">News</Link>
+//           </div>
+
+//           {/* Series Dropdown */}
+//           <div
+//             className="relative group"
+//             onMouseEnter={() => setSeriesOpen(true)}
+//             onMouseLeave={() => setSeriesOpen(false)}
+//           >
+//             <Link to="/series" className="hover:text-yellow-400 transition">Series</Link>
+//           </div>
+
+//           <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
+//           <Link to="/ranking" className="hover:text-yellow-400 transition">Rank</Link>
+//           <Link to="/photo" className="hover:text-yellow-400 transition">Photo</Link>
+//           {
+//             isAuthenticated && !isAdmin ?
+//             (<Link to="http://localhost:5500/Cricboard" className="hover:text-yellow-400 transition">Local Match</Link>):(<></>)
+//           }
+//           {
+//           isAdmin ?
+//           (<Link to="/venue" className="hover:text-yellow-400 transition text-green-400">Add Venue</Link>):(<></>)
+//           } 
+//           {
+//           isAdmin ?
+//           (<Link to="/addProduct" className="hover:text-yellow-400 transition text-green-400">Add Products</Link>):(<></>)
+//           } 
+//           {
+//           isAdmin ?
+//           (<Link to="/remove-venue" className="hover:text-yellow-400 transition text-green-400">Remove Venue</Link>):(<></>)
+//           } 
+//           {
+//           isAdmin ?
+//           (<Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400">Booked Venue</Link>):(<></>)
+//           } 
+//           {
+//           isAdmin ?
+//           (<Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400">User Details</Link>):(<></>)
+//           } 
+//           <Link to="/venueshow" className="hover:text-yellow-400 transition">Book Venue</Link>
+//           <Link to="/contact" className="hover:text-yellow-400 transition">Contact Us</Link>
+//           <Link to="/products" className="hover:text-yellow-400 transition">Sport Equipment</Link>
+
+//           {/* Authentication Buttons */}
+//           {isAuthenticated ? (
+//             <button
+//               onClick={handleLogout}
+//               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition"
+//             >
+//               Log Out
+//             </button>
+//           ) : (
+//             <div className="flex space-x-4">
+//               <Link
+//                 to="/signin"
+//                 className="bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-full font-bold transition"
+//               >
+//                 Login
+//               </Link>
+//               <Link
+//                 to="/signup"
+//                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full font-bold transition"
+//               >
+//                 Sign Up
+//               </Link>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;

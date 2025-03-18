@@ -10,7 +10,6 @@ const Booking = () => {
     const fetchBookings = async () => {
       try {
         const response = await publicApi.get('/booking-data'); // Fetch booking data
-        console.log(response);
         if (response && response.data) {
           setBookings(response.data);
         } else {

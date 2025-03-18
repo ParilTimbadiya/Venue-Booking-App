@@ -23,13 +23,18 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public void sendSimpleMail(EmailDetailsDto detail) {
         try{
+            String to = detail.getRecipient();
+            String msg = detail.getMsgBody();
+            String subject = detail.getSubject();
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(sender);
-            message.setTo(detail.getRecipient());
-            message.setText(detail.getMsgBody());
-            message.setSubject(detail.getSubject());
+            message.setTo(to);
+            message.setText(msg);
+            message.setSubject(subject);
             javaMailSender.send(message);
+            return;
         }catch (Exception e){
+            System.out.println(e);
             log.error(e.getMessage());
         }
     }
