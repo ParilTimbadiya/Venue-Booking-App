@@ -46,10 +46,16 @@ public class User {
 
     private String otp;
 
+    private boolean isMerchant=false;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Booking> bookingList;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItemList;
+
+    public void setMerchant(boolean merchant) {
+        isMerchant = merchant;
+    }
 
 }

@@ -146,6 +146,7 @@ public class UserService {
 
     public ResponseEntity<?> signinUser(AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        String email = authentication.getName();
         UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtService.generateToken(userDetails.getUsername());
@@ -153,6 +154,10 @@ public class UserService {
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
         AuthResponse authResponse = new AuthResponse(token,HttpStatus.OK,isAdmin?"admin":"user");
+        boolean isMerchant = userRepo.findByEmail(email).isMerchant();
+        if(isMerchant){
+            authResponse.setRole("merchant");
+        }
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 

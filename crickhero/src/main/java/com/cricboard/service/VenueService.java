@@ -27,10 +27,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,13 +59,18 @@ public class VenueService {
         }
         return new ResponseEntity<>(slots, HttpStatus.OK);
     }
+
     public List<Venue> getAllVenue() {
         List<Venue> venues = venueRepo.findAll();
+        List<Venue> premiumVenueList = new ArrayList<>();
         for (Venue venue : venues) {
             venue.setBookingList(null);
             venue.setTimeSlots(null);
+            if(venue.isShow()){
+                premiumVenueList.add(venue);
+            }
         }
-        return venues;
+        return premiumVenueList;
     }
 
 

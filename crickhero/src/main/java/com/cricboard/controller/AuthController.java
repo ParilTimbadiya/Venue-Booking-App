@@ -2,12 +2,14 @@ package com.cricboard.controller;
 
 import com.cricboard.config.email.EmailDetailsDto;
 import com.cricboard.config.email.EmailService;
+import com.cricboard.config.jwt.JwtService;
 import com.cricboard.dto.AuthRequest;
 import com.cricboard.dto.Contactus;
 import com.cricboard.model.Booking;
 import com.cricboard.model.Product;
 import com.cricboard.model.User;
 import com.cricboard.model.Venue;
+import com.cricboard.repository.UserRepo;
 import com.cricboard.service.ProductService;
 import com.cricboard.service.UserService;
 import com.cricboard.service.VenueService;
@@ -38,6 +40,10 @@ public class AuthController {
     private UserService userService;
     @Autowired
     VenueService venueService;
+    @Autowired
+    private JwtService jwtService;
+    @Autowired
+    private UserRepo userRepo;
 
     /**
      * Handles user registration
@@ -69,17 +75,50 @@ public class AuthController {
             @RequestPart("image") MultipartFile image)
     {
         try {
-            System.out.println(header);
-            Product product = new Product();
-            product.setTitle(title);
-            product.setDescription(description);
-            product.setPrice(price);
-            return productService.addProduct(image, product);
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.isMerchant()) {
+                Product product = new Product();
+                product.setTitle(title);
+                product.setDescription(description);
+                product.setPrice(price);
+                return productService.addProduct(image, product);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PostMapping("/make-merchant")
+    public ResponseEntity<?> makeMerchant(@RequestHeader("Authorization") String header,@RequestBody Map<String, String> request){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if (user != null && user.getRole().equals("ROLE_ADMIN")) {
+                String merchant_email = request.get("email");
+                User merchant_user = userRepo.findByEmail(merchant_email);
+                if(merchant_user!=null) {
+                    merchant_user.setMerchant(true);
+                    userRepo.save(merchant_user);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                }else {
+                    return new ResponseEntity<>("User doesn't have account on crickboard",HttpStatus.NOT_FOUND);
+                }
+            }
+            return new ResponseEntity<>("Admin not found", HttpStatus.NOT_FOUND);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping("/send-otp")
     public ResponseEntity<String> sendOtp(@RequestBody Map<String, String> request) {
@@ -114,12 +153,10 @@ public class AuthController {
     public ResponseEntity<List<Booking>> getAllBooking() {
         return new ResponseEntity<>(venueService.getAllBooking(),HttpStatus.OK);
     }
-
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUser(),HttpStatus.OK);
     }
-
     @GetMapping("/venuelist")
     @ResponseStatus(HttpStatus.OK)
     public List<Venue> getAllVenue() {

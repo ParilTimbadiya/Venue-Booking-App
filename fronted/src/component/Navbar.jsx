@@ -548,6 +548,7 @@ const Navbar = () => {
 
   const isAuthenticated = !!localStorage.getItem("auth");
   const isAdmin = localStorage.getItem("role") === "admin";
+  const isMerchant = localStorage.getItem("role") === "merchant";
 
   const handleLogout = () => {
     localStorage.removeItem("auth");
@@ -691,7 +692,13 @@ const Navbar = () => {
               {link.text}
             </Link>
           ))}
-
+          {
+            isMerchant && (
+              <>
+              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
+              </>
+            )
+          }
           {isAdmin && (
             <>
               <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
