@@ -40,6 +40,7 @@ import ForgotPassword from "./component/ForgotPassword.jsx";
 import ForgotPassword2 from "./component/ForgotPassword2.jsx";
 import Booking from "./Venue/Booking.jsx";
 import UserDetails from "./Venue/UserDetails.jsx";
+import PremiumPayment from "./Venue/PremiumPayment.jsx";
 
 const router = createBrowserRouter([
   {
@@ -166,6 +167,9 @@ const router = createBrowserRouter([
       },{
         path: "/userDetails",
         element: <UserDetails/>
+      },{
+        path: "/merchant",
+        element: <PremiumPayment/>
       }
     ],
   },

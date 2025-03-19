@@ -6,10 +6,7 @@ import com.cricboard.model.Booking;
 import com.cricboard.model.TimeSlot;
 import com.cricboard.model.User;
 import com.cricboard.model.Venue;
-import com.cricboard.repository.BookingRepo;
-import com.cricboard.repository.TimeSlotRepo;
-import com.cricboard.repository.UserRepo;
-import com.cricboard.repository.VenueRepo;
+import com.cricboard.repository.*;
 import com.cricboard.config.email.EmailDetailsDto;
 import com.cricboard.config.email.EmailService;
 import com.cricboard.dto.BookingRequestDto;
@@ -47,6 +44,8 @@ public class VenueService {
     EmailService emailService;
     @Autowired
     BookingRepo bookingRepo;
+    @Autowired
+    MerchantPaymentRepo merchantPaymentRepo;
     @Value("${spring.admin.username}")
     private String adminMail;
 
@@ -312,5 +311,22 @@ public class VenueService {
             i.setUser(temp);
         }
         return  sortedList;
+    }
+
+    public ResponseEntity<?> processPayment(MerchantPayment merchantPayment,User user) {
+        if(user.getExpiration_month()==null)
+            user.setExpiration_month(LocalDate.now());
+        user.setExpiration_month(user.getExpiration_month().plusMonths(merchantPayment.getMonths()));
+
+        merchantPaymentRepo.save(merchantPayment);
+        userRepo.save(user);
+        if(user.getExpiration_month().isAfter(LocalDate.now()) || user.getExpiration_month().isEqual(LocalDate.now())) {
+            List<Venue> venues = venueRepo.findAllVenueByMerchantEmail(user.getEmail());
+            for (Venue venue : venues) {
+                venue.setShow(true);
+            }
+            venueRepo.saveAll(venues);
+        }
+        return ResponseEntity.ok("Payment processed successfully");
     }
 }

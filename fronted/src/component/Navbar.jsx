@@ -696,6 +696,7 @@ const Navbar = () => {
             isMerchant && (
               <>
               <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
+              <Link to="/merchant" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Premium</Link>
               </>
             )
           }

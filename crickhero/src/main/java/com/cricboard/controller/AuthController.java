@@ -5,10 +5,7 @@ import com.cricboard.config.email.EmailService;
 import com.cricboard.config.jwt.JwtService;
 import com.cricboard.dto.AuthRequest;
 import com.cricboard.dto.Contactus;
-import com.cricboard.model.Booking;
-import com.cricboard.model.Product;
-import com.cricboard.model.User;
-import com.cricboard.model.Venue;
+import com.cricboard.model.*;
 import com.cricboard.repository.UserRepo;
 import com.cricboard.service.ProductService;
 import com.cricboard.service.UserService;
@@ -116,6 +113,42 @@ public class AuthController {
             }
             return new ResponseEntity<>("Admin not found", HttpStatus.NOT_FOUND);
         }catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/expire")
+    public ResponseEntity<?> getExpirationMonth(@RequestHeader("Authorization") String header){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.isMerchant()) {
+                return new ResponseEntity<>(user.getExpiration_month(),HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/merchantPayment")
+    public ResponseEntity<?> processMerchantPayment(@RequestBody MerchantPayment merchantPayment,@RequestHeader("Authorization") String header) {
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.isMerchant()) {
+                return venueService.processPayment(merchantPayment,user);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
