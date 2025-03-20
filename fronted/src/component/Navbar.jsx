@@ -585,11 +585,15 @@ const Navbar = () => {
               alt="Logo"
             />
           </Link>
+          {
+          isAdmin?(<h1 className="text-xl font-bold">Admin panel</h1>):(<></>)
+          } 
         </div>
 
         {/* Center Navigation Links */}
         <div className="flex items-center justify-center space-x-8 tracking-widest font-my3 text-xs">
-          {[
+          {
+          !isAdmin && [
             { to: "/matches", text: "Matches" },
             { to: "http://localhost:5500/Cricboard", text: "Local Match" },
             // { to: "/localmatch", text: "Local Match" },
@@ -658,6 +662,7 @@ const Navbar = () => {
           <Link to="/" className="flex-shrink-0 group">
             <img className="w-15 h-12 transition-transform duration-300 group-hover:scale-110" src="/cricboard-logo-crop.png" alt="Logo" />
           </Link>
+          <h1 className="text-sm font-bold">Admin</h1>
           <button
             onClick={() => setIsMenuOpen(false)}
             className="text-white transition-transform duration-300 hover:rotate-90"
@@ -668,7 +673,8 @@ const Navbar = () => {
 
         {/* Menu Links */}
         <div className="flex flex-col space-y-3 mt-4 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
-          {[
+          {!isAdmin &&
+          [
             { to: "/matches", text: "Matches" },
             { to: "/schedule", text: "Schedule" },
             { to: "/toss", text: "Toss" },
@@ -690,10 +696,12 @@ const Navbar = () => {
             >
               {link.text}
             </Link>
+            
           ))}
 
           {isAdmin && (
             <>
+              
               <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
               <Link to="/addProduct" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Products</Link>
               <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
