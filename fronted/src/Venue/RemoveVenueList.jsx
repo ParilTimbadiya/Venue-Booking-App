@@ -9,6 +9,7 @@ const RemoveVenueList = ({ venue, onRemove }) => {
       <h2 className="text-2xl font-bold mt-3 font-my">{venue.name}</h2>
       <div className="flex justify-between items-center">
         <p className="text-[#a0aec0] font-normal text-base font-my">{venue.address}</p>
+        <p className="text-[#a0aec0] font-normal text-base font-my">{venue.merchantEmail}</p>
         <button
           className="mt-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-all duration-300"
           onClick={() => onRemove(venue.venueId)}

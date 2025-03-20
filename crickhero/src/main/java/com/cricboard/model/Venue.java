@@ -37,6 +37,10 @@ public class Venue {
     @Column(nullable = false)
     private String Address;
 
+    private String merchantEmail;
+
+    private boolean isShow;
+
     private final LocalDateTime localDateTime = LocalDateTime.now();
 
     @OneToMany(mappedBy = "venue",cascade = CascadeType.ALL,orphanRemoval = true)
@@ -44,4 +48,8 @@ public class Venue {
 
     @OneToMany(mappedBy = "venue",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<TimeSlot> timeSlots;
+
+    public void setShow(boolean show) {
+        isShow = show;
+    }
 }

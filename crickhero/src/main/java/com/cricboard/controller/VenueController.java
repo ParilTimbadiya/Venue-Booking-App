@@ -4,7 +4,9 @@ import com.cricboard.config.jwt.JwtService;
 import com.cricboard.dto.BookingRequestDto;
 import com.cricboard.model.Product;
 import com.cricboard.model.TimeSlot;
+import com.cricboard.model.User;
 import com.cricboard.model.Venue;
+import com.cricboard.repository.UserRepo;
 import com.cricboard.service.ProductService;
 import com.cricboard.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class VenueController {
     VenueService venueService;
     @Autowired
     ProductService productService;
+    @Autowired
+    UserRepo userRepo;
 
 
     @PostMapping("addequipment")
@@ -54,15 +58,27 @@ public class VenueController {
             @RequestParam("price") int price,
             @RequestParam("state") String state,
             @RequestParam("city") String city,
-            @RequestParam("address") String address) {
+            @RequestParam("address") String address,
+            @RequestHeader("Authorization") String header) {
         try {
-            Venue venue = new Venue();
-            venue.setName(name);
-            venue.setPrice(price);
-            venue.setState(state);
-            venue.setCity(city);
-            venue.setAddress(address);
-            return venueService.addVenue(image, venue);
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.isMerchant()) {
+                Venue venue = new Venue();
+                venue.setName(name);
+                venue.setPrice(price);
+                venue.setState(state);
+                venue.setCity(city);
+                venue.setAddress(address);
+                venue.setMerchantEmail(email);
+                venue.setShow(true);
+                return venueService.addVenue(image, venue);
+            }
+            return new ResponseEntity<>("Merchant not found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }

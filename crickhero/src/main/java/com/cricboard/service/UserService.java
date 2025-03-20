@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -146,6 +147,7 @@ public class UserService {
 
     public ResponseEntity<?> signinUser(AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
+        String email = authentication.getName();
         UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtService.generateToken(userDetails.getUsername());
@@ -153,6 +155,10 @@ public class UserService {
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(role -> role.equals("ADMIN"));
         AuthResponse authResponse = new AuthResponse(token,HttpStatus.OK,isAdmin?"admin":"user");
+        boolean isMerchant = userRepo.findByEmail(email).isMerchant();
+        if(isMerchant){
+            authResponse.setRole("merchant");
+        }
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
@@ -234,6 +240,20 @@ public class UserService {
 
     public List<User> getAllUser() {
         List<User> sortedList = userRepo.findAll().stream()
+                .sorted(Comparator.comparing(User::getEmail).reversed())
+                .collect(Collectors.toList());
+        for (User i : sortedList){
+            i.setOtp(null);
+            i.setPassword(null);
+            i.setBookingList(null);
+            i.setRole(null);
+            i.setCartItemList(null);
+        }
+        return sortedList;
+    }
+
+    public List<User> getAllMerchant() {
+        List<User> sortedList = userRepo.findAllMerchantUser().stream()
                 .sorted(Comparator.comparing(User::getEmail).reversed())
                 .collect(Collectors.toList());
         for (User i : sortedList){

@@ -26,7 +26,14 @@ function VenueList({ venue }) {
         </div>
         <h2 className="text-2xl font-bold mt-3 font-my">{venue.name}</h2>
         <div className="flex justify-between items-center ">
+          <p className="text-[#a0aec0] font-normal text-base font-my">{venue.city} -   {venue.state} </p>
+        </div>
+        <div className="flex justify-between items-center ">
+          <p className="text-[#a0aec0] font-normal text-base font-my">{venue.address}</p>
+        </div>
+        <div className="flex justify-between items-center ">
           <p className="text-[#a0aec0] font-normal text-base font-my">Rs.{venue.price} per hour</p>
+
           <button
             onClick={handleBookClick}
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-300"

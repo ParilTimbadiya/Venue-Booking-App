@@ -6,12 +6,15 @@ const RemoveVenue = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-  
+    const isMerchant = localStorage.getItem("role") === "merchant";
+
   useEffect(() => {
     const getVenues = async () => {
       setLoading(true); // Start loading
       try {
-        const response = await publicApi.get('/venuelist');
+        
+        const response = await publicApi.get('/removevenuelist');
+        
         if (response && response.data) {
           setVenues(response.data);
         } else {
@@ -50,7 +53,7 @@ const RemoveVenue = () => {
   if (loading) {
     return <div>Loading...</div>; // Replace with your Loader component if available
   }
-  if (!isAdmin) {
+  if (!isAdmin && !isMerchant) {
     return (
       <div className="p-12 mt-20">
         <div>You do not have permission to view this page.</div>

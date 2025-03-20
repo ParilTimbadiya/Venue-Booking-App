@@ -548,6 +548,7 @@ const Navbar = () => {
 
   const isAuthenticated = !!localStorage.getItem("auth");
   const isAdmin = localStorage.getItem("role") === "admin";
+  const isMerchant = localStorage.getItem("role") === "merchant";
 
   const handleLogout = () => {
     localStorage.removeItem("auth");
@@ -587,6 +588,9 @@ const Navbar = () => {
           </Link>
           {
           isAdmin?(<h1 className="text-xl font-bold">Admin panel</h1>):(<></>)
+          } 
+          {
+          isMerchant?(<h1 className="text-xl font-bold">Merchant panel</h1>):(<></>)
           } 
         </div>
 
@@ -662,7 +666,12 @@ const Navbar = () => {
           <Link to="/" className="flex-shrink-0 group">
             <img className="w-15 h-12 transition-transform duration-300 group-hover:scale-110" src="/cricboard-logo-crop.png" alt="Logo" />
           </Link>
+          {isAdmin && 
           <h1 className="text-sm font-bold">Admin</h1>
+          }
+          {isMerchant && 
+          <h1 className="text-sm font-bold">Merchant</h1>
+          }
           <button
             onClick={() => setIsMenuOpen(false)}
             className="text-white transition-transform duration-300 hover:rotate-90"
@@ -698,7 +707,15 @@ const Navbar = () => {
             </Link>
             
           ))}
-
+          {
+            isMerchant && (
+              <>
+              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
+              <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
+              <Link to="/merchant" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Premium</Link>
+              </>
+            )
+          }
           {isAdmin && (
             <>
               
@@ -707,6 +724,7 @@ const Navbar = () => {
               <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
               <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booked Venue</Link>
               <Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>User Details</Link>
+              <Link to="/merchantDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Merchant Details</Link>
             </>
           )}
         </div>

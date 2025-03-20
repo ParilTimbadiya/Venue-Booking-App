@@ -6,10 +6,7 @@ import com.cricboard.model.Booking;
 import com.cricboard.model.TimeSlot;
 import com.cricboard.model.User;
 import com.cricboard.model.Venue;
-import com.cricboard.repository.BookingRepo;
-import com.cricboard.repository.TimeSlotRepo;
-import com.cricboard.repository.UserRepo;
-import com.cricboard.repository.VenueRepo;
+import com.cricboard.repository.*;
 import com.cricboard.config.email.EmailDetailsDto;
 import com.cricboard.config.email.EmailService;
 import com.cricboard.dto.BookingRequestDto;
@@ -27,10 +24,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +44,8 @@ public class VenueService {
     EmailService emailService;
     @Autowired
     BookingRepo bookingRepo;
+    @Autowired
+    MerchantPaymentRepo merchantPaymentRepo;
     @Value("${spring.admin.username}")
     private String adminMail;
 
@@ -62,13 +58,18 @@ public class VenueService {
         }
         return new ResponseEntity<>(slots, HttpStatus.OK);
     }
+
     public List<Venue> getAllVenue() {
         List<Venue> venues = venueRepo.findAll();
+        List<Venue> premiumVenueList = new ArrayList<>();
         for (Venue venue : venues) {
             venue.setBookingList(null);
             venue.setTimeSlots(null);
+            if(venue.isShow()){
+                premiumVenueList.add(venue);
+            }
         }
-        return venues;
+        return premiumVenueList;
     }
 
 
@@ -262,6 +263,60 @@ public class VenueService {
                     user.getUserName(),
                     user.getEmail());
 
+            // Merchant notification email with professional formatting
+            String merchantEmailBody = String.format("""
+            Dear Merchant,
+            
+            NEW BOOKING ALERT - #%s
+            
+            A new cricket venue booking has been confirmed in the Cricboard network.
+            
+            VENUE & BOOKING DETAILS
+            ───────────────────────
+            Venue Name: %s
+            Venue Location: %s
+            Booking ID: %s
+            Date: %s
+            Time: %s - %s
+            Duration: %s hours
+            Price per hour : %s
+            Total Amount: ₹%s
+            ───────────────────────
+            
+            CUSTOMER INFORMATION
+            ───────────────────────
+            Name: %s
+            Email: %s
+            ───────────────────────
+            
+            ACTION ITEMS:
+            • Notify the venue manager about this new booking
+            • Ensure the venue is prepared 30 minutes before the scheduled time
+            • Verify all equipment is in proper working condition
+            • Update the central Cricboard booking system
+            • Contact the customer for any special requirements
+            
+            For any scheduling conflicts or issues, please coordinate with the venue manager and contact the customer directly.
+            
+            Thank you for maintaining our booking standards across all Cricboard venues.
+            
+            Best regards,
+            Cricboard Operations Team
+            official.cricboard@gmail.com
+            """,
+                    bookingId,
+                    venue.getName(),
+                    venue.getAddress(),
+                    bookingId,
+                    savedBooking.getBookingDate(),
+                    savedBooking.getStart_time(),
+                    savedBooking.getEnd_time(),
+                    savedBooking.getTotal_hours(),
+                    venue.getPrice(),
+                    savedBooking.getTotal_cost(),
+                    user.getUserName(),
+                    user.getEmail());
+
             // Send confirmation email to the user
             EmailDetailsDto userConfirmation = EmailDetailsDto.builder()
                     .subject("Booking Confirmation: " + venue.getName() + " Cricket Venue Reserved! [ID: " + bookingId + "]")
@@ -277,6 +332,17 @@ public class VenueService {
                     .msgBody(adminEmailBody)
                     .build();
             emailService.sendSimpleMail(officialEmailCopy);
+
+
+            // Send a copy to cricboard official email for record keeping
+            EmailDetailsDto officialEmailCopyMerchant = EmailDetailsDto.builder()
+                    .subject("New Booking Alert: " + venue.getName() + " at " + venue.getAddress() + " [ID: " + bookingId + "]")
+                    .recipient(venue.getMerchantEmail())
+                    .msgBody(adminEmailBody)
+                    .build();
+            emailService.sendSimpleMail(officialEmailCopyMerchant);
+
+
 
         } catch (Exception e) {
             // Log the error but continue with the booking process
@@ -310,5 +376,40 @@ public class VenueService {
             i.setUser(temp);
         }
         return  sortedList;
+    }
+
+    public ResponseEntity<?> processPayment(MerchantPayment merchantPayment,User user) {
+        if(user.getExpiration_month()==null)
+            user.setExpiration_month(LocalDate.now());
+        user.setExpiration_month(user.getExpiration_month().plusMonths(merchantPayment.getMonths()));
+
+        merchantPaymentRepo.save(merchantPayment);
+        userRepo.save(user);
+        if(user.getExpiration_month().isAfter(LocalDate.now()) || user.getExpiration_month().isEqual(LocalDate.now())) {
+            List<Venue> venues = venueRepo.findAllVenueByMerchantEmail(user.getEmail());
+            for (Venue venue : venues) {
+                venue.setShow(true);
+            }
+            venueRepo.saveAll(venues);
+        }
+        return ResponseEntity.ok("Payment processed successfully");
+    }
+
+    public List<Venue> getAllRemoveVenue() {
+        List<Venue> venues = venueRepo.findAll();
+        for (Venue venue : venues) {
+            venue.setBookingList(null);
+            venue.setTimeSlots(null);
+        }
+        return venues;
+    }
+
+    public List<Venue> getAllMerchantVenue(User user) {
+        List<Venue> venues = venueRepo.findAllVenueByMerchantEmail(user.getEmail());
+        for (Venue venue : venues) {
+            venue.setBookingList(null);
+            venue.setTimeSlots(null);
+        }
+        return venues;
     }
 }

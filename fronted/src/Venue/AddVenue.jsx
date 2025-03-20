@@ -12,6 +12,7 @@ const AddVenue = () => {
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isMerchant, setIsMerchant] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const AddVenue = () => {
       const userRole = localStorage.getItem('role'); // Example
       
       setIsAdmin(userRole === 'admin');
+      setIsMerchant(userRole === 'merchant');
     };
     
     checkAdminStatus();
@@ -99,7 +101,7 @@ const AddVenue = () => {
     setCities(citiesArray);
   };
 
-  if (!isAdmin) {
+  if (!isAdmin && !isMerchant) {
     return (
       <div className="p-12 mt-20">
         <div>You do not have permission to view this page.</div>

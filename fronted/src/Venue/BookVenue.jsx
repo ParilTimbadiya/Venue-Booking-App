@@ -16,6 +16,8 @@ const BookVenue = () => {
       setLoading(true); // Start loading
       try {
         const response = await publicApi.get('/venuelist');
+        console.log(response.data);
+        
         if (response && response.data) {
           setVenues(response.data);
         } else {

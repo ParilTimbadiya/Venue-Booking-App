@@ -148,7 +148,7 @@
 
 import React, { useEffect, useState } from "react";
 // import Sponsers from "./Sponsers/Sponsers";
-// import Gallery from "./Gallery/Gallery";
+import Gallery from "./Gallery/Gallery";
 // import { useSelector } from "react-redux";
 import img1 from "../assets/images/home_1.jpg";
 import img2 from "../assets/images/home_3.jpg";
@@ -370,6 +370,9 @@ const Home = () => {
           </div>
         ))}
       </div>
+
+      <Gallery/>
+
       {/* second */}
       <div className="py-12 bg-[#0c131a]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

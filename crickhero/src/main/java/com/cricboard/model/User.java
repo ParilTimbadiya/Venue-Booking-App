@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,10 +47,18 @@ public class User {
 
     private String otp;
 
+    private boolean isMerchant=false;
+
+    private LocalDate expiration_month=null;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Booking> bookingList;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<CartItem> cartItemList;
+
+    public void setMerchant(boolean merchant) {
+        isMerchant = merchant;
+    }
 
 }
