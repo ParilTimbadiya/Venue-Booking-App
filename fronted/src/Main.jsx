@@ -29,7 +29,7 @@ import MatchDetails from "./component/matchDetails/MatchDetails";
 import Schedule from './component/Schedule/Schedule'
 import NewsDetail from "./component/NewsDetail/NewsDetail.jsx";
 import News from "./component/News/News";
-import Teams from "./component/Teams/Teams";
+import Teams from "./component/Teams/Teams.jsx";
 import Series from "./component/Series/Series";
 import BatsmenRankings from "./component/BatsmenRanking/BatsmenRanking.jsx";
 import PhotoGallery from "./component/Photos/PhotoGallery.jsx";

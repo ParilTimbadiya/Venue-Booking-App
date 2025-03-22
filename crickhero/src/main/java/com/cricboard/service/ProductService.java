@@ -25,6 +25,9 @@ public class ProductService {
 
     public List<Product> getAllProduct() {
         List<Product> products = productRepo.findAll();
+        for(Product i : products){
+            i.setCartItemList(null);
+        }
         return products;
     }
 

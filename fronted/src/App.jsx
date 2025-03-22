@@ -8,7 +8,7 @@ import buttonsContainer from './component/buttonsContainer';
 import Matches from './component/Matches/Matches';
 import match from './component/matchDetails/MatchDetails';
 import Schedule from './component/Schedule/Schedule';
-import Teams from "./component/Teams/Teams";
+import Teams from "./component/Teams/Teams.jsx";
 import Series from "./component/Series/Series";
 import News from './component/News/News.jsx';
 import NewsDetail from './component/NewsDetail/NewsDetail.jsx';

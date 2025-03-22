@@ -9,9 +9,11 @@ import com.cricboard.model.Booking;
 import com.cricboard.model.Product;
 import com.cricboard.model.User;
 import com.cricboard.model.Venue;
+import com.cricboard.repository.BookingRepo;
 import com.cricboard.repository.ContactUsRepo;
 import com.cricboard.model.*;
 import com.cricboard.repository.UserRepo;
+import com.cricboard.repository.VenueRepo;
 import com.cricboard.service.ProductService;
 import com.cricboard.service.UserService;
 import com.cricboard.service.VenueService;
@@ -22,8 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * AuthController - Handles user-related operations
@@ -49,6 +50,10 @@ public class AuthController {
     private JwtService jwtService;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private BookingRepo bookingRepo;
+    @Autowired
+    private VenueRepo venueRepo;
 
     /**
      * Handles user registration
@@ -126,6 +131,39 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/cancel-booking")
+    public ResponseEntity<?> cancelBooking(@RequestHeader("Authorization") String header,@RequestBody Map<String, String> request){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+//            if (user != null && (user.isMerchant() || user.getRole()=="ROLE_ADMIN")) {
+                Long bookingId = Long.valueOf(request.get("bookingId"));
+                Booking booking = bookingRepo.findById(bookingId).get();
+                bookingRepo.deleteById(bookingId);
+            String emailBody = "Dear Customer,\n\n"
+                    + "We regret to inform you that your recent booking has been canceled by the merchant.\n"
+                    + "We sincerely apologize for the inconvenience caused and thank you for your understanding.\n\n"
+                    + "If you have any questions or need further assistance, please feel free to contact our support team.\n\n"
+                    + "Thank you,\n"
+                    + "Crickboard Team";
+                EmailDetailsDto userConfirmation = EmailDetailsDto.builder()
+                        .subject("Booking Canceled: " +"[ID: " +  request.get("bookingId") +"]")
+                        .recipient(booking.getUser().getEmail())
+                        .msgBody(emailBody)
+                        .build();
+                emailService.sendSimpleMail(userConfirmation);
+                return new ResponseEntity<>(HttpStatus.OK);
+//            }
+//            return new ResponseEntity<>("Merchant not found", HttpStatus.NOT_FOUND);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/expire")
     public ResponseEntity<?> getExpirationMonth(@RequestHeader("Authorization") String header){
         try {
@@ -192,8 +230,35 @@ public class AuthController {
         return new ResponseEntity<>(productService.getAllProduct(),HttpStatus.OK);
     }
     @GetMapping("/booking-data")
-    public ResponseEntity<List<Booking>> getAllBooking() {
-        return new ResponseEntity<>(venueService.getAllBooking(),HttpStatus.OK);
+    public ResponseEntity<?> getAllBooking(@RequestHeader("Authorization") String header) {
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.isMerchant()) {
+                HashSet<Integer> venueIds = new HashSet<>();
+                for(Venue i : venueRepo.findAllVenueByMerchantEmail(user.getEmail())){
+                    venueIds.add(i.getVenueId());
+                }
+                List<Booking> bookingList = new ArrayList<>();
+
+                for(Booking i : venueService.getAllBooking()){
+                    if(venueIds.contains(i.getVenue().getVenueId())){
+                        bookingList.add(i);
+                    }
+                }
+                return new ResponseEntity<>(bookingList,HttpStatus.OK);
+            }else if(user!=null && user.getRole().equals("ROLE_ADMIN")){
+                return new ResponseEntity<>(venueService.getAllBooking(),HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
     }
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {

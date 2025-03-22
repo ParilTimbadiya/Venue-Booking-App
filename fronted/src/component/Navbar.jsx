@@ -599,7 +599,7 @@ const Navbar = () => {
           {
           !isAdmin && [
             { to: "/matches", text: "Matches" },
-            { to: "http://localhost:5500/Cricboard", text: "Local Match" },
+            { to: "http://localhost:5500/", text: "Local Match" },
             // { to: "/localmatch", text: "Local Match" },
             { to: "/venueshow", text: "Book Venue" },
             { to: "/products", text: "Sport Equipment" },
@@ -692,7 +692,7 @@ const Navbar = () => {
             { to: "/teams", text: "Teams" },
             { to: "/ranking", text: "Rank" },
             { to: "/photo", text: "Photo" },
-            { to: "http://localhost:5500/Crickboard/", text: "Local Match" },
+            { to: "http://localhost:5500/", text: "Local Match" },
             { to: "/venueshow", text: "Book Venue" },
             { to: "/contact", text: "Contact Us" },
             { to: "/products", text: "Sport Equipment" },
@@ -713,6 +713,7 @@ const Navbar = () => {
               <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
               <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
               <Link to="/merchant" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Premium</Link>
+              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booked Venue</Link>
               </>
             )
           }

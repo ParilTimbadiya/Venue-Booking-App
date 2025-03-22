@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { publicApi } from "../utils/api";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 const Product = () => {
   const [items, setItems] = useState([]);
-  const [cart, setCart] = useState(() => {
-    return JSON.parse(localStorage.getItem("cart")) || [];
-  });
-  const [quantities, setQuantities] = useState({});
+  const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem("cart")) || []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await publicApi.get("/productlist");
-        setItems(response?.data || []);
+        console.log("API Response:", response.data); // Log the response to inspect its structure
+
+        // Check if response.data is an array before setting items
+        setItems(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Error fetching products:", error);
         setItems([]);
       }
     };
     fetchProducts();
-
     setIsLoggedIn(!!localStorage.getItem("auth") && !!localStorage.getItem("role"));
   }, []);
 
@@ -32,86 +31,69 @@ const Product = () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const handleQuantityChange = (productId, change) => {
-    if (change > 0 && !isLoggedIn) {
+  const addToCart = (product) => {
+    if (!isLoggedIn) {
       toast.error("Please log in to add items to the cart.");
       return;
     }
-    setQuantities((prev) => ({
-      ...prev,
-      [productId]: Math.max(0, (prev[productId] || 0) + change),
-    }));
-  };
 
-  const addToCart = (product) => {
-    if (!quantities[product.id]) {
-      toast.error("Please select a quantity before adding to cart.");
-      return;
-    }
     const existingItem = cart.find((item) => item.id === product.id);
     if (existingItem) {
       setCart(
         cart.map((item) =>
-          item.id === product.id ? { ...item, quantity: quantities[product.id] } : item
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         )
       );
     } else {
-      setCart([...cart, { ...product, quantity: quantities[product.id] }]);
+      setCart([...cart, { ...product, quantity: 1 }]); // Default quantity set to 1
     }
     toast.success("Added to cart!");
   };
 
   return (
-    <div className="container mx-auto mt-5">
-      {/* Cart Button (Redirect to Cart Page) */}
+    <div className="container mx-auto mt-8 px-4">
+      {/* Floating Cart Button */}
       {cart.length > 0 && (
         <button
-          className="fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded"
-          onClick={() => navigate("/cart")} // Navigate to Cart Page
+          className="fixed top-28 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-all"
+          onClick={() => navigate("/cart")}
         >
-          Cart ({cart.length})
+          🛒 Cart ({cart.length})
         </button>
       )}
 
       {/* Product List */}
-      <div className="grid grid-cols-3 gap-6">
-        {items.length === 0 ? (
-          <div className="col-span-3 text-center">
-            <h2>No Products Found</h2>
-            <p>Try searching for something else or check back later.</p>
-          </div>
-        ) : (
-          items.map((product) => (
-            <div key={product.id} className="border rounded-lg p-4 shadow-md">
-              <img src={product.imgSrc} alt={product.title} className="w-full h-48 object-cover" />
-              <h3 className="text-xl font-bold mt-2">{product.title}</h3>
-              <p className="text-gray-600">{product.description}</p>
-              <p className="text-lg font-semibold">INR {product.price}</p>
-              <div className="flex items-center gap-2 mt-2">
-                <button
-                  className="bg-blue-500 text-white px-3 py-1 rounded"
-                  onClick={() => handleQuantityChange(product.id, 1)}
-                >
-                  +
-                </button>
-                <span>{quantities[product.id] || 0}</span>
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded"
-                  onClick={() => handleQuantityChange(product.id, -1)}
-                >
-                  -
-                </button>
-              </div>
+      {Array.isArray(items) && items.length > 0 ? (  // Added runtime check
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {items.map((product) => (
+            <div
+              key={product.id}
+              className="bg-white border rounded-lg shadow-lg p-4 hover:shadow-xl transition-all"
+            >
+              <img
+                src={product.imgSrc}
+                alt={product.title}
+                className="w-full h-56 object-cover rounded-md"
+              />
+              <h3 className="text-lg font-bold mt-3">{product.title}</h3>
+              <p className="text-gray-500 text-sm">{product.description}</p>
+              <p className="text-xl font-semibold text-blue-600 mt-1">₹ {product.price}</p>
+
               <button
-                className="bg-green-500 text-white w-full mt-3 py-2 rounded"
+                className="bg-green-500 text-white w-full mt-3 py-2 rounded-md hover:bg-green-600 transition-all"
                 onClick={() => addToCart(product)}
               >
-                Add to Cart
+                🛍 Add to Cart
               </button>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+          <h2 className="text-xl font-semibold">No Products Found</h2>
+          <p>Try searching for something else or check back later.</p>
+        </div>
+      )}
 
       <ToastContainer />
     </div>

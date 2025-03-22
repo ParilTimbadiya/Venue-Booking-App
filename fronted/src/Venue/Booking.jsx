@@ -5,6 +5,8 @@ const Booking = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false); // Assume a way to check if the user is admin
+  const isMerchant = localStorage.getItem("role") === "merchant";
+
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -36,14 +38,26 @@ const Booking = () => {
     checkAdminStatus();
     fetchBookings();
   }, []);
-
+  const handleCancelBooking = async (bookingId) => {
+    try {
+      const response = await publicApi.post('/cancel-booking', { bookingId });
+      if (response.status === 200) {
+        alert("Booking has been canceld successfully!");
+      } else {
+        alert("Failed to canceld booking");
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      alert("An error occurred while canceld booking");
+    }
+  };
   if (loading) {
     return <div className="p-12 mt-20">Loading...</div>; // Replace with your Loader component if available
 
 
   }
 
-  if (!isAdmin) {
+  if (!isAdmin && !isMerchant) {
     return (
       <div className="p-12 mt-20">
         <div>You do not have permission to view this page.</div>
@@ -68,7 +82,7 @@ const Booking = () => {
             <th className="border border-gray-300 p-2">Duration</th>
             <th className="border border-gray-300 p-2">Price per hour</th>
             <th className="border border-gray-300 p-2">Total Amount</th>
-            <th className="border border-gray-300 p-2">Created At</th>
+            <th className="border border-gray-300 p-2">Cancel</th>
 
           </tr>
         </thead>
@@ -84,7 +98,15 @@ const Booking = () => {
               <td className="border border-gray-300 p-2">{booking.total_hours} hour</td>
               <td className="border border-gray-300 p-2">{booking.venue.price}</td>
               <td className="border border-gray-300 p-2">₹{booking.total_cost}</td>
-              <td className="border border-gray-300 p-2">{booking.created_at}</td>
+              <td className="border border-gray-300 p-2">
+                {(<button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+                      onClick={() => handleCancelBooking(booking.bookingId)}
+                      >
+                        Cancel
+                      </button>)
+              }</td>
             </tr>
           ))}
         </tbody>
