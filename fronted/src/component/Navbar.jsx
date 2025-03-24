@@ -553,6 +553,8 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("role");
+    localStorage.removeItem("cart");
+    localStorage.removeItem("orderDetails");
     navigate("/signin");
   };
 

@@ -53,8 +53,6 @@ const Booking = () => {
   };
   if (loading) {
     return <div className="p-12 mt-20">Loading...</div>; // Replace with your Loader component if available
-
-
   }
 
   if (!isAdmin && !isMerchant) {

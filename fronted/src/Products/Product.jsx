@@ -14,10 +14,7 @@ const Product = () => {
     const fetchProducts = async () => {
       try {
         const response = await publicApi.get("/productlist");
-        console.log("API Response:", response.data); // Log the response to inspect its structure
-
-        // Check if response.data is an array before setting items
-        setItems(Array.isArray(response.data) ? response.data : []);
+        setItems(response?.data || []);
       } catch (error) {
         console.error("Error fetching products:", error);
         setItems([]);
@@ -51,7 +48,7 @@ const Product = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8 px-4">
+    <div className="container mx-auto mt-8 px-4 font-my">
       {/* Floating Cart Button */}
       {cart.length > 0 && (
         <button
@@ -63,35 +60,37 @@ const Product = () => {
       )}
 
       {/* Product List */}
-      {Array.isArray(items) && items.length > 0 ? (  // Added runtime check
+      {items.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+          <h2 className="text-xl font-semibold">No Products Found</h2>
+          <p>Try searching for something else or check back later.</p>
+        </div>
+      ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {items.map((product) => (
             <div
               key={product.id}
-              className="bg-white border rounded-lg shadow-lg p-4 hover:shadow-xl transition-all"
+              className="bg-[#1c2736] rounded-lg shadow-lg p-4 hover:shadow-xl transition-all"
             >
               <img
                 src={product.imgSrc}
                 alt={product.title}
                 className="w-full h-56 object-cover rounded-md"
               />
-              <h3 className="text-lg font-bold mt-3">{product.title}</h3>
-              <p className="text-gray-500 text-sm">{product.description}</p>
-              <p className="text-xl font-semibold text-blue-600 mt-1">₹ {product.price}</p>
+              <h3 className="text-2xl text-gray-300 font-bold mt-3">{product.title}</h3>
+              <p className="text-gray-500 font-bold text-sm mt-1">{product.description}</p>
+              <p className="text-xl font-semibold text-[#6eb4ef] my-2">₹ {product.price}</p>
+
+              {/* Removed Increase/Decrease Buttons */}
 
               <button
-                className="bg-green-500 text-white w-full mt-3 py-2 rounded-md hover:bg-green-600 transition-all"
+                className="px-[16px] py-[11px] border-[1px] border-[#6eb5ef40] bg-[#6eb4ef14] rounded-md text-[#6eb4ef] w-full cursor-pointer font-medium"
                 onClick={() => addToCart(product)}
               >
                 🛍 Add to Cart
               </button>
             </div>
           ))}
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-          <h2 className="text-xl font-semibold">No Products Found</h2>
-          <p>Try searching for something else or check back later.</p>
         </div>
       )}
 
@@ -101,6 +100,7 @@ const Product = () => {
 };
 
 export default Product;
+
 
 
 
@@ -274,3 +274,4 @@ export default Product;
 // };
 
 // export default Product;
+// </create_file>

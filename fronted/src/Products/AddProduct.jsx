@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { publicApi } from "../utils/api";
 
 const AddProduct = () => {
   const [imageFile, setImageFile] = useState(null);
@@ -42,9 +43,18 @@ const AddProduct = () => {
       formData.append("price", values.price);
       formData.append("image", imageFile);
 
+      const token = localStorage.getItem("auth");
+      const role = localStorage.getItem("role");
+
       try {
-        // Simulating API request
-        console.log("Product added:", values);
+        const { data } = await publicApi.post("/addequipment", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+            Role: role,
+          },
+        });
+
         toast.success("Product added successfully!", {
           position: "top-right",
           autoClose: 3000,
@@ -52,10 +62,11 @@ const AddProduct = () => {
 
         resetForm();
         setImageFile(null);
-        setImagePreview(null);
 
         setTimeout(() => navigate("/products"), 3000);
       } catch (error) {
+        console.error("Error adding product:", error);
+
         toast.error("Failed to add product. Please try again!", {
           position: "top-right",
           autoClose: 3000,

@@ -60,9 +60,9 @@ public class SecurityConfig {
                 .csrf(customizer -> customizer.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/crickhero/auth/addvenue","/crickhero/auth/bookvenue","/crickhero/addequipment").hasAuthority("ROLE_USER")
-                        .requestMatchers("/crickhero/auth/addvenue","/crickhero/auth/addequipment").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/crickhero/signup","/crickhero/signin","/crickhero/send-otp","/crickhero/reset-password","/crickhero/venuelist","/crickhero/removevenuelist","/crickhero/productlist","/crickhero/contact","/crickhero/addequipment","/crickhero/cart/items","/crickhero/cart/update","/crickhero/booking-data","/crickhero/users","/crickhero/merchantdetails","/crickhero/make-merchant","/crickhero/cancel-booking","/crickhero/expire","/crickhero/merchantPayment").permitAll()
+                        .requestMatchers("/crickhero/auth/addvenue","/crickhero/auth/bookvenue").hasAuthority("ROLE_USER")
+                        .requestMatchers("/crickhero/auth/addvenue").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/crickhero/signup","/crickhero/signin","/crickhero/send-otp","/crickhero/reset-password","/crickhero/venuelist","/crickhero/removevenuelist","/crickhero/productlist","/crickhero/contact","/crickhero/addequipment","/crickhero/place-order","/crickhero/cart/items","/crickhero/cart/update","/crickhero/booking-data","/crickhero/users","/crickhero/merchantdetails","/crickhero/make-merchant","/crickhero/cancel-booking","/crickhero/expire","/crickhero/merchantPayment").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())

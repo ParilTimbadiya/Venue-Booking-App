@@ -5,15 +5,14 @@ import com.cricboard.config.email.EmailService;
 import com.cricboard.config.jwt.JwtService;
 import com.cricboard.dto.AuthRequest;
 import com.cricboard.dto.ContactUs;
+import com.cricboard.dto.OrderDto;
+import com.cricboard.dto.ProductDto;
 import com.cricboard.model.Booking;
 import com.cricboard.model.Product;
 import com.cricboard.model.User;
 import com.cricboard.model.Venue;
-import com.cricboard.repository.BookingRepo;
-import com.cricboard.repository.ContactUsRepo;
+import com.cricboard.repository.*;
 import com.cricboard.model.*;
-import com.cricboard.repository.UserRepo;
-import com.cricboard.repository.VenueRepo;
 import com.cricboard.service.ProductService;
 import com.cricboard.service.UserService;
 import com.cricboard.service.VenueService;
@@ -51,9 +50,13 @@ public class AuthController {
     @Autowired
     private UserRepo userRepo;
     @Autowired
+    private OrderRepo orderRepo;
+    @Autowired
     private BookingRepo bookingRepo;
     @Autowired
     private VenueRepo venueRepo;
+    @Autowired
+    private ProductItemsRepo productItemsRepo;
 
     /**
      * Handles user registration
@@ -91,7 +94,7 @@ public class AuthController {
                 email = jwtService.extractUsername(token);
             }
             User user = userRepo.findByEmail(email);
-            if(user!=null && user.isMerchant()) {
+            if(user!=null && user.getRole().equals("ROLE_ADMIN")) {
                 Product product = new Product();
                 product.setTitle(title);
                 product.setDescription(description);
@@ -258,8 +261,92 @@ public class AuthController {
         } catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
+
+    @PostMapping("/place-order")
+    public ResponseEntity<String> placeOrder(@RequestBody OrderDto orderDto, @RequestHeader("Authorization") String header) {
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null){
+                orderDto.setEmail(user.getEmail());
+
+                Orders order = new Orders()
+                        .builder()
+                        .address(orderDto.getAddress())
+                        .phone(orderDto.getPhone())
+                        .fullName(orderDto.getFullName())
+                        .totalAmount(orderDto.getTotalAmount())
+                        .email(orderDto.getEmail())
+                        .paymentMethod(orderDto.getPaymentMethod())
+                        .build();
+                order = orderRepo.save(order);
+                for(ProductDto i : orderDto.getOrderItems()){
+                    ProductItems productItems = new ProductItems();
+                    productItems.setProductId(i.getId());
+                    productItems.setOrderId(order.getOrderId());
+                    productItems.setQty(i.getQuantity());
+                    productItemsRepo.save(productItems);
+                }
+                // Constructing the email body with placeholders
+                String emailBody = "Dear " + orderDto.getFullName() + ",\n\n"
+                        + "Thank you for placing an order with us! Your order has been successfully received and is being processed. Below are your order details:\n\n"
+                        + "Order ID: " + order.getOrderId() + "\n"
+                        + "Name: " + orderDto.getFullName() + "\n"
+                        + "Phone: " + orderDto.getPhone() + "\n"
+                        + "Email: " + email + "\n"
+                        + "Address: " + orderDto.getAddress() + "\n"
+                        + "Payment Method: " + orderDto.getPaymentMethod() + "\n"
+                        + "Order Items: " + orderDto.getOrderItems().size() + "\n"
+                        + "Total Amount: ₹" +orderDto.getTotalAmount() + "\n\n"
+                        + "We will notify you once your order is shipped.\n\n"
+                        + "If you have any questions or need assistance, please contact our customer support team.\n\n"
+                        + "Thank you for shopping with us!\n"
+                        + "Crickboard Team";
+
+                EmailDetailsDto orderConfirmationEmail = EmailDetailsDto.builder()
+                        .subject("Order Confirmation - Order ID: " + order.getOrderId())
+                        .recipient(email)
+                        .msgBody(emailBody)
+                        .build();
+                emailService.sendSimpleMail(orderConfirmationEmail);
+
+                String emailBody1 = "Dear Admin,\n\n"
+                        + "A new order has been placed on Crickboard. Below are the order details:\n\n"
+                        + "Order ID: " + order.getOrderId() + "\n"
+                        + "Customer Name: " + orderDto.getFullName() + "\n"
+                        + "Phone: " + orderDto.getPhone() + "\n"
+                        + "Email: " + orderDto.getEmail() + "\n"
+                        + "Shipping Address: " + orderDto.getAddress() + "\n"
+                        + "Payment Method: " + orderDto.getPaymentMethod() + "\n"
+                        + "Number of Items: " + orderDto.getOrderItems().size() + "\n"
+                        + "Total Order Amount: ₹" + orderDto.getTotalAmount() + "\n\n"
+                        + "Please review the order and proceed with further processing.\n\n"
+                        + "Thank you,\n"
+                        + "Crickboard Team";
+
+                EmailDetailsDto adminNotificationEmail = EmailDetailsDto.builder()
+                        .subject("New Order Placed - Order ID: " + order.getOrderId())
+                        .recipient("official.cricboard@gmail.com")  // Replace with actual admin email variable
+                        .msgBody(emailBody1)
+                        .build();
+
+                emailService.sendSimpleMail(adminNotificationEmail);
+
+            }
+            return ResponseEntity.ok("Order placed successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to place order: " + e.getMessage());
+        }
+    }
+
+
+
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUser(),HttpStatus.OK);
