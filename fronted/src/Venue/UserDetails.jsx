@@ -77,28 +77,26 @@ const UserDetails = () => {
       <h1 className="text-2xl font-bold mb-4">User Details</h1>
       <table className="min-w-full border-collapse border border-gray-200">
         <thead>
-          <tr>
-            <th className="border border-gray-300 p-2">User ID</th>
-            <th className="border border-gray-300 p-2">Full Name</th>
-            <th className="border border-gray-300 p-2">Username</th>
-            <th className="border border-gray-300 p-2">Email</th>
-            <th className="border border-gray-300 p-2">State</th>
-            <th className="border border-gray-300 p-2">City</th>
-            <th className="border border-gray-300 p-2">Created At</th>
-            <th className="border border-gray-300 p-2">Merchant</th>
+          <tr className="hover:bg-gray-900" >
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">User ID</th>
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">Full Name</th>
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">Username</th>
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">Email</th>
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">State</th>
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">City</th>
+            <th className="px-3 md:px-5 py-3 md:py-4 text-left text-sm md:text-xl font-semibold cursor-pointer border-0">Merchant</th>
           </tr>
         </thead>
         <tbody>
           {userDetails.map((user) => (
-            <tr key={user.userId}>
-              <td className="border border-gray-300 p-2">{user.userId}</td>
-              <td className="border border-gray-300 p-2">{user.fullName}</td>
-              <td className="border border-gray-300 p-2">{user.userName}</td>
-              <td className="border border-gray-300 p-2">{user.email}</td>
-              <td className="border border-gray-300 p-2">{user.state}</td>
-              <td className="border border-gray-300 p-2">{user.city}</td>
-              <td className="border border-gray-300 p-2">{user.createdAt}</td>
-              <td className="border border-gray-300 p-2">
+            <tr className="hover:bg-[#1b2741] transition-colors" key={user.userId}>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">{user.userId}</td>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">{user.fullName}</td>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">{user.userName}</td>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">{user.email}</td>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">{user.state}</td>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">{user.city}</td>
+            <td className="px-3 md:px-5 py-3 md:py-4 text-xs md:text-base font-bold text-[#b1adad] border-0">
                 {!user.merchant?(<button
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"

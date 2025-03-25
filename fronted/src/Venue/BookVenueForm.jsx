@@ -10,7 +10,8 @@ const BookVenueForm = ({ venueId, onBack }) => {
   const [selectedSlot, setSelectedSlot] = useState("");
   const [duration, setDuration] = useState(1); // Default duration of 1 hour
   const [maxDuration, setMaxDuration] = useState(5); // Default max duration
-
+  const [debitCardNumber, setDebitCardNumber] = useState('');
+  const [pin, setPin] = useState('');
   const validationSchema = yup.object({
     booking_date: yup.date().required("Booking date is required"),
     start_time: yup.string().required("Start time is required"),
@@ -222,7 +223,32 @@ const BookVenueForm = ({ venueId, onBack }) => {
             <div className="text-red-500 text-sm">{formik.errors.start_time}</div>
           )}
         </div>
-
+        <div>
+          <label className="block text-sm font-medium text-gray-700 flex items-center">
+            <span className="mr-2">Debit Card Number:</span>
+            <i className="fas fa-credit-card text-gray-400"></i>
+          </label>
+          <input
+            type="text"
+            value={debitCardNumber}
+            onChange={(e) => setDebitCardNumber(e.target.value)}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 flex items-center">
+            <span className="mr-2">PIN:</span>
+            <i className="fas fa-lock text-gray-400"></i>
+          </label>
+          <input
+            type="password"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            required
+            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
         {/* Submit Button */}
         <button
           type="submit"
