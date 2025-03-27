@@ -147,6 +147,8 @@ public class VenueService {
                 .total_hours(hours)
                 .total_cost(hours * venue.getPrice())
                 .created_at(LocalDateTime.now())
+                .debitCardNumber(bookingRequestDto.getDebitCardNumber())
+                .pin(bookingRequestDto.getPin())
                 .venue(Venue.builder().venueId(venue.getVenueId()).build())
                 .user(User.builder().userId(user.getUserId()).build())
                 .build();

@@ -66,11 +66,11 @@ const Product = () => {
           <p>Try searching for something else or check back later.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="m-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-20">
           {items.map((product) => (
             <div
               key={product.id}
-              className="bg-[#1c2736] rounded-lg shadow-lg p-4 hover:shadow-xl transition-all"
+              className="bg-[#1c2736] rounded-lg shadow-lg p-11 hover:shadow-xl transition-all"
             >
               <img
                 src={product.imgSrc}

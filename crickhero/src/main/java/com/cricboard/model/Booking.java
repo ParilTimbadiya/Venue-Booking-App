@@ -35,6 +35,8 @@ public class Booking {
 
     private LocalDateTime created_at = LocalDateTime.now();
 
+    private String debitCardNumber;
+    private int pin;
     @ManyToOne
     @JoinColumn(name = "fkVenueId")
     private Venue venue;

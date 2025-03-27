@@ -32,6 +32,8 @@ const BookVenueForm = ({ venueId, onBack }) => {
             .split("T")[0],
           startTime: formatTimeForBackend(selectedSlot),
           endTime: calculateEndTime(selectedSlot, duration),
+          debitCardNumber: debitCardNumber,
+          pin: pin,
         };
         console.log("Booking data:",bookingData);
         const response = await privateApi.post("/bookings", bookingData);
@@ -224,7 +226,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
           )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+          <label className="block text-sm font-medium text-gray-400 flex items-center">
             <span className="mr-2">Debit Card Number:</span>
             <i className="fas fa-credit-card text-gray-400"></i>
           </label>
@@ -237,7 +239,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+          <label className="block text-sm font-medium text-gray-400 flex items-center">
             <span className="mr-2">PIN:</span>
             <i className="fas fa-lock text-gray-400"></i>
           </label>

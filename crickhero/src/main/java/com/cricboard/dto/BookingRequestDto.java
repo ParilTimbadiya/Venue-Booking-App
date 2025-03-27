@@ -1,10 +1,14 @@
 package com.cricboard.dto;
 
 import jakarta.persistence.Column;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-
+@Data
+@AllArgsConstructor
 public class BookingRequestDto {
     @Column(nullable = false)
     private int venueId;
@@ -14,6 +18,12 @@ public class BookingRequestDto {
     private LocalTime startTime;
     @Column(nullable = false)
     private LocalTime endTime;
+
+    @Column(nullable = false)
+    private String debitCardNumber;
+
+    @Column(nullable = false)
+    private int pin;
 
     @Override
     public String toString() {
