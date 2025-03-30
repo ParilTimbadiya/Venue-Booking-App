@@ -712,20 +712,21 @@ const Navbar = () => {
           {
             isMerchant && (
               <>
-              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
-              <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
+              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Host Venue</Link>
+              <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Discard Venue</Link>
               <Link to="/merchant" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Premium</Link>
-              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booked Venue</Link>
+              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booking Details</Link>
               </>
             )
           }
           {isAdmin && (
             <>
               
-              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Venue</Link>
-              <Link to="/addProduct" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Add Products</Link>
-              <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Remove Venue</Link>
-              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booked Venue</Link>
+              <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Host Venue</Link>
+              <Link to="/addProduct" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}> Product Listing</Link>
+              <Link to="/remove-venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Discard Venue</Link>
+              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booking Details</Link>
+              <Link to="/orderData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Order Details</Link>
               <Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>User Details</Link>
               <Link to="/merchantDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Merchant Details</Link>
             </>

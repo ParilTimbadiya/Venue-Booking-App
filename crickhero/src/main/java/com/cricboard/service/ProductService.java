@@ -1,6 +1,12 @@
 package com.cricboard.service;
 
 import com.cloudinary.Cloudinary;
+import com.cricboard.dto.OrderDataResponseDto;
+import com.cricboard.dto.ProductDto;
+import com.cricboard.model.Orders;
+import com.cricboard.model.ProductItems;
+import com.cricboard.repository.OrderRepo;
+import com.cricboard.repository.ProductItemsRepo;
 import com.cricboard.repository.ProductRepo;
 import com.cricboard.model.Product;
 import jakarta.transaction.Transactional;
@@ -10,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +27,10 @@ public class ProductService {
     ProductRepo productRepo;
     @Autowired
     Cloudinary cloudinaryTemplate;
-
+    @Autowired
+    OrderRepo orderRepo;
+    @Autowired
+    ProductItemsRepo productItemsRepo;
 
 
     public List<Product> getAllProduct() {
@@ -41,5 +51,35 @@ public class ProductService {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public List<?> getAllOrders() {
+        List<Orders> ordersList = orderRepo.findAll();
+        List<OrderDataResponseDto> orderDataResponseDtoList = new ArrayList<>();
+        for(Orders i : ordersList){
+            List<ProductItems> productItemsList = productItemsRepo.findAllByOrderId(i.getOrderId());
+            List<ProductDto> productDtoList = new ArrayList<>();
+
+            for(ProductItems productItems : productItemsList){
+                Product product = productRepo.findById(productItems.getProductId()).get();
+                productDtoList.add(ProductDto.builder()
+                                .title(product.getTitle())
+                                .quantity(productItems.getQty())
+                                .price((long)product.getPrice())
+                        .build());
+            }
+            OrderDataResponseDto dto = OrderDataResponseDto.builder()
+                    .orderId(i.getOrderId())
+                    .address(i.getAddress())
+                    .email(i.getEmail())
+                    .fullName(i.getFullName())
+                    .phone(i.getPhone())
+                    .paymentMethod(i.getPaymentMethod())
+                    .totalAmount(i.getTotalAmount())
+                    .orderItems(productDtoList)
+                    .build();
+            orderDataResponseDtoList.add(dto);
+        }
+        return orderDataResponseDtoList;
     }
 }

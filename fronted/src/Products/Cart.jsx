@@ -93,7 +93,7 @@ const Cart = () => {
               <input
                 type="text"
                 placeholder="Enter code"
-                className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-300"
+                className="w-full mt-1 p-2 border rounded-md focus:ring focus:ring-blue-300 bg-[#0c131a] text-white"
               />
               <button className="w-full mt-2 bg-black text-white py-2 rounded-md hover:opacity-80">
                 Apply

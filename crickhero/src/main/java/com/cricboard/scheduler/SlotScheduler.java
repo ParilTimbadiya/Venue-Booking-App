@@ -32,15 +32,22 @@ public class SlotScheduler {
 //        }
 //    }
 //
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 23 12 * * *")
     private void turnOfShowingVenue(){
         try {
             List<User> users = userRepo.findAllMerchantUser();
             for (User i : users){
-                if(i.getExpiration_month().isEqual(LocalDate.now()) || i.getExpiration_month().isAfter(LocalDate.now())) {
+                if(i.getExpiration_month().isEqual(LocalDate.now()) || i.getExpiration_month().isBefore(LocalDate.now())) {
                     List<Venue> venues = venueRepo.findAllVenueByMerchantEmail(i.getEmail());
                     for(Venue venue : venues){
                         venue.setShow(false);
+                    }
+                    venueRepo.saveAll(venues);
+                }
+                if(i.getExpiration_month().isAfter(LocalDate.now())){
+                    List<Venue> venues = venueRepo.findAllVenueByMerchantEmail(i.getEmail());
+                    for(Venue venue : venues){
+                        venue.setShow(true);
                     }
                     venueRepo.saveAll(venues);
                 }

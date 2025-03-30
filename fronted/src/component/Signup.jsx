@@ -43,6 +43,7 @@ const Signup = () => {
         const res = await publicApi.post("/signup", signUpData);
         if (res.status === 200) navigate("/signin");
       } catch (ex) {
+        if (ex.status == 406) alert("User already exist!")
         console.error("Signup error:", ex);
       }
     },

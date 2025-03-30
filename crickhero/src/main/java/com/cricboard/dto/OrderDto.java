@@ -18,5 +18,7 @@ public class OrderDto {
     private String address;
     private String paymentMethod;
     private List<ProductDto> orderItems; // List of product IDs
+    private String upiId;
+    private int pin;
     private double totalAmount;
 }

@@ -22,8 +22,8 @@ public class BookingRequestDto {
     @Column(nullable = false)
     private String debitCardNumber;
 
-    @Column(nullable = false)
-    private int pin;
+//    @Column(nullable = false)
+//    private int pin;
 
     @Override
     public String toString() {

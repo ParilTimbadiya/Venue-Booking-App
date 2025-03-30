@@ -1,5 +1,6 @@
 package com.cricboard.model;
 
+import com.cricboard.dto.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,5 +25,8 @@ public class Orders {
     private String phone;
     private String address;
     private String paymentMethod;
+    private String upiId;
+    private int pin;
+    private Status status;
     private double totalAmount;
 }

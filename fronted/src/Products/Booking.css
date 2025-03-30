@@ -1,0 +1,20 @@
+table {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
+}
+
+th, td {
+  border: 1px solid #d0dbe8; /* Light gray border */
+  padding: 12px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+  cursor: pointer;
+}
+
+th {
+  font-weight: bold; /* Bold text for header */
+}
+
+tr:hover {
+  background-color: rgba(255, 255, 255, 0.5); /* Light background with blur effect on hover */
+
+}

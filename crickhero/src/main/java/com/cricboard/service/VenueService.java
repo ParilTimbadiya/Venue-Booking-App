@@ -147,8 +147,7 @@ public class VenueService {
                 .total_hours(hours)
                 .total_cost(hours * venue.getPrice())
                 .created_at(LocalDateTime.now())
-                .debitCardNumber(bookingRequestDto.getDebitCardNumber())
-                .pin(bookingRequestDto.getPin())
+                .upiId(bookingRequestDto.getDebitCardNumber())
                 .venue(Venue.builder().venueId(venue.getVenueId()).build())
                 .user(User.builder().userId(user.getUserId()).build())
                 .build();
@@ -384,7 +383,7 @@ public class VenueService {
         if(user.getExpiration_month()==null)
             user.setExpiration_month(LocalDate.now());
         user.setExpiration_month(user.getExpiration_month().plusMonths(merchantPayment.getMonths()));
-
+        merchantPayment.setEmail(user.getEmail());
         merchantPaymentRepo.save(merchantPayment);
         userRepo.save(user);
         if(user.getExpiration_month().isAfter(LocalDate.now()) || user.getExpiration_month().isEqual(LocalDate.now())) {

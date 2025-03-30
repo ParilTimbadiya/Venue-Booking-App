@@ -14,7 +14,7 @@ const RemoveVenueList = ({ venue, onRemove }) => {
           className="mt-2 bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-all duration-300"
           onClick={() => onRemove(venue.venueId)}
         >
-          Remove
+          Discard
         </button>
       </div>
     </div>

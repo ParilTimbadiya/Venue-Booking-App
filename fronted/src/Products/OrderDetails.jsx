@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { publicApi } from "../utils/api";
+import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const OrderDetails = () => {
   const [cart, setCart] = useState([]);
@@ -11,6 +12,7 @@ const OrderDetails = () => {
     phone: "",
     address: "",
     paymentMethod: "online",
+    upiId: "",
   });
   const [errors, setErrors] = useState({});
 
@@ -29,6 +31,9 @@ const OrderDetails = () => {
     // if (!formData.email.trim()) newErrors.email = "Email is required";
     if (!formData.phone.trim()) newErrors.phone = "Phone Number is required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
+    if (formData.paymentMethod === "online" && !formData.upiId.trim()) {
+      newErrors.upiId = "UPI ID is required";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -47,13 +52,13 @@ const handlePlaceOrder = async () => {
       console.log(orderData)
         const response = await publicApi.post("/place-order", orderData); // Adjust the endpoint as necessary
         if (response.status === 200) {
-            alert("🎉 Order Placed Successfully!");
+            // toast.success("🎉 Order Placed Successfully!");
             localStorage.removeItem("cart");
             setCart([]);
+            navigate('/');
         } else {
             alert("Failed to place order. Please try again.");
         }
-        navigate('/');
     } catch (error) {
         console.error("Error placing order:", error);
         alert("An error occurred while placing the order. Please try again.");
@@ -70,7 +75,7 @@ const handlePlaceOrder = async () => {
           type="text"
           name="fullName"
           placeholder="Full Name"
-          className="border p-2 w-full mb-2 rounded"
+          className="border p-2 w-full mb-2 rounded bg-[#0c131a] text-white"
           onChange={handleChange}
         />
         {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
@@ -85,10 +90,10 @@ const handlePlaceOrder = async () => {
         {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>} */}
 
         <input
-          type="text"
+          type="number"
           name="phone"
           placeholder="Mobile Number"
-          className="border p-2 w-full mb-2 rounded"
+          className="border p-2 w-full mb-2 rounded bg-[#0c131a] text-white"
           onChange={handleChange}
         />
         {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
@@ -96,7 +101,7 @@ const handlePlaceOrder = async () => {
         <textarea
           name="address"
           placeholder="Delivery Address"
-          className="border p-2 w-full mb-2 rounded"
+          className="border p-2 w-full mb-2 rounded bg-[#0c131a] text-white"
           rows="3"
           onChange={handleChange}
         ></textarea>
@@ -126,6 +131,21 @@ const handlePlaceOrder = async () => {
             Cash on Delivery
           </label>
         </div>
+
+        {formData.paymentMethod === "online" && (
+          <div className="mt-3">
+            <input
+              type="email"
+              name="upiId"
+              placeholder="example@upi"
+              className="border p-2 w-full rounded bg-[#0c131a] text-white"
+              onChange={handleChange}
+            />
+            {errors.upiId && (
+              <p className="text-red-500 text-sm">{errors.upiId}</p>
+            )}
+          </div>
+        )}
 
         <button
           className="bg-green-500 text-white px-4 py-2 rounded w-full mt-5 font-bold hover:bg-green-600"

@@ -3,10 +3,7 @@ package com.cricboard.controller;
 import com.cricboard.config.email.EmailDetailsDto;
 import com.cricboard.config.email.EmailService;
 import com.cricboard.config.jwt.JwtService;
-import com.cricboard.dto.AuthRequest;
-import com.cricboard.dto.ContactUs;
-import com.cricboard.dto.OrderDto;
-import com.cricboard.dto.ProductDto;
+import com.cricboard.dto.*;
 import com.cricboard.model.Booking;
 import com.cricboard.model.Product;
 import com.cricboard.model.User;
@@ -57,6 +54,8 @@ public class AuthController {
     private VenueRepo venueRepo;
     @Autowired
     private ProductItemsRepo productItemsRepo;
+    @Autowired
+    private ProductRepo productRepo;
 
     /**
      * Handles user registration
@@ -143,7 +142,10 @@ public class AuthController {
                 email = jwtService.extractUsername(token);
             }
             User user = userRepo.findByEmail(email);
-//            if (user != null && (user.isMerchant() || user.getRole()=="ROLE_ADMIN")) {
+            if(user!=null)
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+
+            if (user.isMerchant() || user.getRole()=="ROLE_ADMIN") {
                 Long bookingId = Long.valueOf(request.get("bookingId"));
                 Booking booking = bookingRepo.findById(bookingId).get();
                 bookingRepo.deleteById(bookingId);
@@ -160,8 +162,30 @@ public class AuthController {
                         .build();
                 emailService.sendSimpleMail(userConfirmation);
                 return new ResponseEntity<>(HttpStatus.OK);
-//            }
-//            return new ResponseEntity<>("Merchant not found", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>("Merchant not found", HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/shipped-order")
+    public ResponseEntity<?> shippedOrder(@RequestHeader("Authorization") String header,@RequestBody Map<String, String> request){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if (user != null && user.getRole()=="ROLE_ADMIN") {
+                Long orderId = Long.valueOf(request.get("orderId"));
+                Orders orders = orderRepo.findById(orderId).get();
+                orders.setStatus(Status.SHIPPED);
+                orderRepo.save(orders);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -263,6 +287,25 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/order-data")
+    public ResponseEntity<?> getAllOrder(@RequestHeader("Authorization") String header) {
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.getRole().equals("ROLE_ADMIN")) {
+                return new ResponseEntity<>(productService.getAllOrders(),HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @PostMapping("/place-order")
     public ResponseEntity<String> placeOrder(@RequestBody OrderDto orderDto, @RequestHeader("Authorization") String header) {
         try {
@@ -283,9 +326,20 @@ public class AuthController {
                         .totalAmount(orderDto.getTotalAmount())
                         .email(orderDto.getEmail())
                         .paymentMethod(orderDto.getPaymentMethod())
+                        .upiId(orderDto.getUpiId())
+                        .pin(orderDto.getPin())
+                        .status(Status.UNSHIPPED)
                         .build();
                 order = orderRepo.save(order);
+                String productString = "";
+                int count = 1;
                 for(ProductDto i : orderDto.getOrderItems()){
+                    Product product = productRepo.findById(i.getId()).get();
+                    productString = productString + "("+count+") Product ID: "+i.getId()+"\n"
+                    + "    Product: " +product.getTitle()+"\n"
+                    + "    Price: " +product.getPrice()+"\n"
+                    + "    Qty: " +i.getQuantity()+"\n";
+                    count++;
                     ProductItems productItems = new ProductItems();
                     productItems.setProductId(i.getId());
                     productItems.setOrderId(order.getOrderId());
@@ -302,12 +356,13 @@ public class AuthController {
                         + "Address: " + orderDto.getAddress() + "\n"
                         + "Payment Method: " + orderDto.getPaymentMethod() + "\n"
                         + "Order Items: " + orderDto.getOrderItems().size() + "\n"
+                        + productString +"\n"
                         + "Total Amount: ₹" +orderDto.getTotalAmount() + "\n\n"
+                        + "Tracking ID: " + "https://shadowfex.com" + "\n\n"
                         + "We will notify you once your order is shipped.\n\n"
                         + "If you have any questions or need assistance, please contact our customer support team.\n\n"
                         + "Thank you for shopping with us!\n"
                         + "Crickboard Team";
-
                 EmailDetailsDto orderConfirmationEmail = EmailDetailsDto.builder()
                         .subject("Order Confirmation - Order ID: " + order.getOrderId())
                         .recipient(email)
@@ -324,11 +379,11 @@ public class AuthController {
                         + "Shipping Address: " + orderDto.getAddress() + "\n"
                         + "Payment Method: " + orderDto.getPaymentMethod() + "\n"
                         + "Number of Items: " + orderDto.getOrderItems().size() + "\n"
+                        + productString +"\n"
                         + "Total Order Amount: ₹" + orderDto.getTotalAmount() + "\n\n"
                         + "Please review the order and proceed with further processing.\n\n"
                         + "Thank you,\n"
                         + "Crickboard Team";
-
                 EmailDetailsDto adminNotificationEmail = EmailDetailsDto.builder()
                         .subject("New Order Placed - Order ID: " + order.getOrderId())
                         .recipient("official.cricboard@gmail.com")  // Replace with actual admin email variable

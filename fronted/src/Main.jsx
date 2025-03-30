@@ -44,6 +44,7 @@ import PremiumPayment from "./Venue/PremiumPayment.jsx";
 import MerchantDetails from "./Venue/MerchantDetails.jsx";
 import Cart from "./Products/Cart.jsx";
 import OrderDetails from "./Products/OrderDetails.jsx";
+import OrderData from "./Products/OrderData.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -182,6 +183,9 @@ const router = createBrowserRouter([
       },{
         path: "/order-details",
         element: <OrderDetails/>
+      },{
+        path: "/orderData",
+        element: <OrderData/>
       }
     ],
   },

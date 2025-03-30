@@ -33,7 +33,6 @@ const BookVenueForm = ({ venueId, onBack }) => {
           startTime: formatTimeForBackend(selectedSlot),
           endTime: calculateEndTime(selectedSlot, duration),
           debitCardNumber: debitCardNumber,
-          pin: pin,
         };
         console.log("Booking data:",bookingData);
         const response = await privateApi.post("/bookings", bookingData);
@@ -227,18 +226,19 @@ const BookVenueForm = ({ venueId, onBack }) => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-400 flex items-center">
-            <span className="mr-2">Debit Card Number:</span>
+            <span className="mr-2">UPI ID</span>
             <i className="fas fa-credit-card text-gray-400"></i>
           </label>
           <input
             type="text"
+            placeholder="example@upi"
             value={debitCardNumber}
             onChange={(e) => setDebitCardNumber(e.target.value)}
             required
             className="mt-1 block w-full border border-gray-300 rounded-md p-2"
           />
         </div>
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-400 flex items-center">
             <span className="mr-2">PIN:</span>
             <i className="fas fa-lock text-gray-400"></i>
@@ -250,7 +250,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
             required
             className="mt-1 block w-full border border-gray-300 rounded-md p-2"
           />
-        </div>
+        </div> */}
         {/* Submit Button */}
         <button
           type="submit"

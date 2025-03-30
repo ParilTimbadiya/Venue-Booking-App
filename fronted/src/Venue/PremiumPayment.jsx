@@ -9,13 +9,12 @@ const PremiumPayment = () => {
   const [email, setEmail] = useState('');
   const [totalAmount, setTotalAmount] = useState(0);
   const [debitCardNumber, setDebitCardNumber] = useState('');
-  const [pin, setPin] = useState('');
+  const [pricePerMonth, setPricePerMonth] = useState(5999);
     const navigate = useNavigate();
   
 
   useEffect(() => {
     const calculateTotal = () => {
-      const pricePerMonth = 5999; // Example price per month
       setTotalAmount(pricePerMonth * months);
     };
     calculateTotal();
@@ -41,7 +40,7 @@ const PremiumPayment = () => {
   const handlePayment = async () => {
     const paymentDetails = {
       months,
-      email,
+      // email,
       totalAmount,
       debitCardNumber,
       pin,
@@ -59,22 +58,22 @@ const PremiumPayment = () => {
   };
 
   return (
-    <div className="p-5 mt-12 mb-12 max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Premium Of Venue Host</h1>
+    <div className=" mt-12 mb-12 max-w-lg mx-auto bg-gray-800 shadow-md rounded-lg p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center text-[#6eb4ef]">Premium Of Venue Host</h1>
       <form onSubmit={(e) => { e.preventDefault(); handlePayment(); }} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+          <label className="  text-sm font-medium text-[#a0aec0] flex items-center">
             <span className="mr-2">Expiration Date:</span>
             <input
               type="text"
               value={expirationDate}
               readOnly
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-100"
+              className="mt-1   w-full border border-gray-300 rounded-md p-2 bg-[#0c131a] text-white"
             />
           </label>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+          <label className="  text-sm font-medium text-[#a0aec0] flex items-center">
             <span className="mr-2">Increase Months:</span>
             <i className="fas fa-calendar-alt text-gray-400"></i>
           </label>
@@ -84,11 +83,11 @@ const PremiumPayment = () => {
             onChange={(e) => setMonths(e.target.value)}
             min="1"
             max="12"
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1   w-full border border-gray-300 bg-[#0c131a] text-white rounded-md p-2"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+        {/* <div>
+          <label className="  text-sm font-medium  text-[#a0aec0] flex items-center">
             <span className="mr-2">Email:</span>
             <i className="fas fa-envelope text-gray-400"></i>
           </label>
@@ -97,11 +96,11 @@ const PremiumPayment = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1   w-full border border-gray-300 bg-[#0c131a] text-white rounded-md p-2"
           />
-        </div>
+        </div> */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+          <label className="  text-sm font-medium  text-[#a0aec0] flex items-center">
             <span className="mr-2">Total Amount:</span>
             <i className="fas fa-money-bill-wave text-gray-400"></i>
           </label>
@@ -109,24 +108,25 @@ const PremiumPayment = () => {
             type="text"
             value={`₹${totalAmount}`}
             readOnly
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1   w-full border border-gray-300 rounded-md bg-[#0c131a] text-white p-2"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
-            <span className="mr-2">Debit Card Number:</span>
+          <label className="  text-sm font-medium  text-[#a0aec0] flex items-center">
+            <span className="mr-2">UPI</span>
             <i className="fas fa-credit-card text-gray-400"></i>
           </label>
           <input
             type="text"
+            placeholder="example@upi"
             value={debitCardNumber}
             onChange={(e) => setDebitCardNumber(e.target.value)}
             required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1   w-full border border-gray-300 rounded-md bg-[#0c131a] text-white p-2"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 flex items-center">
+        {/* <div>
+          <label className=" text-sm font-medium  text-[#a0aec0] flex items-center">
             <span className="mr-2">PIN:</span>
             <i className="fas fa-lock text-gray-400"></i>
           </label>
@@ -135,10 +135,10 @@ const PremiumPayment = () => {
             value={pin}
             onChange={(e) => setPin(e.target.value)}
             required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+            className="mt-1   w-full border border-gray-300 rounded-md bg-[#0c131a] text-white p-2"
           />
-        </div>
-        <button type="submit" className="w-full bg-blue-600 text-white font-bold py-2 rounded-md hover:bg-blue-700">Pay Now</button>
+        </div> */}
+        <button type="submit" className="w-full border-[1px] border-[#6eb5ef40] bg-[#6eb4ef14] rounded-md py-2 text-[#6eb4ef]   cursor-pointer font-medium">Pay Now</button>
       </form>
     </div>
   );
