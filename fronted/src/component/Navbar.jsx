@@ -555,6 +555,8 @@ const Navbar = () => {
     localStorage.removeItem("role");
     localStorage.removeItem("cart");
     localStorage.removeItem("orderDetails");
+    document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "role=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     navigate("/signin");
   };
 
@@ -580,14 +582,19 @@ const Navbar = () => {
           >
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
-
+          {!isAdmin && !isMerchant ? (
           <Link to="/" className="flex-shrink-0 group">
             <img
               className="w-15 h-12 transition-transform duration-300 group-hover:scale-110"
               src="/cricboard-logo-crop.png"
               alt="Logo"
             />
-          </Link>
+          </Link>):(<img
+              className="w-15 h-12 transition-transform duration-300 group-hover:scale-110"
+              src="/cricboard-logo-crop.png"
+              alt="Logo"
+            />)
+          } 
           {
           isAdmin?(<h1 className="text-xl font-bold">Admin panel</h1>):(<></>)
           } 
@@ -599,7 +606,7 @@ const Navbar = () => {
         {/* Center Navigation Links */}
         <div className="flex items-center justify-center space-x-8 tracking-widest font-my3 text-xs">
           {
-          !isAdmin && [
+          !isAdmin && !isMerchant && [
             { to: "/matches", text: "Matches" },
             { to: "http://localhost:5500/", text: "Local Match" },
             // { to: "/localmatch", text: "Local Match" },
@@ -665,9 +672,11 @@ const Navbar = () => {
         }`}
       >
         <div className="flex justify-between items-center p-2 border-b border-gray-700">
+        {!isAdmin && !isMerchant ? (
           <Link to="/" className="flex-shrink-0 group">
             <img className="w-15 h-12 transition-transform duration-300 group-hover:scale-110" src="/cricboard-logo-crop.png" alt="Logo" />
-          </Link>
+          </Link>):(<img className="w-15 h-12 transition-transform duration-300 group-hover:scale-110" src="/cricboard-logo-crop.png" alt="Logo" />)
+          } 
           {isAdmin && 
           <h1 className="text-sm font-bold">Admin</h1>
           }
@@ -684,7 +693,7 @@ const Navbar = () => {
 
         {/* Menu Links */}
         <div className="flex flex-col space-y-3 mt-4 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-900">
-          {!isAdmin &&
+          {!isAdmin && !isMerchant &&
           [
             { to: "/matches", text: "Matches" },
             { to: "/schedule", text: "Schedule" },
@@ -710,6 +719,14 @@ const Navbar = () => {
             
           ))}
           {
+            isAuthenticated && !isAdmin && !isMerchant && (
+              <>
+              <Link to="/orderData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Order Details</Link>
+              <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booking Details</Link>
+              </>
+            )
+          }
+          {
             isMerchant && (
               <>
               <Link to="/venue" className="text-green-400 hover:text-yellow-400" onClick={() => setIsMenuOpen(false)}>Host Venue</Link>
@@ -729,6 +746,7 @@ const Navbar = () => {
               <Link to="/orderData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Order Details</Link>
               <Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>User Details</Link>
               <Link to="/merchantDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Merchant Details</Link>
+              <Link to="/updateProduct" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Update Product</Link>
             </>
           )}
         </div>

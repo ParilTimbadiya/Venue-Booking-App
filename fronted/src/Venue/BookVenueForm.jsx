@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { privateApi } from "../utils/api";
+import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-const BookVenueForm = ({ venueId, onBack }) => {
+const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
   const navigate = useNavigate();
   const [bookedSlots, setBookedSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState("");
@@ -12,10 +13,15 @@ const BookVenueForm = ({ venueId, onBack }) => {
   const [maxDuration, setMaxDuration] = useState(5); // Default max duration
   const [debitCardNumber, setDebitCardNumber] = useState('');
   const [pin, setPin] = useState('');
+  const [total,setTotal] = useState('');
   const validationSchema = yup.object({
     booking_date: yup.date().required("Booking date is required"),
     start_time: yup.string().required("Start time is required"),
   });
+
+  useEffect(()=>{
+    setTotal(venuePrice*duration);
+  },[duration]);
 
   const formik = useFormik({
     initialValues: {
@@ -44,9 +50,9 @@ const BookVenueForm = ({ venueId, onBack }) => {
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          alert("Please login to your account");
+          toast.danger("Please login to your account");
         } else if (error.response && error.response.status === 406) {
-          alert("Not valid date and time");
+          toast.danger("Not valid date and time");
         } else {
           console.error("Booking failed:", error);
         }
@@ -64,7 +70,7 @@ const BookVenueForm = ({ venueId, onBack }) => {
         console.log(response);
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          alert("Please login to your account");
+          toast.danger("Please login to your account");
         }
       }
 
@@ -223,6 +229,9 @@ const BookVenueForm = ({ venueId, onBack }) => {
           {formik.touched.start_time && formik.errors.start_time && (
             <div className="text-red-500 text-sm">{formik.errors.start_time}</div>
           )}
+        </div>
+        <div>
+          Total Amount: <span>{total} INR</span>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-400 flex items-center">

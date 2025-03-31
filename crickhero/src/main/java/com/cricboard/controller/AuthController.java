@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -141,11 +143,12 @@ public class AuthController {
                 String token = header.substring(7);
                 email = jwtService.extractUsername(token);
             }
+
             User user = userRepo.findByEmail(email);
-            if(user!=null)
+            if(user==null)
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
 
-            if (user.isMerchant() || user.getRole()=="ROLE_ADMIN") {
+//            if (user.isMerchant() || user.getRole()=="ROLE_ADMIN") {
                 Long bookingId = Long.valueOf(request.get("bookingId"));
                 Booking booking = bookingRepo.findById(bookingId).get();
                 bookingRepo.deleteById(bookingId);
@@ -162,8 +165,8 @@ public class AuthController {
                         .build();
                 emailService.sendSimpleMail(userConfirmation);
                 return new ResponseEntity<>(HttpStatus.OK);
-            }
-            return new ResponseEntity<>("Merchant not found", HttpStatus.NOT_FOUND);
+//            }
+//            return new ResponseEntity<>("Merchant not found", HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -178,14 +181,36 @@ public class AuthController {
                 email = jwtService.extractUsername(token);
             }
             User user = userRepo.findByEmail(email);
-            if (user != null && user.getRole()=="ROLE_ADMIN") {
+//            if (user != null && user.getRole()=="ROLE_ADMIN") {
                 Long orderId = Long.valueOf(request.get("orderId"));
                 Orders orders = orderRepo.findById(orderId).get();
                 orders.setStatus(Status.SHIPPED);
                 orderRepo.save(orders);
                 return new ResponseEntity<>(HttpStatus.OK);
+//            }
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/delivered-order")
+    public ResponseEntity<?> delivardOrder(@RequestHeader("Authorization") String header,@RequestBody Map<String, String> request){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
             }
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            User user = userRepo.findByEmail(email);
+//            if (user != null && user.getRole()=="ROLE_ADMIN") {
+                Long orderId = Long.valueOf(request.get("orderId"));
+                Orders orders = orderRepo.findById(orderId).get();
+                orders.setStatus(Status.DELIVERED);
+                orderRepo.save(orders);
+                return new ResponseEntity<>(HttpStatus.OK);
+//            }
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }catch (Exception e) {
             return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -227,17 +252,47 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/send-otp")
-    public ResponseEntity<String> sendOtp(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        // Logic to generate and send OTP
-        boolean isSent = userService.sendOtpToEmail(email);
-        if (isSent) {
-            return ResponseEntity.ok("OTP sent to your email!");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending OTP.");
+
+    @PostMapping("/generate-qr")
+    public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
+        Long amount = Long.valueOf(request.get("amount"));
+
+        if(amount>0){
+            System.out.println(amount);
+            String command = "./main darshanvirani010@okhdfcbank " + amount +" C:\\Users\\sahaj\\Desktop\\Venue-Booking-App\\fronted\\src\\assets\\images";
+            System.out.println(command);
+            Runtime runtime = Runtime.getRuntime();
+
+            HashMap<String, String> map = new HashMap<>();
+            try {
+                Process process = runtime.exec(command);
+                process.waitFor(); // Wait for the command to complete
+                map.put("qrCodeUrl", "\\assets\\images\\qr.png");
+//                System.out.println("QR code generation done.");
+            } catch (Exception ex) {
+//                System.out.println("Error during QR code generation: " + ex.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(map, HttpStatus.OK);
         }
+
+//        String sourcePath = "C:\\Users\\sahaj\\Desktop\\Venue-Booking-App\\crickhero\\src\\images\\qr.png"; // Source path
+//        String destinationPath = "C:\\Users\\sahaj\\Desktop\\Venue-Booking-App\\fronted\\src\\assets\\images\\"; // Destination path
+//        String moveCommand = "cmd /c move \"" + sourcePath + "\" \"" + destinationPath + "\"";
+//
+//        try {
+//            Process moveProcess = runtime.exec(moveCommand);
+//            moveProcess.waitFor(); // Wait for the move command to complete
+//            System.out.println("Image moved successfully.");
+//            map.put("qrCodeUrl", "\\assets\\images\\qr.png");
+//        } catch (Exception ex) {
+//            System.out.println("Error moving image: " + ex.getMessage());
+//            map.put("qrCodeUrl", "\\assets\\images\\qr.png");
+//        }
+            return new ResponseEntity<>( HttpStatus.OK);
     }
+
+
 
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
@@ -280,6 +335,8 @@ public class AuthController {
                 return new ResponseEntity<>(bookingList,HttpStatus.OK);
             }else if(user!=null && user.getRole().equals("ROLE_ADMIN")){
                 return new ResponseEntity<>(venueService.getAllBooking(),HttpStatus.OK);
+            }else if(user!=null && user.getRole().equals("ROLE_USER")){
+                return new ResponseEntity<>(venueService.getAllBookingOfUser(email),HttpStatus.OK);
             }
             return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -297,7 +354,9 @@ public class AuthController {
             }
             User user = userRepo.findByEmail(email);
             if(user!=null && user.getRole().equals("ROLE_ADMIN")) {
-                return new ResponseEntity<>(productService.getAllOrders(),HttpStatus.OK);
+                return new ResponseEntity<>(productService.getAllOrders(email,"admin"),HttpStatus.OK);
+            }else if(user.getRole().equals("ROLE_USER")){
+                return new ResponseEntity<>(productService.getAllOrders(email,"user"),HttpStatus.OK);
             }
             return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
         } catch (Exception e) {

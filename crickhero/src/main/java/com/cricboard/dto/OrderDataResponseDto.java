@@ -20,4 +20,5 @@ public class OrderDataResponseDto {
         private String paymentMethod;
         private List<ProductDto> orderItems; // List of product IDs
         private double totalAmount;
+        private Status status;
 }

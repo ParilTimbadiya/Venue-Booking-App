@@ -15,7 +15,7 @@ import BookVenue from "./Venue/BookVenue.jsx";
 import Play from "./component/Play.jsx";
 import Signin from "./component/Signin.jsx";
 import Signup from "./component/Signup.jsx";
-import Home from "./component/Home.jsx";
+import Home from "./component/Home1.jsx";
 import AddVenue from "./Venue/AddVenue.jsx";
 import ErrorBoundary from "./component/ErrorBoundary.jsx";
 import RemoveVenue from "./Venue/RemoveVenue.jsx";
@@ -27,10 +27,10 @@ import store from "./redux/store";
 import Matches from "./component/Matches/Matches";
 import MatchDetails from "./component/matchDetails/MatchDetails";
 import Schedule from './component/Schedule/Schedule'
-import NewsDetail from "./component/NewsDetail/NewsDetail.jsx";
+import NewsDetail from "./component/NewsDetail/NewsDetail2.jsx";
 import News from "./component/News/News";
-import Teams from "./component/Teams/Teams.jsx";
-import Series from "./component/Series/Series";
+import Teams from "./component/Teams/Teams3.jsx";
+import Series from "./component/Series/Series2.jsx";
 import BatsmenRankings from "./component/BatsmenRanking/BatsmenRanking.jsx";
 import PhotoGallery from "./component/Photos/PhotoGallery.jsx";
 import Product from "./Products/Product.jsx";
@@ -45,6 +45,8 @@ import MerchantDetails from "./Venue/MerchantDetails.jsx";
 import Cart from "./Products/Cart.jsx";
 import OrderDetails from "./Products/OrderDetails.jsx";
 import OrderData from "./Products/OrderData.jsx";
+import EditProfile from "./Venue/EditProfile.jsx";
+import UpdateProduct from "./Products/UpdateProduct.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -186,6 +188,12 @@ const router = createBrowserRouter([
       },{
         path: "/orderData",
         element: <OrderData/>
+      },{
+        path: "/edit",
+        element: <EditProfile/>
+      },{
+        path: "/updateProduct",
+        element: <UpdateProduct/>
       }
     ],
   },

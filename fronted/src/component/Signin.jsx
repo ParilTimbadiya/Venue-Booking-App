@@ -8,6 +8,7 @@ import { publicApi } from "../utils/api";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import backgroundVideo from "../assets/cricket-stadium.mov";
+import { round } from "lodash";
 
 function Signin() {
   const navigate = useNavigate();
@@ -44,8 +45,14 @@ function Signin() {
 
           setCookie("auth", data.data.message);
           setCookie("role",data.data.role);
-
-          navigate("/");
+          const role = data.data.role;
+          if(role=="admin"){
+            navigate("/orderData");
+          }
+          else if(role=="merchant"){
+            navigate("/bookingData")
+          }else
+            navigate("/");
           window.location.reload();
         } else if (data.status === 403) {
           alert("Invalid credentials");
@@ -57,7 +64,7 @@ function Signin() {
       } catch (ex) {
         if(ex.status === 400){
           alert("Invalid credentials");
-        }else if (data.status === 500) {
+        }else if (ex.status === 500) {
           alert("Internal server error");
         } else {
           alert("Invalid credentials");

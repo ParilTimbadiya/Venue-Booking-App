@@ -1,6 +1,7 @@
 package com.cricboard.dto;
 
 public enum Status {
+    UNSHIPPED,
     SHIPPED,
-    UNSHIPPED
+    DELIVERED
 }

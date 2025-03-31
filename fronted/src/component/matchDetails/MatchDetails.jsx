@@ -731,7 +731,7 @@
 
 
 import React, { useEffect, useState } from 'react';
-import './matchDetails.css';
+// import './matchDetails.css';
 import { useParams } from 'react-router-dom';
 import { fetchCommentary } from '../../redux/Reducers/commentarySlice';
 import { fetchScorecard } from '../../redux/Reducers/scorecardSlice';
@@ -838,10 +838,10 @@ const MatchDetails = () => {
       { rejected ? (
         <Error />
       ) : (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-[#0c131a]">
           <div className="max-w-screen mx-auto px-4 py-6">
             {/* Match Header */}
-            <div className="bg-gradient-to-b from-gray-600 to-gray-950 text-white p-6 rounded-t-lg shadow-lg mt-20">
+            <div className="bg-[#1e293b] text-white p-6 rounded-t-lg shadow-lg ">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <h1 className="text-2xl font-bold">
@@ -888,14 +888,14 @@ const MatchDetails = () => {
 
             {/* Main Content */}
             <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="lg:col-span-2 bg-[#1e293b] rounded-lg shadow-md overflow-hidden">
                 {/* Tab Navigation */}
-                <div className="bg-white border-b">
+                <div className="bg-[#1e293b] text-gray-300 border-b">
                   <div className="flex overflow-x-auto">
                     <button
                       onClick={activeOption1}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
-                        overview ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+                        overview ? 'text-[#6eb4ef] border-b-2 border-[#6eb4ef]' : 'text-[#babdc2] hover:text-[#6eb4ef]'
                       }`}
                     >
                       Overview
@@ -903,7 +903,7 @@ const MatchDetails = () => {
                     <button
                       onClick={activeOption2}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
-                        scorecardActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+                        scorecardActive ? 'text-[#6eb4ef] border-b-2 border-[#6eb4ef]' : 'text-[#babdc2] hover:text-[#6eb4ef]'
                       }`}
                     >
                       Scorecard
@@ -911,7 +911,7 @@ const MatchDetails = () => {
                     <button
                       onClick={activeOption3}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
-                        squad ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+                        squad ? 'text-[#6eb4ef] border-b-2 border-[#6eb4ef]' : 'text-[#babdc2] hover:text-[#6eb4ef]'
                       }`}
                     >
                       Squads
@@ -929,16 +929,16 @@ const MatchDetails = () => {
 
               {/*Commentary Section*/}
               <div className="lg:col-span-1 ">
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <div className="bg-gray-50 p-4 border-b border-gray-200">
-                    <h3 className="font-bold text-gray-700 flex items-center">
+                <div className="bg-[#1e293b] rounded-lg shadow-md overflow-hidden">
+                  <div className="bg-[#222d3f] p-4 border-b border-gray-200">
+                    <h3 className="font-bold  text-gray-300 flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                       </svg>
                       Live Commentary
                     </h3>
                   </div>
-                  <div className="h-full max-h-96 overflow-y-auto">
+                  <div className="h-full max-h-96 overflow-y-auto ">
                     {commentaryList.map((comment, index) => (
                       <Commentary key={index} commentaryList={comment} />
                     ))}

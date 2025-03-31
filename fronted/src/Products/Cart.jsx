@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { publicApi } from "../utils/api";
 
 const Cart = () => {
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem("cart")) || []);
   const navigate = useNavigate();
-
+  const handleQr = () =>{
+    const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    console.log(totalAmount);
+        const fetchQRCode = async () => {
+          try {
+            const response = await publicApi.post("/generate-qr",{ amount: totalAmount }); // Adjust the endpoint as necessary
+            if (response.status === 200) {
+              console.log(response.data.qrCodeUrl);
+              
+              setQrCodeUrl(response.data.qrCodeUrl); // Assuming the QR code URL is returned in this format
+            }
+          } catch (error) {
+            console.error("Error fetching QR code:", error);
+            setQrCodeUrl("");
+          }
+        };
+    
+        fetchQRCode();
+        navigate("/order-details")
+  };
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
@@ -109,7 +130,7 @@ const Cart = () => {
 
             <button
               className="px-[16px] py-[11px] border-[1px] border-[#6eb5ef40] bg-[#6eb4ef14] rounded-md text-[#6eb4ef] w-full my-3 cursor-pointer font-medium"
-              onClick={() => navigate("/order-details")}
+              onClick={() => handleQr()}
             >
               🛒 Proceed to Checkout
             </button>

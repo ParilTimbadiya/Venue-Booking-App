@@ -378,6 +378,23 @@ public class VenueService {
         }
         return  sortedList;
     }
+    public List<Booking> getAllBookingOfUser(String email) {
+        List<Booking> sortedList = bookingRepo.findAll().stream()
+                .sorted(Comparator.comparing(Booking::getBookingDate).reversed())
+                .collect(Collectors.toList());
+        List<Booking> ans = new ArrayList<>();
+        for (Booking i : sortedList){
+            i.getVenue().setBookingList(null);
+            i.getVenue().setTimeSlots(null);
+            User temp = new User();
+            temp.setEmail(i.getUser().getEmail());
+            i.setUser(temp);
+            if(i.getUser().getEmail().equals(email)){
+                ans.add(i);
+            }
+        }
+        return  ans;
+    }
 
     public ResponseEntity<?> processPayment(MerchantPayment merchantPayment,User user) {
         if(user.getExpiration_month()==null)

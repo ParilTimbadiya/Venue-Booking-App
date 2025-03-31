@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import { publicApi } from '../utils/api'; // Importing the publicApi for API calls
 import './Booking.css'; // Importing existing styles

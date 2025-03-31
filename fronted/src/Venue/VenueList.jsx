@@ -51,7 +51,7 @@ function VenueList({ venue }) {
 
           {/* Booking Form Modal */}
           <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-            <BookVenueForm venueId={venue.venueId} onBack={handleCloseForm} />
+            <BookVenueForm venueId={venue.venueId} venuePrice={venue.price} onBack={handleCloseForm} />
           </div>
         </>
       )}

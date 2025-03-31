@@ -32,7 +32,7 @@ public class SlotScheduler {
 //        }
 //    }
 //
-    @Scheduled(cron = "0 23 12 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     private void turnOfShowingVenue(){
         try {
             List<User> users = userRepo.findAllMerchantUser();

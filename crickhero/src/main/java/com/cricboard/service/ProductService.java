@@ -53,33 +53,69 @@ public class ProductService {
         }
     }
 
-    public List<?> getAllOrders() {
-        List<Orders> ordersList = orderRepo.findAll();
-        List<OrderDataResponseDto> orderDataResponseDtoList = new ArrayList<>();
-        for(Orders i : ordersList){
-            List<ProductItems> productItemsList = productItemsRepo.findAllByOrderId(i.getOrderId());
-            List<ProductDto> productDtoList = new ArrayList<>();
+    public List<?> getAllOrders(String email,String role) {
+        if(role=="admin") {
+            List<Orders> ordersList = orderRepo.findAll();
+            List<OrderDataResponseDto> orderDataResponseDtoList = new ArrayList<>();
+            for (Orders i : ordersList) {
+                List<ProductItems> productItemsList = productItemsRepo.findAllByOrderId(i.getOrderId());
+                List<ProductDto> productDtoList = new ArrayList<>();
 
-            for(ProductItems productItems : productItemsList){
-                Product product = productRepo.findById(productItems.getProductId()).get();
-                productDtoList.add(ProductDto.builder()
-                                .title(product.getTitle())
-                                .quantity(productItems.getQty())
-                                .price((long)product.getPrice())
-                        .build());
+                for (ProductItems productItems : productItemsList) {
+                    Product product = productRepo.findById(productItems.getProductId()).get();
+                    productDtoList.add(ProductDto.builder()
+                            .imgSrc(product.getImgSrc())
+                            .description(product.getDescription())
+                            .title(product.getTitle())
+                            .quantity(productItems.getQty())
+                            .price((long) product.getPrice())
+                            .build());
+                }
+                OrderDataResponseDto dto = OrderDataResponseDto.builder()
+                        .orderId(i.getOrderId())
+                        .address(i.getAddress())
+                        .email(i.getEmail())
+                        .fullName(i.getFullName())
+                        .phone(i.getPhone())
+                        .paymentMethod(i.getPaymentMethod())
+                        .totalAmount(i.getTotalAmount())
+                        .orderItems(productDtoList)
+                        .status(i.getStatus())
+                        .build();
+                orderDataResponseDtoList.add(dto);
             }
-            OrderDataResponseDto dto = OrderDataResponseDto.builder()
-                    .orderId(i.getOrderId())
-                    .address(i.getAddress())
-                    .email(i.getEmail())
-                    .fullName(i.getFullName())
-                    .phone(i.getPhone())
-                    .paymentMethod(i.getPaymentMethod())
-                    .totalAmount(i.getTotalAmount())
-                    .orderItems(productDtoList)
-                    .build();
-            orderDataResponseDtoList.add(dto);
+            return orderDataResponseDtoList;
+        }else{
+            List<Orders> ordersList = orderRepo.findAllByEmail(email);
+            List<OrderDataResponseDto> orderDataResponseDtoList = new ArrayList<>();
+            for (Orders i : ordersList) {
+                List<ProductItems> productItemsList = productItemsRepo.findAllByOrderId(i.getOrderId());
+                List<ProductDto> productDtoList = new ArrayList<>();
+
+                for (ProductItems productItems : productItemsList) {
+                    Product product = productRepo.findById(productItems.getProductId()).get();
+                    productDtoList.add(ProductDto.builder()
+                            .imgSrc(product.getImgSrc())
+                            .description(product.getDescription())
+                            .title(product.getTitle())
+                            .quantity(productItems.getQty())
+                            .price((long) product.getPrice())
+                            .build());
+                }
+                OrderDataResponseDto dto = OrderDataResponseDto.builder()
+                        .orderId(i.getOrderId())
+                        .address(i.getAddress())
+                        .email(i.getEmail())
+                        .fullName(i.getFullName())
+                        .phone(i.getPhone())
+                        .paymentMethod(i.getPaymentMethod())
+                        .totalAmount(i.getTotalAmount())
+                        .orderItems(productDtoList)
+                        .status(i.getStatus())
+                        .build();
+                orderDataResponseDtoList.add(dto);
+            }
+            return orderDataResponseDtoList;
         }
-        return orderDataResponseDtoList;
     }
 }
