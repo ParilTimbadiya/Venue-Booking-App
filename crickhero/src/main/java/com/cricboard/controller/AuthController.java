@@ -254,7 +254,7 @@ public class AuthController {
 
 
     @PostMapping("/generate-qr")
-    public ResponseEntity<?> sendOtp(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> generateQr(@RequestBody Map<String, String> request) {
         Long amount = Long.valueOf(request.get("amount"));
 
         if(amount>0){
@@ -329,6 +329,17 @@ public class AuthController {
         } catch(Exception e) {
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP or email.");
+        }
+    }
+    @PostMapping("/send-otp")
+    public ResponseEntity<String> sendOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        // Logic to generate and send OTP
+        boolean isSent = userService.sendOtpToEmail(email);
+        if (isSent) {
+            return ResponseEntity.ok("OTP sent to your email!");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending OTP.");
         }
     }
 

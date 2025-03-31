@@ -62,7 +62,7 @@ const Signup = () => {
         transition={{ duration: 0.6 }}
         className="relative z-10 w-[720px] bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-850 to-gray-950 shadow-lg shadow-blue-500/50 rounded-xl p-8 mt-20"
       >
-        <h2 className="text-3xl font-bold text-center text-white">🏏 Sign Up</h2>
+        <h2 className="text-3xl font-bold text-center text-white">🏏 Welcome to Crickboard</h2>
         <p className="text-center text-gray-400 text-sm mt-1">
           Already have an account? <Link to="/signin" className="text-yellow-400 hover:underline">Sign in</Link>
         </p>
