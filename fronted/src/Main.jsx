@@ -24,13 +24,13 @@ import CalculateScore from "./component/calculateScore.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 // import store from "./app/store";
-import Matches from "./component/Matches/Matches";
+import Matches from "./component/Matches/Matches.jsx";
 import MatchDetails from "./component/matchDetails/MatchDetails";
 import Schedule from './component/Schedule/Schedule'
-import NewsDetail from "./component/NewsDetail/NewsDetail2.jsx";
+import NewsDetail from "./component/NewsDetail/NewsDetail.jsx";
 import News from "./component/News/News";
-import Teams from "./component/Teams/Teams3.jsx";
-import Series from "./component/Series/Series2.jsx";
+import Teams from "./component/Teams/Teams.jsx";
+import Series from "./component/Series/Series.jsx";
 import BatsmenRankings from "./component/BatsmenRanking/BatsmenRanking.jsx";
 import PhotoGallery from "./component/Photos/PhotoGallery.jsx";
 import Product from "./Products/Product.jsx";
@@ -47,6 +47,7 @@ import OrderDetails from "./Products/OrderDetails.jsx";
 import OrderData from "./Products/OrderData.jsx";
 import EditProfile from "./Venue/EditProfile.jsx";
 import UpdateProduct from "./Products/UpdateProduct.jsx";
+import RemoveProducts from "./Products/RemoveProducts.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -194,6 +195,9 @@ const router = createBrowserRouter([
       },{
         path: "/updateProduct",
         element: <UpdateProduct/>
+      },{
+        path: "/removeProduct",
+        element: <RemoveProducts/>
       }
     ],
   },

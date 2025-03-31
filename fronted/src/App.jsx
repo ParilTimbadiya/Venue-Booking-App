@@ -5,13 +5,13 @@ import Sidebar from './component/Sidebar';
 import Footer from './component/Footer';
 import UserInput from './component/UserInput';
 import buttonsContainer from './component/buttonsContainer';
-import Matches from './component/Matches/Matches';
+import Matches from './component/Matches/Matches.jsx';
 import match from './component/matchDetails/MatchDetails';
 import Schedule from './component/Schedule/Schedule';
-import Teams from "./component/Teams/Teams3.jsx";
-import Series from "./component/Series/Series2.jsx";
+import Teams from "./component/Teams/Teams.jsx";
+import Series from "./component/Series/Series.jsx";
 import News from './component/News/News.jsx';
-import NewsDetail from './component/NewsDetail/NewsDetail2.jsx';
+import NewsDetail from './component/NewsDetail/NewsDetail.jsx';
 import BatsmenRankings from './component/BatsmenRanking/BatsmenRanking.jsx';
 import PhotoGallery from './component/Photos/PhotoGallery.jsx';
 const App = () => {

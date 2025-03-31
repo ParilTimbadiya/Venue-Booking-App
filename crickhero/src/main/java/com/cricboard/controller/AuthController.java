@@ -294,6 +294,44 @@ public class AuthController {
 
 
 
+    @PostMapping("/productfetch")
+    public ResponseEntity<?> productfetchPost(@RequestBody Map<String, String> request) {
+        Long id  = Long.valueOf(request.get("productId"));
+        Product product = productRepo.findById(id).get();
+        product.setCartItemList(null);
+
+        if (product!=null) {
+            return ResponseEntity.ok(product);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP or email.");
+        }
+    }
+
+    @GetMapping("/productfetch")
+    public ResponseEntity<?> productfetchGet(@RequestBody Product product) {
+        Product product1 = productRepo.findById(product.getId()).get();
+        product1.setTitle(product.getTitle());
+        product1.setDescription(product.getDescription());
+        product1.setPrice(product1.getPrice());
+
+        if (productRepo.save(product1)!=null) {
+            return ResponseEntity.ok("Success");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP or email.");
+        }
+    }
+    @PostMapping("/removeProduct")
+    public ResponseEntity<?> removeProduct(@RequestBody Map<String, String> request) {
+        Long id  = Long.valueOf(request.get("productId"));
+        try{
+            productRepo.deleteById(id);
+            return ResponseEntity.ok("Success");
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP or email.");
+        }
+    }
+
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");

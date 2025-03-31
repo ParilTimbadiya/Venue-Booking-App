@@ -50,9 +50,9 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          toast.danger("Please login to your account");
+          alert("Please login to your account");
         } else if (error.response && error.response.status === 406) {
-          toast.danger("Not valid date and time");
+          alert("Not valid date and time");
         } else {
           console.error("Booking failed:", error);
         }
@@ -70,7 +70,7 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
         console.log(response);
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          toast.danger("Please login to your account");
+          alert("Please login to your account");
         }
       }
 

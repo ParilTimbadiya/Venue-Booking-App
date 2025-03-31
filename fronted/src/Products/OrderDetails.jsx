@@ -66,7 +66,7 @@ const OrderDetails = () => {
   const validateForm = () => {
     let newErrors = {};
     if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required";
-    if (!formData.phone.trim()) newErrors.phone = "Phone Number is required";
+    if (!formData.phone.trim() || formData.phone.trim().length>10) newErrors.phone = "Phone Number should be 10 number and required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (formData.paymentMethod === "online" && !formData.upiId.trim()) {
       newErrors.upiId = "UPI ID is required";
