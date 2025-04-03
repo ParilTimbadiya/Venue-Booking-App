@@ -746,7 +746,7 @@ const Navbar = () => {
               <Link to="/orderData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Order Details</Link>
               <Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>User Details</Link>
               <Link to="/merchantDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Merchant Details</Link>
-              <Link to="/updateProduct" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Update Product</Link>
+              {/* <Link to="/updateProduct" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Update Product</Link> */}
               <Link to="/removeProduct" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Discard Product</Link>
             </>
           )}

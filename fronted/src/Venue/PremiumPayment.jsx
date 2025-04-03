@@ -44,7 +44,7 @@ const PremiumPayment = () => {
       // email,
       totalAmount,
       debitCardNumber,
-      pin,
+      // pin,
     };
 
     try {
