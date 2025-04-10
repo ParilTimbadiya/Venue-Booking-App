@@ -99,14 +99,14 @@ const Signup = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 w-[720px] bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-850 to-gray-950 shadow-lg shadow-blue-500/50 rounded-xl p-8 mt-20"
+        className="relative z-10 w-[720px] bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-850 to-gray-950 shadow-lg shadow-blue-500/50 rounded-xl p-8 "
       >
         <h2 className="text-3xl font-bold text-center text-white">
-          🏏 Join Crickboard
+          Join Crickboard
         </h2>
         <p className="text-center text-gray-400 text-sm mt-1">
           Already have an account?{" "}
-          <Link to="/signin" className="text-yellow-400 hover:underline">
+          <Link to="/signin" className="text-yellow-400 hover:underline hover:text-white  ">
             Sign in
           </Link>
         </p>
@@ -224,7 +224,7 @@ const Signup = () => {
             {loading ? (
               <div className="animate-spin h-5 w-5 border-4 border-white border-t-transparent rounded-full"></div>
             ) : (
-              "Join 🏆"
+              "Join"
             )}
           </button>
         </form>

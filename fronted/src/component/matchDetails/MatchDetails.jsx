@@ -730,8 +730,256 @@
 // export default MatchDetails;
 
 
+
+
+
+
+// import React, { useEffect, useState } from 'react';
+// import './matchDetails.css';
+// import { useParams } from 'react-router-dom';
+// import { fetchCommentary } from '../../redux/Reducers/commentarySlice';
+// import { fetchScorecard } from '../../redux/Reducers/scorecardSlice';
+// import { fetchMatchInfo } from '../../redux/Reducers/matchInfoSlice';
+// import Overview from './Overview';
+// import Scorecard from './Scorecard';
+// import { useDispatch, useSelector } from 'react-redux';
+// import Squads from './Squads';
+// import Commentary from './Commentary';
+// import Loader from '../Loader/Loader.jsx';
+// import Error from '../Error/Error.jsx';
+
+// const MatchDetails = () => {
+//   const [overview, setOverview] = useState(true);
+//   const [scorecardActive, setScorecardActive] = useState(false);
+//   const [squad, setSquad] = useState(false);
+//   let { matchId } = useParams();
+//   const { commentary, loading, rejected } = useSelector((state) => state?.commentary);
+//   const { scorecard } = useSelector((state) => state?.scorecard);
+//   const { matchInfo } = useSelector((state) => state?.matchInfo?.matchInfo);
+//   const { venueInfo } = useSelector((state) => state?.matchInfo?.matchInfo);
+//   const dispatch = useDispatch();
+//   let commentaryList = commentary?.commentaryList || [];
+
+//   let matchStartTimeDateEpoch = commentary?.matchHeader?.matchStartTimestamp;
+//   let matchStartTimeDate = new Date(matchStartTimeDateEpoch);
+
+//   let team1ScoreObj = {
+//     teamName: scorecard?.scoreCard?.[0]?.batTeamDetails?.batTeamName,
+//     teamShortName: scorecard?.scoreCard?.[0]?.batTeamDetails?.batTeamShortName,
+//     innings1Runs: scorecard?.scoreCard?.[0]?.scoreDetails?.runs,
+//     innings1Wickets: scorecard?.scoreCard?.[0]?.scoreDetails?.wickets,
+//     innings1Overs: scorecard?.scoreCard?.[0]?.scoreDetails?.overs,
+//   };
+//   let team2ScoreObj = {
+//     teamName: scorecard?.scoreCard?.[1]?.batTeamDetails?.batTeamName,
+//     teamShortName: scorecard?.scoreCard?.[1]?.batTeamDetails?.batTeamShortName,
+//     innings1Runs: scorecard?.scoreCard?.[1]?.scoreDetails?.runs,
+//     innings1Wickets: scorecard?.scoreCard?.[1]?.scoreDetails?.wickets,
+//     innings1Overs: scorecard?.scoreCard?.[1]?.scoreDetails?.overs,
+//   };
+
+//   // Handle test match innings
+//   if (scorecard?.scoreCard?.[0]?.batTeamDetails?.batTeamShortName === scorecard?.scoreCard?.[2]?.batTeamDetails?.batTeamShortName) {
+//     team1ScoreObj = {
+//       ...team1ScoreObj,
+//       innings2Runs: scorecard?.scoreCard?.[2]?.scoreDetails?.runs,
+//       innings2Wickets: scorecard?.scoreCard?.[2]?.scoreDetails?.wickets,
+//       innings2Overs: scorecard?.scoreCard?.[2]?.scoreDetails?.overs,
+//     };
+//   }
+//   if (scorecard?.scoreCard?.[0]?.batTeamDetails?.batTeamShortName === scorecard?.scoreCard?.[3]?.batTeamDetails?.batTeamShortName) {
+//     team1ScoreObj = {
+//       ...team1ScoreObj,
+//       innings2Runs: scorecard?.scoreCard?.[3]?.scoreDetails?.runs,
+//       innings2Wickets: scorecard?.scoreCard?.[3]?.scoreDetails?.wickets,
+//       innings2Overs: scorecard?.scoreCard?.[3]?.scoreDetails?.overs,
+//     };
+//   }
+
+//   if (scorecard?.scoreCard?.[1]?.batTeamDetails?.batTeamId === scorecard?.scoreCard?.[2]?.batTeamDetails?.batTeamId) {
+//     team2ScoreObj = {
+//       ...team2ScoreObj,
+//       innings2Runs: scorecard?.scoreCard?.[2]?.scoreDetails?.runs,
+//       innings2Wickets: scorecard?.scoreCard?.[2]?.scoreDetails?.wickets,
+//       innings2Overs: scorecard?.scoreCard?.[2]?.scoreDetails?.overs,
+//     };
+//   }
+//   if (scorecard?.scoreCard?.[1]?.batTeamDetails?.batTeamId === scorecard?.scoreCard?.[3]?.batTeamDetails?.batTeamId) {
+//     team2ScoreObj = {
+//       ...team2ScoreObj,
+//       innings2Runs: scorecard?.scoreCard?.[3]?.scoreDetails?.runs,
+//       innings2Wickets: scorecard?.scoreCard?.[3]?.scoreDetails?.wickets,
+//       innings2Overs: scorecard?.scoreCard?.[3]?.scoreDetails?.overs,
+//     };
+//   }
+
+//   useEffect(() => {
+//     dispatch(fetchCommentary(matchId));
+//     dispatch(fetchScorecard(matchId));
+//     dispatch(fetchMatchInfo(matchId));
+//   }, [dispatch, matchId]);
+
+//   const activeOption1 = () => {
+//     setOverview(true);
+//     setScorecardActive(false);
+//     setSquad(false);
+//   };
+
+//   const activeOption2 = () => {
+//     setOverview(false);
+//     setScorecardActive(true);
+//     setSquad(false);
+//   };
+
+//   const activeOption3 = () => {
+//     setOverview(false);
+//     setScorecardActive(false);
+//     setSquad(true);
+//   };
+
+//   return (
+//     <>
+//       { rejected ? (
+//         <Error />
+//       ) : (
+//         <div className="min-h-screen bg-gray-100">
+//           <div className="max-w-screen mx-auto px-4 py-6">
+//             {/* Match Header */}
+//             <div className="bg-gradient-to-b from-gray-600 to-gray-950 text-white p-6 rounded-t-lg shadow-lg mt-20">
+//               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+//                 <div>
+//                   <h1 className="text-2xl font-bold">
+//                     {commentary?.matchHeader?.team1?.name} vs {commentary?.matchHeader?.team2?.name}
+//                   </h1>
+//                   <p className="text-lg opacity-90">{commentary?.matchHeader?.matchDescription}</p>
+//                 </div>
+//                 {commentary?.matchHeader?.complete === false ? (
+//                   <span className="mt-2 md:mt-0 px-3 py-1  bg-gradient-to-b from-red-800 to-red-600 text-white rounded-full text-sm ring-2 ring-red-500 animate-pulse  flex ">
+                    
+//                   Live
+//                 </span>
+//                 ) : (
+//                   <span className="mt-2 md:mt-0 px-3 py-1  bg-gradient-to-b from-blue-800 to-blue-600 text-white rounded-full text-sm ring-2 ring-blue-5000">
+                  
+//                   Completed
+//                 </span>
+                  
+                  
+//                 )}
+//               </div>
+//               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm opacity-90">
+//                 <div className="flex items-center">
+//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+//                   </svg>
+//                   <span>Series: {commentary?.matchHeader?.seriesName}</span>
+//                 </div>
+//                 <div className="flex items-center">
+//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+//                   </svg>
+//                   <span>Venue: {venueInfo?.ground}, {venueInfo?.city}</span>
+//                 </div>
+//                 <div className="flex items-center">
+//                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+//                   </svg>
+//                   <span>{matchStartTimeDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Main Content */}
+//             <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+//               <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+//                 {/* Tab Navigation */}
+//                 <div className="bg-white border-b">
+//                   <div className="flex overflow-x-auto">
+//                     <button
+//                       onClick={activeOption1}
+//                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
+//                         overview ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+//                       }`}
+//                     >
+//                       Overview
+//                     </button>
+//                     {/* <button
+//                       onClick={activeOption2}
+//                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
+//                         scorecardActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+//                       }`}
+//                     >
+//                       Scorecard
+//                     </button> */}
+//                     <button
+//                       onClick={activeOption3}
+//                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
+//                         squad ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+//                       }`}
+//                     >
+//                       Squads
+//                     </button>
+//                   </div>
+//                 </div>
+
+//                 {/* Tab Content */}
+//                 <div className="p-6">
+//                   {overview && <Overview commentary={commentary} scorecard={scorecard} team1ScoreObj={team1ScoreObj} team2ScoreObj={team2ScoreObj} />}
+//                   {scorecardActive && <Scorecard scorecard={scorecard} />}
+//                   {squad && <Squads matchInfo={matchInfo} />}
+//                 </div>
+//               </div>
+
+//               {/*Commentary Section*/}
+//               <div className="lg:col-span-1 ">
+//                 <div className="bg-white rounded-lg shadow-md overflow-hidden">
+//                   <div className="bg-gray-50 p-4 border-b border-gray-200">
+//                     <h3 className="font-bold text-gray-700 flex items-center">
+//                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+//                       </svg>
+//                       Live Commentary
+//                     </h3>
+//                   </div>
+//                   <div className="h-full max-h-96 overflow-y-auto">
+//                     {commentaryList.map((comment, index) => (
+//                       <Commentary key={index} commentaryList={comment} />
+//                     ))}
+//                   </div>
+//                 </div>
+//               </div> 
+//               {/* Commentary Section*/}
+
+//               {/* <div className=" top-0 right-0 w-100 h-screen bg-white shadow-md rounded-lg overflow-hidden">
+//                 <div className="bg-gray-50 p-4 border-b border-gray-200">
+//                   <h3 className="font-bold text-gray-700 flex items-center">
+//                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+//                     </svg>
+//                      Live Commentary
+//                   </h3>
+//                 </div>
+//                 <div className="h-full max-h-[calc(100vh-60px)] overflow-y-auto p-2">
+//                   {commentaryList.map((comment, index) => (
+//                     <Commentary key={index} commentaryList={comment} />
+//                   ))}
+//                 </div>
+//               </div>  */}
+
+//             </div>
+//           </div>
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
+// export default MatchDetails;
+
+
 import React, { useEffect, useState } from 'react';
-import './matchDetails.css';
+// import './matchDetails.css';
 import { useParams } from 'react-router-dom';
 import { fetchCommentary } from '../../redux/Reducers/commentarySlice';
 import { fetchScorecard } from '../../redux/Reducers/scorecardSlice';
@@ -838,10 +1086,10 @@ const MatchDetails = () => {
       { rejected ? (
         <Error />
       ) : (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-[#0c131a]">
           <div className="max-w-screen mx-auto px-4 py-6">
             {/* Match Header */}
-            <div className="bg-gradient-to-b from-gray-600 to-gray-950 text-white p-6 rounded-t-lg shadow-lg mt-20">
+            <div className="bg-[#1e293b] text-white p-6 rounded-t-lg shadow-lg ">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div>
                   <h1 className="text-2xl font-bold">
@@ -888,14 +1136,14 @@ const MatchDetails = () => {
 
             {/* Main Content */}
             <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
+              <div className="lg:col-span-2 bg-[#1e293b] rounded-lg shadow-md overflow-hidden">
                 {/* Tab Navigation */}
-                <div className="bg-white border-b">
+                <div className="bg-[#1e293b] text-gray-300 border-b">
                   <div className="flex overflow-x-auto">
                     <button
                       onClick={activeOption1}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
-                        overview ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+                        overview ? 'text-[#6eb4ef] border-b-2 border-[#6eb4ef]' : 'text-[#babdc2] hover:text-[#6eb4ef]'
                       }`}
                     >
                       Overview
@@ -903,7 +1151,7 @@ const MatchDetails = () => {
                     {/* <button
                       onClick={activeOption2}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
-                        scorecardActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+                        scorecardActive ? 'text-[#6eb4ef] border-b-2 border-[#6eb4ef]' : 'text-[#babdc2] hover:text-[#6eb4ef]'
                       }`}
                     >
                       Scorecard
@@ -911,7 +1159,7 @@ const MatchDetails = () => {
                     <button
                       onClick={activeOption3}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
-                        squad ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
+                        squad ? 'text-[#6eb4ef] border-b-2 border-[#6eb4ef]' : 'text-[#babdc2] hover:text-[#6eb4ef]'
                       }`}
                     >
                       Squads
@@ -929,16 +1177,16 @@ const MatchDetails = () => {
 
               {/*Commentary Section*/}
               <div className="lg:col-span-1 ">
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <div className="bg-gray-50 p-4 border-b border-gray-200">
-                    <h3 className="font-bold text-gray-700 flex items-center">
+                <div className="bg-[#1e293b] rounded-lg shadow-md overflow-hidden">
+                  <div className="bg-[#222d3f] p-4 border-b border-gray-200">
+                    <h3 className="font-bold  text-gray-300 flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                       </svg>
                       Live Commentary
                     </h3>
                   </div>
-                  <div className="h-full max-h-96 overflow-y-auto">
+                  <div className="h-full max-h-96 overflow-y-auto ">
                     {commentaryList.map((comment, index) => (
                       <Commentary key={index} commentaryList={comment} />
                     ))}

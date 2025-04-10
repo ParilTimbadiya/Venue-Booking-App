@@ -759,11 +759,11 @@ const OrderData = () => {
             <p className="text-gray-400">Try adjusting your search or filter criteria</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 text-gray-300 gap-6">
+          <div className="grid grid-cols-1 text-gray-300 gap-4">
             {filteredOrders.map((order) => (
               <div key={order.orderId} className="bg-[#1e293b] rounded-lg shadow-sm overflow-hidden transition-all hover:shadow-md">
                 {/* Order Header */}
-                <div className="bg-[#1e293b] px-4 py-3 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <div className="bg-[#1e293b] px-4 py-3 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center ">
                   <div className="flex items-center gap-3">
                     <div className="bg-blue-100 p-2 rounded-lg">
                       <FiPackage className="text-blue-600" />

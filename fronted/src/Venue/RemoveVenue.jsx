@@ -64,8 +64,8 @@ const RemoveVenue = () => {
 
   }
   return (
-    <div className="p-5 mt-20 text-white  ">
-      <h1 className="text-2xl font-bold mb-4">Discard Venue</h1>
+    <div className="p-5 text-white  ">
+      <h1 className="text-2xl font-bold m-4">Discard Venue</h1>
       <div className="grid grid-cols-1 p-3 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {venues.map((venue) => (
           <RemoveVenueList key={venue.venueId} venue={venue} onRemove={handleRemoveVenue} />

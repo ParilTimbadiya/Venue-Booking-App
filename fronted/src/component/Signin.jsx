@@ -8,10 +8,17 @@ import { motion } from "framer-motion";
 import backgroundVideo from "../assets/cricket-stadium.mov";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Eye, EyeOff } from "lucide-react"; // Import eye 
 
 function Signin() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  
 
   const { touched, handleSubmit, handleChange, values, errors } = useFormik({
     initialValues: {
@@ -68,7 +75,7 @@ function Signin() {
   });
 
   return (
-    <div className="relative w-screen h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative font-my w-screen h-screen flex items-center justify-center overflow-hidden">
       <ToastContainer position="top-right" autoClose={3000} />
 
       <video autoPlay loop muted className="absolute top-0 left-0 w-full h-full object-cover">
@@ -79,12 +86,12 @@ function Signin() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 w-[720px] bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-850 to-gray-950 shadow-lg shadow-blue-500/50 rounded-xl p-8 mt-20"
+        className="relative z-10 w-[720px] bg-gradient-to-t from-gray-800 to-gray-950 hover:bg-gradient-to-r from-gray-850 to-gray-950 shadow-lg shadow-blue-500/50 rounded-xl p-8 "
       >
-        <h2 className="text-3xl font-bold text-center text-white">Welcome Back 🏏</h2>
+        <h2 className="text-3xl font-bold text-center font-my text-white">Welcome Back</h2>
         <p className="text-center text-gray-400 text-sm mt-1">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-yellow-400 hover:underline">
+          <Link to="/signup" className="text-yellow-400 hover:underline hover:text-white">
             Create a new account
           </Link>
         </p>
@@ -115,15 +122,24 @@ function Signin() {
               </div>
               <input
                 className="mt-1 p-2 w-full rounded-md bg-gray-800 text-white border border-gray-600 focus:ring-2 focus:ring-yellow-400"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={values.password}
                 onChange={handleChange}
               />
+              {errors.password && touched.password && (
               <p className="text-sm text-red-600 font-semibold">
                 {errors.password && touched.password && errors.password}
               </p>
+              )}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-10 top-[120px] flex items-center text-gray-400 hover:text-white"
+                >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
             </div>
 
             <div>
@@ -135,7 +151,7 @@ function Signin() {
                 {loading ? (
                   <div className="animate-spin h-5 w-5 border-4 border-white border-t-transparent rounded-full"></div>
                 ) : (
-                  "Get started ↣"
+                  "Get started"
                 )}
               </button>
             </div>

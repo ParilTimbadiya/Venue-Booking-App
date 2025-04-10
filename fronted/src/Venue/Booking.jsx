@@ -92,7 +92,9 @@ const Booking = () => {
           booking.bookingId === bookingId ? {...booking, status: "cancelled"} : booking
         ));
 
+
         toast.success("Booking cancelled successfully!");
+        window.location.reload();
       } else {
         toast.error(response.data?.message || "Failed to cancel booking");
       }
@@ -134,7 +136,7 @@ const Booking = () => {
 
   return (
     <div className="p-5 mt-12 bg-[#0f172a] min-h-screen">
-      <ToastContainer />
+      <ToastContainer position="top-right" autoClose={3000} />
       <h1 className="text-3xl font-bold mb-6 text-[#6eb4ef]">Booking Management Dashboard</h1>
 
       {/* Stats Cards */}

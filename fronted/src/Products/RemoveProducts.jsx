@@ -52,7 +52,7 @@ const RemoveProducts = () => {
                 className="w-16 h-16 object-cover rounded-lg border"
                 ></img>
                   <h3 className="text-xl text-white">{product.title}</h3>
-                  <p className="text-gray-300">Price: ${product.price}</p>
+                  <p className="text-gray-300">Price: {product.price} INR</p>
                 </div>
                 <button
                   onClick={() => handleRemove(product.id)}

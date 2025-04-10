@@ -49,10 +49,12 @@ const PremiumPayment = () => {
 
     try {
       const response = await publicApi.post('/merchantPayment', paymentDetails); // Send payment details
-      console.log('Payment response:', response.data);
-      navigate("/venueshow")
+      setTimeout(() => {
+        toast.success("Payment Successfully..")
+      }, 2500);
+        navigate("/venueshow")
     } catch (error) {
-      console.error("Error processing payment:", error);
+      toast.error("Error processing payment:", error);
     }
     // Implement payment logic here
     console.log('Payment submitted:', { months, email, totalAmount, debitCardNumber, pin });
@@ -60,6 +62,7 @@ const PremiumPayment = () => {
 
   return (
     <div className=" mt-12 mb-12 max-w-lg mx-auto bg-gray-800 shadow-md rounded-lg p-6">
+            <ToastContainer position="top-right" autoClose={3000} />
       <h1 className="text-3xl font-bold mb-6 text-center text-[#6eb4ef]">Premium Of Venue Host</h1>
       <form onSubmit={(e) => { e.preventDefault(); handlePayment(); }} className="space-y-4">
         <div>
