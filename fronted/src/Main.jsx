@@ -48,6 +48,8 @@ import OrderData from "./Products/OrderData.jsx";
 import EditProfile from "./Venue/EditProfile.jsx";
 import UpdateProduct from "./Products/UpdateProduct.jsx";
 import RemoveProducts from "./Products/RemoveProducts.jsx";
+import BecomeMerchant from "./component/BecomeMerchant.jsx";
+import MerchantRequestList from "./component/MerchantRequestList.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -198,6 +200,12 @@ const router = createBrowserRouter([
       },{
         path: "/removeProduct",
         element: <RemoveProducts/>
+      },{
+        path: "/becomeMerchant",
+        element: <BecomeMerchant/>
+      },{
+        path: "/merchantRequests",
+        element: <MerchantRequestList/>
       }
     ],
   },

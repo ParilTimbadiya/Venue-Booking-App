@@ -234,6 +234,137 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/becomeMerchant")
+    public ResponseEntity<?> becomeMerchant(@RequestHeader("Authorization") String header){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null) {
+                user.setMerchantRequest(true);
+                userRepo.save(user);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/merchant-requests")
+    public ResponseEntity<?> fetchMerchantRequest(@RequestHeader("Authorization") String header){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.getRole().equals("ROLE_ADMIN")) {
+                List<User> users = userRepo.findAllMerchantRequestUser();
+                List<MerchantRequestListDto> merchantRequestListDtos = new ArrayList<>();
+                for(User i : users){
+                    MerchantRequestListDto merchantRequestListDto = new MerchantRequestListDto();
+                    merchantRequestListDto.setName(i.getFullName());
+                    merchantRequestListDto.setEmail(i.getEmail());
+                    merchantRequestListDtos.add(merchantRequestListDto);
+                }
+                String adminNotification = "New Merchant Request Received\n\n"
+                        + "Name: " + user.getFullName() + "\n"
+                        + "Email: " + user.getEmail() + "\n"
+                        + "Submitted: " + LocalDate.now() + "\n\n"
+                        + "Please review this request in the admin panel.";
+
+                EmailDetailsDto adminAlert = EmailDetailsDto.builder()
+                        .subject("New Merchant Request ")
+                        .recipient("official.cricboard@gmail.com")
+                        .msgBody(adminNotification)
+                        .build();
+                emailService.sendSimpleMail(adminAlert);
+                return new ResponseEntity<>(merchantRequestListDtos,HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/accept-merchant-request")
+    public ResponseEntity<?> acceptMerchantRequest(@RequestHeader("Authorization") String header,@RequestBody Map<String, String> request){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.getRole().equals("ROLE_ADMIN")) {
+                String merchantEmail = request.get("email");
+                User user1 = userRepo.findByEmail(merchantEmail);
+                user1.setMerchant(true);
+                user1.setMerchantRequest(false);
+                userRepo.save(user1);
+                String acceptanceEmail = "Dear " + user1.getFullName() + ",\n\n"
+                        + "Congratulations! Your request to become a merchant on Crickboard has been approved.\n"
+                        + "You can now log in to your account and start listing your products/services.\n\n"
+                        + "If you have any questions or need assistance, please contact our support team.\n\n"
+                        + "Thank you,\n"
+                        + "Crickboard Team";
+
+                EmailDetailsDto acceptanceConfirmation = EmailDetailsDto.builder()
+                        .subject("Merchant Application Approved")
+                        .recipient(merchantEmail)
+                        .msgBody(acceptanceEmail)
+                        .build();
+                emailService.sendSimpleMail(acceptanceConfirmation);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/reject-merchant-request")
+    public ResponseEntity<?> rejectMerchantRequest(@RequestHeader("Authorization") String header,@RequestBody Map<String, String> request){
+        try {
+            String email = "";
+            if (header != null && header.startsWith("Bearer ")) {
+                String token = header.substring(7);
+                email = jwtService.extractUsername(token);
+            }
+            User user = userRepo.findByEmail(email);
+            if(user!=null && user.getRole().equals("ROLE_ADMIN")) {
+                String merchantEmail = request.get("email");
+                User user1 = userRepo.findByEmail(merchantEmail);
+                user1.setMerchantRequest(false);
+                userRepo.save(user1);
+                String rejectionEmail = "Dear " + user1.getFullName() + ",\n\n"
+                        + "We regret to inform you that your merchant application has not been approved at this time.\n"
+                        + "Our team has reviewed your application and determined it doesn't meet our current requirements.\n\n"
+                        + "You may reapply after addressing the following areas:\n"
+                        + "- Complete business documentation\n"
+                        + "- Valid tax identification\n"
+                        + "- Product/service details\n\n"
+                        + "If you have any questions, please contact our support team.\n\n"
+                        + "Thank you,\n"
+                        + "Crickboard Team";
+
+                EmailDetailsDto rejectionConfirmation = EmailDetailsDto.builder()
+                        .subject("Merchant Application Status")
+                        .recipient(merchantEmail)
+                        .msgBody(rejectionEmail)
+                        .build();
+                emailService.sendSimpleMail(rejectionConfirmation);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error processing request " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping("/merchantPayment")
     public ResponseEntity<?> processMerchantPayment(@RequestBody MerchantPayment merchantPayment,@RequestHeader("Authorization") String header) {
         try {

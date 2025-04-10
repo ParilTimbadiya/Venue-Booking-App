@@ -14,4 +14,7 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     public User findByEmail(String email);
     @Query(value = "SELECT * FROM tbluser WHERE is_merchant = True", nativeQuery = true)
     List<User> findAllMerchantUser();
+
+    @Query(value = "SELECT * FROM tbluser WHERE merchant_request = True", nativeQuery = true)
+    List<User> findAllMerchantRequestUser();
 }

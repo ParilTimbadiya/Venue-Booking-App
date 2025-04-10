@@ -900,14 +900,14 @@ const MatchDetails = () => {
                     >
                       Overview
                     </button>
-                    <button
+                    {/* <button
                       onClick={activeOption2}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${
                         scorecardActive ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:text-blue-500'
                       }`}
                     >
                       Scorecard
-                    </button>
+                    </button> */}
                     <button
                       onClick={activeOption3}
                       className={`px-6 py-4 font-medium transition-colors duration-200 whitespace-nowrap ${

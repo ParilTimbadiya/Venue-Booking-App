@@ -51,6 +51,8 @@ public class User {
 
     private LocalDate expiration_month=null;
 
+    private boolean merchantRequest=false;
+
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Booking> bookingList;
 

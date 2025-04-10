@@ -721,6 +721,7 @@ const Navbar = () => {
           {
             isAuthenticated && !isAdmin && !isMerchant && (
               <>
+              <Link to="/becomeMerchant" className="hover:text-yellow-400 transition-opacity duration-300 opacity-90 hover:opacity-100" onClick={() => setIsMenuOpen(false)}>Become Merchant</Link>
               <Link to="/orderData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Order Details</Link>
               <Link to="/bookingData" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Booking Details</Link>
               </>
@@ -747,7 +748,9 @@ const Navbar = () => {
               <Link to="/userDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>User Details</Link>
               <Link to="/merchantDetails" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Merchant Details</Link>
               {/* <Link to="/updateProduct" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Update Product</Link> */}
+              <Link to="/merchantRequests" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Merchant Requests</Link>
               <Link to="/removeProduct" className="hover:text-yellow-400 transition text-green-400" onClick={() => setIsMenuOpen(false)}>Discard Product</Link>
+
             </>
           )}
         </div>

@@ -87,21 +87,25 @@ const OrderDetails = () => {
     try {
       const response = await publicApi.post("/place-order", orderData);
       if (response.status === 200) {
-        alert("🎉 Order Placed Successfully!");
+        toast.success("🎉 Order Placed Successfully!");
         localStorage.removeItem("cart");
         setCart([]);
-        navigate('/');
+        setTimeout(() => {
+            navigate("/orderData");
+          }, 1000);
       } else {
-        alert("Failed to place order. Please try again.");
+        toast.error("Failed to place order. Please try again.");
       }
     } catch (error) {
       console.error("Error placing order:", error);
-      alert("An error occurred while placing the order. Please try again.");
+      toast.error("An error occurred while placing the order. Please try again.");
     }
   };
 
   return (
     <div className="container bg-[#0c131a] h-1000 font-my mx-auto p-5 max-w-5xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <ToastContainer position="top-right" autoClose={3000} />
+
       {/* Customer Information */}
       <div className="bg-[#1e293b] h-1000 text-gray-300 p-6 shadow-lg rounded-lg col-span-2">
         <h2 className="text-3xl font-bold mb-4">Customer Information</h2>

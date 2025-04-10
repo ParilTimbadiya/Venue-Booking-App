@@ -12,6 +12,7 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
   const [duration, setDuration] = useState(1); // Default duration of 1 hour
   const [maxDuration, setMaxDuration] = useState(5); // Default max duration
   const [debitCardNumber, setDebitCardNumber] = useState('');
+  const [loading, setLoading] = useState(false);
   const [pin, setPin] = useState('');
   const [total,setTotal] = useState('');
   const validationSchema = yup.object({
@@ -30,6 +31,7 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         const bookingData = {
           venueId: venueId,
@@ -44,18 +46,23 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
         const response = await privateApi.post("/bookings", bookingData);
         console.log("Booking Response:", response); // Log the booking response
         if (response.status === 200) {
-          navigate("/");
+          toast.success("Venue booked successfully")
+          setTimeout(() => {
+              navigate("/bookingData");
+            }, 2500);
         } else if (response.status === 208) {
-          alert(response.data); // Show alert if slots are already booked
+          toast.error(response.data); // Show alert if slots are already booked
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          alert("Please login to your account");
+          toast.error("Please login to your account");
         } else if (error.response && error.response.status === 406) {
-          alert("Not valid date and time");
+          toast.error("Not valid date and time");
         } else {
           console.error("Booking failed:", error);
         }
+      }finally{
+        setLoading(false);
       }
     },
   });
@@ -70,7 +77,7 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
         console.log(response);
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          alert("Please login to your account");
+          toast.error("Please login to your account");
         }
       }
 
@@ -157,6 +164,7 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
   };
   return (
     <div className="bg-[#2d3748] p-6 text-[#a0aec0] rounded-lg shadow-lg w-[448px] max-w-lg mx-auto">
+            <ToastContainer position="top-right" autoClose={3000} />
       {/* Header with Back Button */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Book Venue</h2>
@@ -263,9 +271,14 @@ const BookVenueForm = ({ venueId, venuePrice, onBack }) => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          className="w-full h-18 flex items-center justify-center rounded-md transition-all duration-300 bg-blue-600 text-white py-2 hover:bg-blue-700"
+          disabled={loading}
         >
-          Book Now
+          {loading ? (
+                  <div className="animate-spin h-5 w-5 border-4 border-white border-t-transparent rounded-full"></div>
+                ) : (
+                  "Book Now"
+                )}
         </button>
       </form>
     </div>
